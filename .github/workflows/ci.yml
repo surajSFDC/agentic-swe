@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Verify pipeline layout
+        run: npm run verify
+
       - name: Test
         run: npm test
         # No npm dependencies; nothing to install before test

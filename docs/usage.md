@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-No separate eval, audit, or setup steps are required. The pipeline is self-bootstrapping -- just give it a task and it handles the rest.
+No separate eval, audit, or setup steps are required. The pipeline is self-bootstrapping -- just give it a task and it handles the rest. If install or commands fail, see [troubleshooting.md](troubleshooting.md) and `agentic-swe doctor /path/to/your/project`.
 
 **Step 1: Open Claude Code in your project**
 

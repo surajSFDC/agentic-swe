@@ -25,6 +25,8 @@ cd /path/to/your/project && claude
 
 See the [installation guide](https://d3pi4w4hqr9gq6.cloudfront.net/installation.md) for upgrades, selective installs, and **optional org knowledge files** (`AGENTS.md`, `docs/agentic-swe/`).
 
+**What this is:** a **markdown workflow pack** that runs inside **Claude Code** on your repo (phases, gates, evidence). It is **not** a hosted async coding agent or cloud sandbox—that is a different class of product (e.g. remote harnesses with triggers and isolated runners).
+
 ## Product
 
 Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, and agents)—not a hosted cloud runtime. More on the product and licensing:
@@ -35,6 +37,8 @@ Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, a
 | MIT and commercial strategy | [Licensing](https://d3pi4w4hqr9gq6.cloudfront.net/licensing.md) |
 | Pro / services (first paid wedges) | [Pro & services](https://d3pi4w4hqr9gq6.cloudfront.net/PRO.md) |
 | Distribution and hosting | [Distribution](https://d3pi4w4hqr9gq6.cloudfront.net/distribution.md) |
+| Troubleshooting | [Troubleshooting](https://d3pi4w4hqr9gq6.cloudfront.net/troubleshooting.md) |
+| `/check` quick reference | [Check commands](https://d3pi4w4hqr9gq6.cloudfront.net/check-commands.md) |
 
 ## How It Works
 

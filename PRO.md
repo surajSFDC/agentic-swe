@@ -1,6 +1,16 @@
 # Agentic SWE Pro and services
 
-The core pipeline is **MIT-licensed** open source. This page describes the **first commercial wedges**—support and services—not a separate runtime product.
+The core pipeline is **MIT-licensed** open source. Paid offers are **people, priority, and packaging** around that same artifact—not a different executable or a cloud runtime you deploy from this repo.
+
+## Boundary (read this first)
+
+| Included in core (MIT) | Pro / services (commercial) |
+|------------------------|----------------------------|
+| `.claude/` pipeline, phases, agents, npm install | Time-boxed help: install, tune phases, train teams |
+| Runs in **your** Claude Code + **your** repo | Email/office hours / early add-on **content** (when offered) |
+| You operate upgrades via `npx agentic-swe` | No obligation to buy Pro to use the OSS pipeline |
+
+**Still not sold:** execution of your code on our servers, a proprietary “Pro runtime,” or an API that runs tasks without your environment.
 
 ## What we do not sell (today)
 
