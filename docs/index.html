@@ -566,18 +566,18 @@
     <div class="reveal">
       <div class="section-label">// how it works</div>
       <h2>Two paths, one pipeline</h2>
-      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Every task is analyzed and routed. Simple fixes take the fast path. Complex features get full design review, testing, and multi-agent code review.</p>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Every task is analyzed and routed. Simple fixes take the lean track. Complex features get full design review, testing, and multi-agent code review.</p>
     </div>
 
     <div class="pipeline-viz reveal">
       <div class="pipeline-path">
-        <div class="pipeline-path-label fast">Fast path &mdash; simple tasks</div>
+        <div class="pipeline-path-label fast">Lean track &mdash; simple tasks</div>
         <div class="pipeline-nodes">
           <span class="p-node">feasibility</span>
           <span class="p-arrow">&rarr;</span>
-          <span class="p-node">fast-path-check</span>
+          <span class="p-node">lean-track-check</span>
           <span class="p-arrow">&rarr;</span>
-          <span class="p-node">fast-implementation</span>
+          <span class="p-node">lean-track-implementation</span>
           <span class="p-arrow">&rarr;</span>
           <span class="p-node">validation</span>
           <span class="p-arrow">&rarr;</span>
@@ -589,7 +589,7 @@
         </div>
       </div>
       <div class="pipeline-path">
-        <div class="pipeline-path-label full">Full path &mdash; complex tasks</div>
+        <div class="pipeline-path-label full">Rigorous track &mdash; complex tasks</div>
         <div class="pipeline-nodes">
           <span class="p-node">feasibility</span>
           <span class="p-arrow">&rarr;</span>
@@ -658,7 +658,7 @@
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon amber">&#9889;</div>
-        <h3>Fast path routing</h3>
+        <h3>Lean track routing</h3>
         <p>Simple tasks skip design review and go straight to implementation. The pipeline adapts to task complexity automatically.</p>
       </div>
     </div>
@@ -729,7 +729,7 @@
       <h2>Key commands</h2>
     </div>
     <div class="commands-list reveal">
-      <div class="cmd-row"><span class="cmd-name">/work &lt;task&gt;</span><span class="cmd-desc">Start a new task — auto-routes fast or full path</span></div>
+      <div class="cmd-row"><span class="cmd-name">/work &lt;task&gt;</span><span class="cmd-desc">Start a new task — auto-routes lean or rigorous track</span></div>
       <div class="cmd-row"><span class="cmd-name">/work &lt;id&gt;</span><span class="cmd-desc">Resume paused work by ID</span></div>
       <div class="cmd-row"><span class="cmd-name">/plan-only &lt;task&gt;</span><span class="cmd-desc">Analyze and design without implementing</span></div>
       <div class="cmd-row"><span class="cmd-name">/subagent</span><span class="cmd-desc">Browse 135+ specialized subagents</span></div>

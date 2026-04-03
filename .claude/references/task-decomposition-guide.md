@@ -75,7 +75,7 @@ Logging, error handling, and metrics get their own dedicated step(s) — not spr
 Consumed by:
 
 - `.claude/phases/implementation.md` (structuring implementation plans)
-- `.claude/phases/fast-path-implementation.md` (same decomposition rules, smaller scope)
+- `.claude/phases/lean-track-implementation.md` (same decomposition rules, smaller scope)
 - `.claude/agents/developer-agent.md` (step execution)
 
 Related: `.claude/references/plan-quality-bar.md` (quality criteria for each step)

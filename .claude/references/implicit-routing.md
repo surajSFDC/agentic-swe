@@ -11,10 +11,10 @@ Hosts differ: some expose a **Skill** tool; agentic-swe uses **`CLAUDE.md`**, **
 
 | Signals in user message | Suggested first action | Typical path |
 |-------------------------|------------------------|--------------|
-| Bug, regression, typo, “fix”, “broken”, single file | `/work <task>` | feasibility → fast-path-check → fast-path-implementation |
+| Bug, regression, typo, “fix”, “broken”, single file | `/work <task>` | feasibility → lean-track-check → lean-track-implementation |
 | “New feature”, “add auth”, “redesign”, multiple modules, unclear architecture | `/work <task>` | feasibility → design → … |
 | “Design only”, “spec”, “no code yet”, exploration | `/plan-only` or `/brainstorm` | feasibility → design (plan-only stops per command) |
-| “Follow the plan”, “execute plan”, plan artifact exists | `/execute-plan` (same work id) | implementation or fast-path-implementation |
+| “Follow the plan”, “execute plan”, plan artifact exists | `/execute-plan` (same work id) | implementation or lean-track-implementation |
 | “Improve the plan”, “break down tasks” | `/write-plan` | refine `implementation.md` artifact |
 | Visual layout, UI flow, “show me options” | `/brainstorm` (optional: local visual server per design phase) | design artifact |
 | New command, phase, agent, template | `/author-pipeline` | contributor workflow (no state transition) |

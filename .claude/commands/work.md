@@ -53,8 +53,8 @@ You are running `/work`.
 - After artifact creation: invoke `/check artifacts`
 - Execute phases using the matching prompt in `.claude/phases/`
 - Follow either:
-  - fast path: `fast-path-implementation → validation`
-  - full path: `design → design-review → verification → test-strategy → implementation → code-review → permissions-check → validation`
+  - lean track: `lean-track-implementation → validation`
+  - rigorous track: `design → design-review → verification → test-strategy → implementation → code-review → permissions-check → validation`
 - If validation succeeds, execute `pr-creation` and stop at `approval-wait`.
 - When resuming at `approval-wait`:
   - If `approvals.pr_approved == true`: execute `.claude/phases/merge-completion.md`, transition to `completed`.

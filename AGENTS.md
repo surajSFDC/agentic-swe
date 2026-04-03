@@ -12,11 +12,11 @@ the policies, phase prompts, and templates under `.claude/`.
 ### State Machine (abbreviated)
 
 ```
-initialized → feasibility → fast-path-check → [fast-path | full-path] → validation → pr-creation → approval-wait → completed
+initialized → feasibility → lean-track-check → [lean-track | rigorous-track] → validation → pr-creation → approval-wait → completed
 ```
 
-- **Fast path** (low-risk): skips design and code review
-- **Full path** (complex): includes design, design-review, test-strategy, implementation, self-review, code-review, and permissions-check
+- **Lean track** (low-risk): skips design and code review
+- **Rigorous track** (complex): includes design, design-review, test-strategy, implementation, self-review, code-review, and permissions-check
 - **Human gates**: ambiguity-wait, approval-wait, and escalation states
 
 ### Available Commands
@@ -27,7 +27,7 @@ initialized → feasibility → fast-path-check → [fast-path | full-path] → 
 | `/plan-only` | Feasibility and design only — no implementation |
 | `/brainstorm` | Design-first exploration (design phase + optional visual server) |
 | `/write-plan` | Refine `implementation.md` plan without coding |
-| `/execute-plan` | Execute the plan via implementation / fast-path-implementation |
+| `/execute-plan` | Execute the plan via implementation / lean-track-implementation |
 | `/author-pipeline` | Extend phases, commands, agents, templates safely |
 | `/check budget` | Verify budget before a phase |
 | `/check transition` | Validate a state transition |

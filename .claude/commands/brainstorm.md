@@ -10,7 +10,7 @@ You are running `/brainstorm` for: `$ARGUMENTS`
 
 1. If `$ARGUMENTS` is an existing work id under `.claude/.work/<id>/`, use that folder. Otherwise treat `$ARGUMENTS` as the **task description** and either:
    - Tell the user to run `/work <task>` first (preferred for branch + state hygiene), **or**
-   - Bootstrap a new work item using the **Start Mode** steps in `/work` (create `.claude/.work/<id>/`, `state.json`, templates, branch) through **`feasibility`** and **`fast-path-check`**, then set `current_state` toward **`design`** per `CLAUDE.md` (invoke `/check transition` before changing state).
+   - Bootstrap a new work item using the **Start Mode** steps in `/work` (create `.claude/.work/<id>/`, `state.json`, templates, branch) through **`feasibility`** and **`lean-track-check`**, then set `current_state` toward **`design`** per `CLAUDE.md` (invoke `/check transition` before changing state).
 
 2. Read root `CLAUDE.md` and execute **`.claude/phases/design.md`** in full for this work item — including **Design Refinement** (one question at a time, 2–3 approaches, self-review checklist).
 
@@ -18,6 +18,6 @@ You are running `/brainstorm` for: `$ARGUMENTS`
 
 4. **Outputs:** Write `.claude/.work/<id>/design.md` per artifact format. Do **not** skip human approval gates: present sections and obtain approval before claiming design is final.
 
-5. **Stop line:** Do not enter **`implementation`** or **`fast-path-implementation`** unless the user explicitly switches to `/execute-plan` or `/work` continuation. You may stop after `design.md` is drafted and reviewed by the human, or proceed to **`design-review`** if the pipeline state allows and the user wants full-path rigor.
+5. **Stop line:** Do not enter **`implementation`** or **`lean-track-implementation`** unless the user explicitly switches to `/execute-plan` or `/work` continuation. You may stop after `design.md` is drafted and reviewed by the human, or proceed to **`design-review`** if the pipeline state allows and the user wants rigorous-track rigor.
 
 6. Log actions in `audit.log` and `progress.md` per the operating loop.

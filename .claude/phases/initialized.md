@@ -22,7 +22,7 @@ Orchestrator performing startup — methodical, no assumptions, validates prereq
    - `current_state` — `"initialized"`
    - `created_at` / `updated_at` — current ISO-8601 timestamp
    - `owner` — `"claude"`
-   - `mode` — `"full"` (may change to `"fast"` after fast-path-check)
+   - `mode` — `"full"` (may change to `"lean"` after lean-track-check routes to the lean track)
 
 5. Initialize `progress.md` from `.claude/templates/progress.md` with the task summary.
 

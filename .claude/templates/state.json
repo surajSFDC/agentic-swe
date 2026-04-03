@@ -22,7 +22,7 @@
     "cost_used": 0.0
   },
   "counters": {
-    "fast_iter": 0,
+    "lean_iter": 0,
     "design_iter": 0,
     "code_iter": 0,
     "panel_runs": 0,
@@ -52,7 +52,7 @@
   "artifacts": {
     "feasibility": null,
     "ambiguity-report": null,
-    "fast-path-check": null,
+    "lean-track-check": null,
     "design": null,
     "design-review": null,
     "design-feedback": null,
@@ -87,8 +87,8 @@
   },
   "pipeline": {
     "complexity_score": null,
-    "fast_path_eligible": false,
-    "fast_path_decision": null,
+    "lean_track_eligible": false,
+    "lean_track_decision": null,
     "design_review_status": null,
     "review_status": null,
     "verification_status": null,

@@ -75,7 +75,7 @@ These are common reasons agents (and humans) skip TDD. None of them hold.
 This reference is consumed by:
 
 - `.claude/phases/test-strategy.md` (Phase 1 stub generation under TDD)
-- `.claude/phases/implementation.md` and `.claude/phases/fast-path-implementation.md` (evidence requirements)
+- `.claude/phases/implementation.md` and `.claude/phases/lean-track-implementation.md` (evidence requirements)
 - `.claude/agents/developer-agent.md` (working method)
 
 Related: `.claude/references/testing-anti-patterns.md`, `.claude/references/tdd-examples.md`

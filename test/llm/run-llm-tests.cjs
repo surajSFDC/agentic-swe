@@ -12,13 +12,13 @@ const root = path.join(__dirname);
 
 const CASES = [
   {
-    name: 'fast-path-prompt',
-    file: 'fixtures/fast-path-prompt.txt',
-    expectAny: ['feasibility', 'fast-path', 'work', 'pipeline'],
+    name: 'lean-track-prompt',
+    file: 'fixtures/lean-track-prompt.txt',
+    expectAny: ['feasibility', 'lean-track', 'work', 'pipeline'],
   },
   {
-    name: 'full-path-prompt',
-    file: 'fixtures/full-path-prompt.txt',
+    name: 'rigorous-track-prompt',
+    file: 'fixtures/rigorous-track-prompt.txt',
     expectAny: ['feasibility', 'design', 'implementation', 'pipeline', 'work'],
   },
 ];

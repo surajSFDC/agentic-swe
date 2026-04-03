@@ -31,18 +31,21 @@ describe('state-schema: state.json template is valid and complete', () => {
     assert.ok('cost_used' in state.budget, 'missing budget.cost_used');
   });
 
-  it('pipeline has tdd_mode and worktree_path', () => {
+  it('pipeline has tdd_mode, worktree_path, and lean track fields', () => {
     const raw = fs.readFileSync(templatePath, 'utf8');
     state = JSON.parse(raw);
     assert.ok('tdd_mode' in state.pipeline, 'missing pipeline.tdd_mode');
     assert.ok('worktree_path' in state.pipeline, 'missing pipeline.worktree_path');
+    assert.ok('lean_track_eligible' in state.pipeline, 'missing pipeline.lean_track_eligible');
+    assert.ok('lean_track_decision' in state.pipeline, 'missing pipeline.lean_track_decision');
   });
 
-  it('counters has self_review_iter and test_adequacy_iter', () => {
+  it('counters has self_review_iter, test_adequacy_iter, and lean_iter', () => {
     const raw = fs.readFileSync(templatePath, 'utf8');
     state = JSON.parse(raw);
     assert.ok('self_review_iter' in state.counters, 'missing counters.self_review_iter');
     assert.ok('test_adequacy_iter' in state.counters, 'missing counters.test_adequacy_iter');
+    assert.ok('lean_iter' in state.counters, 'missing counters.lean_iter');
   });
 
   it('history is an empty array', () => {

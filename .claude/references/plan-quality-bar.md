@@ -72,6 +72,6 @@ Every step must include a verification command. Acceptable forms:
 
 Consumed by:
 
-- `.claude/phases/implementation.md` (full-path plan quality gate)
-- `.claude/phases/fast-path-implementation.md` (same standard, fewer steps)
+- `.claude/phases/implementation.md` (rigorous-track plan quality gate)
+- `.claude/phases/lean-track-implementation.md` (same standard, fewer steps)
 - `.claude/agents/developer-agent.md` (plan authoring)

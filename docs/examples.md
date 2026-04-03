@@ -4,17 +4,17 @@ Practical examples showing how to use the pipeline and subagents in real scenari
 
 ---
 
-## Example 1: Simple Bug Fix (Fast Path)
+## Example 1: Simple Bug Fix (Lean Track)
 
-A one-file bug fix that goes through the fast path:
+A one-file bug fix that goes through the lean track:
 
 ```
 > /work Fix the off-by-one error in pagination logic in src/api/list.py
 
-Pipeline: initialized -> feasibility -> fast-path-check (fast path) -> fast-implementation -> validation -> pr-created
+Pipeline: initialized -> feasibility -> lean-track-check (lean track) -> lean-track-implementation -> validation -> pr-created
 
 [Pipeline scans the repo, identifies src/api/list.py]
-[Determines this is a simple, single-file fix -- routes to fast path]
+[Determines this is a simple, single-file fix -- routes to lean track]
 [Implements the fix, runs tests, creates PR]
 
 PR created: https://github.com/your-org/your-repo/pull/42
@@ -27,17 +27,17 @@ Status: completed
 
 ---
 
-## Example 2: New Feature (Full Path)
+## Example 2: New Feature (Rigorous Track)
 
 A multi-file feature that goes through design review:
 
 ```
 > /work Add rate limiting middleware to the Express API with Redis backing
 
-Pipeline: initialized -> feasibility -> fast-path-check (full path) -> design -> design-review -> ...
+Pipeline: initialized -> feasibility -> lean-track-check (rigorous track) -> design -> design-review -> ...
 
 [Pipeline scans repo, identifies Express setup, existing middleware patterns]
-[Routes to full path due to complexity -- multiple files, new dependency]
+[Routes to rigorous track due to complexity -- multiple files, new dependency]
 [Produces design.md with: architecture, file changes, API contract, test plan]
 [Spawns design panel: architect + security + adversarial reviewers]
 [Iterates on design based on panel feedback]

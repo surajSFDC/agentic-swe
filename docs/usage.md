@@ -20,7 +20,7 @@ claude
 The pipeline automatically:
 - Creates a work branch (`work/add-retry-logic`)
 - Runs **feasibility analysis** (scans the repo, identifies relevant files, detects ambiguity)
-- Routes to **fast path** (simple tasks) or **full path** (complex tasks)
+- Routes to the **lean track** (simple tasks) or **rigorous track** (complex tasks)
 - Implements, tests, reviews, and validates the change
 - Creates a **PR** and stops for your approval
 
@@ -55,18 +55,18 @@ The `/work` command is the main entry point. It handles the entire lifecycle:
 /work <task description>
 ```
 
-The pipeline decides whether to use the **fast path** (simple, low-risk changes) or the **full path** (complex, multi-file changes with design review).
+The pipeline decides whether to use the **lean track** (simple, low-risk changes) or the **rigorous track** (complex, multi-file changes with design review).
 
-**Fast path** (typically 3-5 minutes):
-
-```
-initialized -> feasibility -> fast-path-check -> fast-implementation -> validation -> pr-created -> approval-wait -> completed
-```
-
-**Full path** (typically 10-30 minutes):
+**Lean track** (typically 3-5 minutes):
 
 ```
-initialized -> feasibility -> fast-path-check -> design -> design-review -> verification -> test ->
+initialized -> feasibility -> lean-track-check -> lean-track-implementation -> validation -> pr-created -> approval-wait -> completed
+```
+
+**Rigorous track** (typically 10-30 minutes):
+
+```
+initialized -> feasibility -> lean-track-check -> design -> design-review -> verification -> test ->
 implementation -> self-review -> code-review -> permissions -> validation -> pr-created -> approval-wait -> completed
 ```
 

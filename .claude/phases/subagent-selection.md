@@ -13,7 +13,7 @@ This policy is consulted by the orchestrator and by core agents (developer-agent
 | Phase | Trigger | Who Reads This | Purpose |
 |-------|---------|----------------|---------|
 | feasibility | After `/repo-scan` completes | Orchestrator | Collect signals, write `## Subagent Signals` into feasibility.md |
-| fast-path-implementation | Before spawning developer-agent.md | Orchestrator | Optionally spawn 1 language specialist (background, non-blocking) |
+| lean-track-implementation | Before spawning developer-agent.md | Orchestrator | Optionally spawn 1 language specialist (background, non-blocking) |
 | implementation | Before spawning developer-agent.md | Orchestrator | Spawn language + domain specialists (background, advisory) |
 | design | Before panel invocation | Orchestrator | Spawn domain specialist for pre-design input |
 | code-review | After reading artifacts | Orchestrator | Spawn specialized reviewers in parallel |
@@ -60,7 +60,7 @@ Write into `feasibility.md`:
 - **Subagent mode**: full | minimal
 ```
 
-Set `subagent mode` to `minimal` if fast-path-check routes to fast path, `full` otherwise.
+Set `subagent mode` to `minimal` if lean-track-check routes to the lean track, `full` otherwise.
 
 ---
 
@@ -142,7 +142,7 @@ Set `subagent mode` to `minimal` if fast-path-check routes to fast path, `full` 
 
 ## Composition Rules
 
-### Advisory Mode (implementation, fast-path-implementation)
+### Advisory Mode (implementation, lean-track-implementation)
 
 Used when subagents provide recommendations alongside the primary developer agent.
 
@@ -230,21 +230,21 @@ Core agents (`developer-agent.md`, panel agents) can spawn subagents themselves 
 
 ---
 
-## Fast Path vs Full Path
+## Lean track vs rigorous track
 
-### Fast path (`subagent-mode: minimal`)
+### Lean track (`subagent-mode: minimal`)
 
 - Signal collection happens in feasibility (zero extra cost)
-- During fast-path-implementation: spawn **at most 1** language specialist
+- During lean-track-implementation: spawn **at most 1** language specialist
   - Only if confidence is `high`
   - Only if the language matches the primary language of changed files
   - Runs in **background** (non-blocking)
-  - If fast-path-implementation finishes before specialist returns, **proceed without waiting**
-- No domain specialists on fast path
-- No review specialists on fast path (fast path has no separate code-review phase)
+  - If lean-track-implementation finishes before specialist returns, **proceed without waiting**
+- No domain specialists on the lean track
+- No review specialists on the lean track (no separate code-review phase)
 - Developer-agent.md can still use agent-to-agent delegation (1 spawn max)
 
-### Full path (`subagent-mode: full`)
+### Rigorous track (`subagent-mode: full`)
 
 - Up to 2 subagents per phase (typically 1 language + 1 domain)
 - Implementation: language specialist + domain specialist (both background, advisory)

@@ -13,13 +13,13 @@ policies, phase prompts, and templates under `.claude/`.
 The pipeline moves work through structured states with human gates:
 
 ```
-initialized → feasibility → fast-path-check
-  → [fast-path-implementation | design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check]
+initialized → feasibility → lean-track-check
+  → [lean-track-implementation | design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check]
   → validation → pr-creation → approval-wait → completed
 ```
 
-- **Fast path**: low-risk changes skip design and code review
-- **Full path**: complex changes get design panel, test strategy, and review
+- **Lean track**: low-risk changes skip design and code review
+- **Rigorous track**: complex changes get design panel, test strategy, and review
 - **Human gates**: ambiguity-wait, approval-wait, escalation states
 
 ## Key Commands

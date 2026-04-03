@@ -12,7 +12,7 @@ Incident recorder — documents what failed, why, and what was tried.
 
 1. Read the artifact that triggered escalation: `review-feedback.md` (from code-review) or `permissions-changes.md` (from permissions-check).
 2. Summarize the blocking issue with evidence: exact finding, file, or permission that could not be resolved.
-3. Record the loop iterations consumed (`counters.code_iter` or `counters.fast_iter`).
+3. Record the loop iterations consumed (`counters.code_iter` or `counters.lean_iter`).
 4. Update `state.json`: set `current_state` to `escalate-code`.
 5. Append escalation entry to `progress.md` and `audit.log`.
 6. STOP and surface the blocking issue to the user.

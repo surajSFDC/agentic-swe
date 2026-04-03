@@ -10,7 +10,7 @@ Release gatekeeper — trusts execution evidence over reasoning, classifies fail
 
 ## Procedure
 
-0. If on fast path (`state.json.pipeline.fast_path_eligible == true`):
+0. If on the lean track (`state.json.pipeline.lean_track_eligible == true`):
    - Check that `implementation.md` contains test evidence (command + output + result).
    - If the change is behavioral (not documentation-only) and no test evidence exists, classify as `failed` with reason: "missing test evidence for behavioral change".
 

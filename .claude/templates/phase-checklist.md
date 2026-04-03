@@ -30,9 +30,9 @@ Use this checklist before every state transition.
 
 ## Quality Gate
 
-- self-review rubric scores recorded before code-review (full path) or within fast-path-implementation (fast path)
+- self-review rubric scores recorded before code-review (rigorous track) or within lean-track-implementation (lean track)
 - reflection-log read before rework when prior rejection exists
-- test adequacy assessment completed before implementation begins (full path)
+- test adequacy assessment completed before implementation begins (rigorous track)
 - changed behavior has at least one decisive verification path
 - tests pass before or during `validation`, or the lack of runnable tests is precisely documented
 - reviewable output exists before `pr-creation`
@@ -51,7 +51,7 @@ Use this checklist before every state transition.
 ## Convergence Gate
 
 - if reflection-log has 2+ entries with the same failure category, escalate rather than retry
-- if fast-path self-review scores a dimension as 1 that the developer cannot resolve, escalate rather than consuming the next iteration
+- if lean-track self-review scores a dimension as 1 that the developer cannot resolve, escalate rather than consuming the next iteration
 - if design review is failing on fundamentally different criteria each iteration (thrashing), escalate after iteration 2
 
 ## Context Condensation Gate

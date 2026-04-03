@@ -21,7 +21,7 @@ Use this when implementation or permissions touches **external systems**, **MCP*
 
 - No production credentials in prompts or logs; use existing secret patterns from `/security-scan`.
 - Destructive or wide-scope shell commands require explicit alignment with design and **permissions** phase.
-- Read-only discovery first; mutate only after design approval (full path) or within fast-path scope.
+- Read-only discovery first; mutate only after design approval (rigorous track) or within lean-track scope.
 
 ## Relation to `/repo-scan`
 

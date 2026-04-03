@@ -1,6 +1,6 @@
 # /execute-plan
 
-Execute the implementation plan in **`implementation.md`**. The **execute-plan** naming matches common assistant workflows; semantics are agentic-swe **implementation** / **fast-path-implementation**.
+Execute the implementation plan in **`implementation.md`**. The **execute-plan** naming matches common assistant workflows; semantics are agentic-swe **implementation** / **lean-track-implementation**.
 
 ## Prompt
 
@@ -16,11 +16,11 @@ You are running `/execute-plan` for: `$ARGUMENTS`
 
 ### Instructions
 
-1. Read `CLAUDE.md` and determine whether the work item is on **fast path** or **full path** from `state.json` / `fast-path-check` outcomes.
+1. Read `CLAUDE.md` and determine whether the work item is on the **lean track** or **rigorous track** from `state.json` / `lean-track-check` outcomes.
 
-2. Transition to **`fast-path-implementation`** or **`implementation`** as allowed by the state machine. If the current state is earlier (e.g. `test-strategy`), complete required intermediate transitions with artifacts — do not skip states.
+2. Transition to **`lean-track-implementation`** or **`implementation`** as allowed by the state machine. If the current state is earlier (e.g. `test-strategy`), complete required intermediate transitions with artifacts — do not skip states.
 
-3. Execute **`.claude/phases/fast-path-implementation.md`** or **`.claude/phases/implementation.md`** as appropriate. Delegate to **`.claude/agents/developer-agent.md`** with explicit scope from the plan (and `worktree_path` if set).
+3. Execute **`.claude/phases/lean-track-implementation.md`** or **`.claude/phases/implementation.md`** as appropriate. Delegate to **`.claude/agents/developer-agent.md`** with explicit scope from the plan (and `worktree_path` if set).
 
 4. Follow **TDD / verification** flags in `state.json.pipeline` (`tdd_mode`, etc.) and references wired in those phases.
 

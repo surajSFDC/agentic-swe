@@ -54,19 +54,19 @@ All run state lives in `.claude/.work/<id>/`:
 
 ## State Machine
 
-Two paths through the pipeline:
+Two tracks through the pipeline:
 
-- **Fast path** (low-risk): `initialized → feasibility → fast-path-check → fast-path-implementation → validation → pr-creation → approval-wait → completed`
-- **Full path** (complex): `initialized → feasibility → fast-path-check → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed`
+- **Lean track** (low-risk): `initialized → feasibility → lean-track-check → lean-track-implementation → validation → pr-creation → approval-wait → completed`
+- **Rigorous track** (complex): `initialized → feasibility → lean-track-check → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed`
 - **Escalation exits**: `escalate-code`, `escalate-validation`, `pipeline-failed`
 - **Human gates**: `ambiguity-wait`, `approval-wait`, and escalation states
 
 ```
 initialized -> feasibility
-feasibility -> ambiguity-wait | fast-path-check | pipeline-failed
+feasibility -> ambiguity-wait | lean-track-check | pipeline-failed
 ambiguity-wait -> feasibility | pipeline-failed
-fast-path-check -> fast-path-implementation | design
-fast-path-implementation -> validation | escalate-code
+lean-track-check -> lean-track-implementation | design
+lean-track-implementation -> validation | escalate-code
 design -> design-review
 design-review -> design | verification
 verification -> test-strategy | design | pipeline-failed
@@ -86,8 +86,8 @@ approval-wait -> implementation | completed
 |---|---|
 | `feasibility` | `feasibility.md` |
 | `ambiguity-wait` | `feasibility.md`, `ambiguity-report.md` |
-| `fast-path-check` | `fast-path-check.md` |
-| `fast-path-implementation` | `implementation.md`, `review-pass.md` or `review-feedback.md` |
+| `lean-track-check` | `lean-track-check.md` |
+| `lean-track-implementation` | `implementation.md`, `review-pass.md` or `review-feedback.md` |
 | `design` | `design.md`, `reflection-log.md` (when returning from rejection) |
 | `design-review` | `design-review.md` or `design-feedback.md` |
 | `verification` | `verification-results.md` |
@@ -140,7 +140,7 @@ Do not transition on narrative confidence alone.
 ## Budgets And Loops
 
 - ambiguity loops are bounded by human clarification, not silent retries
-- fast path implementation review loop: maximum 2 iterations. The structured self-review rubric (embedded in fast-path-implementation) must run before each review pass — if self-review scores any dimension as 1 and the developer cannot resolve it within the same iteration, escalate rather than consuming the second iteration on a known-failing review.
+- lean-track implementation review loop: maximum 2 iterations. The structured self-review rubric (embedded in lean-track-implementation) must run before each review pass — if self-review scores any dimension as 1 and the developer cannot resolve it within the same iteration, escalate rather than consuming the second iteration on a known-failing review.
 - design review loop: budget 3 by default, 4 for high-complexity work. Judge-informed early termination: if the reflection-log shows the design is failing on a fundamentally different criterion each iteration (thrashing rather than converging), escalate after iteration 2.
 - self-review loop: maximum 1 iteration (tracked in `state.json.counters.self_review_iter`). Returns to implementation at most once, then must pass forward.
 - implementation and code review loop: maximum 5 iterations. Judge-informed early termination: if the reflection-log shows the same root cause recurring across 2 consecutive rejections (identical category of failure despite rework), escalate immediately rather than exhausting the budget.
@@ -234,15 +234,15 @@ The pipeline automatically selects and spawns specialized subagents during phase
 | Phase | Subagent Role | Max Agents | Blocking? |
 |-------|---------------|------------|-----------|
 | feasibility | Signal collection only (no spawning) | 0 | N/A |
-| fast-path-implementation | 1 language specialist (if high confidence) | 1 | No (background) |
+| lean-track-implementation | 1 language specialist (if high confidence) | 1 | No (background) |
 | implementation | Language specialist + domain specialist | 2 | No (background, advisory) |
 | design | Domain specialist for pre-design input | 1 | Yes (focused, before panel) |
 | code-review | Specialized reviewers (security, performance, etc.) | 2 | No (background, parallel) |
 
-### Fast Path vs Full Path
+### Lean track vs rigorous track
 
-- **Fast path** (`subagent-mode: minimal`): At most 1 background language specialist. No domain or review specialists. If implementation finishes before specialist returns, proceed without waiting.
-- **Full path** (`subagent-mode: full`): Up to 2 subagents per phase. Language + domain specialists during implementation. Parallel reviewers during code-review. Domain input before design.
+- **Lean track** (`subagent-mode: minimal`): At most 1 background language specialist. No domain or review specialists. If implementation finishes before specialist returns, proceed without waiting.
+- **Rigorous track** (`subagent-mode: full`): Up to 2 subagents per phase. Language + domain specialists during implementation. Parallel reviewers during code-review. Domain input before design.
 
 ### Budget Guard
 
@@ -301,7 +301,7 @@ Reusable slash commands that phases and agents invoke for structured, evidence-b
 | Skill | Purpose | Primary Consumers |
 |-------|---------|-------------------|
 | `/repo-scan` | Structured codebase snapshot (languages, frameworks, tests, CI, linters) | `.claude/phases/feasibility.md` |
-| `/test-runner [scope]` | Detect and execute tests with structured pass/fail results | `.claude/phases/test-strategy.md`, `.claude/phases/fast-path-implementation.md`, `.claude/phases/validation.md` |
+| `/test-runner [scope]` | Detect and execute tests with structured pass/fail results | `.claude/phases/test-strategy.md`, `.claude/phases/lean-track-implementation.md`, `.claude/phases/validation.md` |
 | `/lint [scope]` | Detect and run linters/formatters in check mode | `.claude/phases/validation.md` |
 | `/diff-review [range]` | Evidence-backed code review against structured criteria | `.claude/phases/code-review.md`, `.claude/phases/design-review.md` |
 | `/ci-status [PR|branch]` | Query CI/CD check status with mergeability assessment | `.claude/phases/pr-creation.md`, `.claude/phases/merge-completion.md` |
@@ -309,7 +309,7 @@ Reusable slash commands that phases and agents invoke for structured, evidence-b
 | `/security-scan [scope]` | Dependency audit, secret scan, dangerous pattern detection | `.claude/phases/permissions-check.md`, `.claude/agents/panel/security-reviewer.md` |
 | `/brainstorm` | Design-first exploration; optional `tools/brainstorm-server` visual companion | `.claude/phases/design.md` |
 | `/write-plan` | Refine `implementation.md` against plan-quality bar (no coding) | `.claude/references/plan-quality-bar.md`, `.claude/commands/plan-only.md` |
-| `/execute-plan` | Run the plan via implementation or fast-path-implementation per `state.json` | `.claude/agents/developer-agent.md` |
+| `/execute-plan` | Run the plan via implementation or lean-track-implementation per `state.json` | `.claude/agents/developer-agent.md` |
 | `/author-pipeline` | Checklist to extend commands, phases, agents, templates | `.claude/references/authoring-pipeline-capabilities.md` |
 
 ## Key Directories

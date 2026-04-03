@@ -1,6 +1,6 @@
 {
   "name": "agentic-swe",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Autonomous SWE pipeline for Claude Code — install markdown policies, phases, and agents into your repo",
   "license": "MIT",
   "author": "Suraj Gupta",
@@ -22,6 +22,7 @@
   "files": [
     "CHANGELOG.md",
     "bin",
+    "scripts",
     "CLAUDE.md",
     "AGENTS.md",
     "GEMINI.md",

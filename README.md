@@ -45,11 +45,11 @@ Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, a
 The pipeline runs a **state machine** that routes tasks through analysis, design, implementation, review, and PR creation. At each phase, it **automatically selects** specialized subagents based on the languages, frameworks, and domains detected in your codebase — agents can also call other agents in the background when they need domain-specific expertise.
 
 ```
-              fast path (simple tasks)
+              lean track (simple tasks)
              ┌─────────────────────────────────────────────────────┐
-initialized -> feasibility -> fast-path-check -> fast-path-implementation -> validation -> pr-creation -> completed
+initialized -> feasibility -> lean-track-check -> lean-track-implementation -> validation -> pr-creation -> completed
                                     |
-                                    v  full path (complex tasks)
+                                    v  rigorous track (complex tasks)
                               design -> design-review -> verification -> test-strategy ->
                               implementation -> self-review -> code-review ->
                               permissions-check -> validation -> pr-creation -> completed
@@ -61,32 +61,32 @@ Human gates stop the pipeline at `ambiguity-wait`, `approval-wait`, and escalati
 
 Example tasks and the routes they follow (see the **state machine** diagram above).
 
-**Fast path** (small bug fix):
+**Lean track** (small bug fix):
 
 ```
 /work "Fix the off-by-one error in calculateTotal"
 ```
 
-→ feasibility → fast-path-check (low risk) → fast-path-implementation → validation → pr-creation → approval-wait → completed
+→ feasibility → lean-track-check (low risk) → lean-track-implementation → validation → pr-creation → approval-wait → completed
 
-**Full path** (new feature):
+**Rigorous track** (new feature):
 
 ```
 /work "Add user authentication with JWT tokens"
 ```
 
-→ feasibility → fast-path-check (high risk) → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed
+→ feasibility → lean-track-check (high risk) → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed
 
 ## Key Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/work <task>` | Start a new task (auto-routes fast/full path) |
+| `/work <task>` | Start a new task (auto-routes lean or rigorous track) |
 | `/work <id>` | Resume paused work |
 | `/plan-only <task>` | Analyze and design without implementing |
 | `/brainstorm` | Design-first exploration (design phase + optional visual server) |
 | `/write-plan [id]` | Refine `implementation.md` plan to plan-quality bar (no coding) |
-| `/execute-plan [id]` | Run the plan via implementation / fast-path-implementation |
+| `/execute-plan [id]` | Run the plan via implementation / lean-track-implementation |
 | `/author-pipeline` | Checklist to extend phases, commands, agents safely |
 | `/subagent` | Browse 135+ specialized subagents |
 | `/subagent search <query>` | Find subagents by keyword |
@@ -118,12 +118,12 @@ See the [subagent catalog](https://d3pi4w4hqr9gq6.cloudfront.net/subagent-catalo
 
 ## Examples
 
-**Simple bug fix** (fast path, ~3-5 min):
+**Simple bug fix** (lean track, ~3-5 min):
 ```
 /work Fix the off-by-one error in pagination logic in src/api/list.py
 ```
 
-**Complex feature** (full path with design review, ~10-30 min):
+**Complex feature** (rigorous track with design review, ~10-30 min):
 ```
 /work Add rate limiting middleware to the Express API with Redis backing
 ```

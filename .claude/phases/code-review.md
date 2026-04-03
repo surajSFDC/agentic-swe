@@ -2,7 +2,7 @@
 
 ## Mission
 
-Approve only when correctness, complexity, and test adequacy are acceptable. Review code changes after `implementation` or `fast-path-implementation`.
+Approve only when correctness, complexity, and test adequacy are acceptable. Review code changes after `implementation` or `lean-track-implementation`.
 
 ## Persona
 
@@ -88,7 +88,7 @@ Apply `.claude/templates/evidence-standard.md` throughout.
 
 ## Review Response Protocol
 
-Anyone implementing fixes after this phase (return to `implementation`, fast-path loops, or human PR feedback) should treat review input as **claims to verify**, not orders to obey.
+Anyone implementing fixes after this phase (return to `implementation`, lean-track loops, or human PR feedback) should treat review input as **claims to verify**, not orders to obey.
 
 - **Verify before changing**: Check each item against the real code, runtime behavior, and tests. Reviewers and specialists can be mistaken—do not ship changes based on assumed correctness of the comment alone.
 - **One fix at a time with tests**: Land one coherent fix (or one tightly related cluster) per step, with tests proving it; avoid batching unrelated edits to clear a feedback list faster.

@@ -10,7 +10,7 @@ You are running `/write-plan` for: `$ARGUMENTS`
 
 1. Active work under `.claude/.work/<id>/`. Resolve `<id>` from `$ARGUMENTS` if it is an existing work id; otherwise use the **most recently updated** work directory or ask the user which id to use.
 
-2. `feasibility.md` and approved or draft **`design.md`** should exist for full-path work. If missing, say so and offer `/brainstorm` or `/plan-only` first.
+2. `feasibility.md` and approved or draft **`design.md`** should exist for rigorous-track work. If missing, say so and offer `/brainstorm` or `/plan-only` first.
 
 ### Instructions
 
@@ -18,7 +18,7 @@ You are running `/write-plan` for: `$ARGUMENTS`
 
 2. Write or update `.claude/.work/<id>/implementation.md` so the **plan portion** (steps, file paths, snippets, verification commands) meets the zero-context engineer bar. No vague placeholders.
 
-3. **Do not** run production implementation, broad refactors, or tests that mutate the product beyond what is needed to validate the plan text — this command is **planning only**. Align with **`/plan-only`** spirit: no `implementation` / `fast-path-implementation` state entry from this command alone.
+3. **Do not** run production implementation, broad refactors, or tests that mutate the product beyond what is needed to validate the plan text — this command is **planning only**. Align with **`/plan-only`** spirit: no `implementation` / `lean-track-implementation` state entry from this command alone.
 
 4. If the user wants a specialist review of the plan, spawn a background subagent using `.claude/agents/prompts/plan-reviewer-prompt.md` (paste plan content into the prompt).
 

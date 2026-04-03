@@ -2,7 +2,7 @@
 
 ## Mission
 
-Convert the task into executable requirements, identify blocking ambiguity, and produce the complexity basis for fast-path branching.
+Convert the task into executable requirements, identify blocking ambiguity, and produce the complexity basis for lean-track routing.
 
 ## Persona
 
@@ -39,7 +39,7 @@ Senior staff engineer doing early technical discovery — skeptical of vague req
 
 10. **Ambiguity routing**: If **material** ambiguity remains and cannot be resolved from repo + org docs + `/repo-scan`, recommend **`ambiguity-wait`** as the next state and produce `ambiguity-report.md` (do not guess a single interpretation without justification).
 
-11. Score complexity and blast radius for fast-path branching.
+11. Score complexity and blast radius for lean-track routing.
 
 ## Inputs
 
@@ -60,7 +60,7 @@ Write `.claude/.work/<id>/feasibility.md` following `.claude/templates/artifact-
 - acceptance criteria
 - constraints and dependencies
 - ambiguity assessment (harmless vs material; if material unresolved → `ambiguity-wait`)
-- complexity rationale and fast-path risk factors
+- complexity rationale and lean-track risk factors
 - subagent signals (see below)
 - recommended next state
 
@@ -85,7 +85,7 @@ Write a `## Subagent Signals` section into the feasibility artifact:
 - **Subagent mode**: full | minimal
 ```
 
-Set `subagent mode` to `minimal` for tasks likely to take the fast path (low complexity, narrow blast radius), `full` otherwise. Downstream phases read this section to auto-select subagents.
+Set `subagent mode` to `minimal` for tasks likely to take the lean track (low complexity, narrow blast radius), `full` otherwise. Downstream phases read this section to auto-select subagents.
 
 If ambiguity is blocking, also write `.claude/.work/<id>/ambiguity-report.md` with:
 

@@ -23,16 +23,16 @@ run_prompt() {
   output="$(claude -p "$prompt" --output-format stream-json 2>&1 || true)"
 
   case "$name" in
-    fast-path-bug-fix)
-      if echo "$output" | grep -q "fast-path-implementation"; then
-        echo "  PASS: fast-path-implementation phase detected"
+    lean-track-bug-fix)
+      if echo "$output" | grep -q "lean-track-implementation"; then
+        echo "  PASS: lean-track-implementation phase detected"
         PASS=$((PASS + 1))
       else
-        echo "  FAIL: expected fast-path-implementation phase"
+        echo "  FAIL: expected lean-track-implementation phase"
         FAIL=$((FAIL + 1))
       fi
       ;;
-    full-path-new-feature)
+    rigorous-track-new-feature)
       local ok=true
       for phase in design test-strategy implementation; do
         if echo "$output" | grep -q "$phase"; then

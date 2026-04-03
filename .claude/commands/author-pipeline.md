@@ -20,8 +20,9 @@ You are running `/author-pipeline`.
 3. **Implement** — Create or edit markdown under `.claude/`; use `.claude/templates/new-phase-stub.md` for new phases.
 4. **Update policy** — If states changed: update `CLAUDE.md` (diagram, transition block, Required Artifacts table, Utility Skills if needed).
 5. **Update discovery** — Add new slash commands to `README.md` Key Commands; link new references from relevant phases.
-6. **Verify** — Run `npm test` from the **agentic-swe** package root (or the repo hosting the pack). Fix `claude-md-consistency`, `phase-structure`, or `references-integrity` failures.
-7. **Summarize** — Tell the user which files changed and any follow-up (e.g. publish new npm version).
+6. **Breaking renames** — If `current_state` strings or `state.json` keys change, add or update `scripts/migrate-*.js`, document it in `CHANGELOG.md`, and bump **major** version in `package.json` and plugin manifests (`.claude-plugin`, `.cursor-plugin`, `gemini-extension.json` per `.version-bump.json`).
+7. **Verify** — Run `npm test` from the **agentic-swe** package root (or the repo hosting the pack). Fix `claude-md-consistency`, `phase-structure`, or `references-integrity` failures.
+8. **Summarize** — Tell the user which files changed and any follow-up (e.g. publish new npm version).
 
 ### Constraints
 

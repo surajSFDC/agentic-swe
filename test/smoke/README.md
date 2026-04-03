@@ -24,8 +24,8 @@ bash test/smoke/run-smoke.sh
 
 Each file in `prompts/` contains a task description. The runner feeds each prompt to `claude -p` with `--output-format stream-json` and greps the output for expected phase activations.
 
-- `fast-path-bug-fix.txt` — should route through fast-path-implementation
-- `full-path-new-feature.txt` — should route through design + test-strategy + implementation
+- `lean-track-bug-fix.txt` — should route through lean-track-implementation
+- `rigorous-track-new-feature.txt` — should route through design + test-strategy + implementation
 
 ## Important
 

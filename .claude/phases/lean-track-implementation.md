@@ -1,4 +1,4 @@
-# Fast-Path Implementation
+# Lean-Track Implementation
 
 ## Mission
 
@@ -6,34 +6,34 @@ Implement a low-risk change end-to-end under a tighter review budget.
 
 ## Constraints
 
-- Maximum **2 review iterations** (tracked in `state.json.counters.fast_iter`).
+- Maximum **2 review iterations** (tracked in `state.json.counters.lean_iter`).
 - If the second review still has blocking findings, escalate to `escalate-code` rather than iterating further.
 
 ## TDD Mode
 
-When `state.json.pipeline.tdd_mode` is `true`, the developer agent must follow red-green-refactor discipline per `.claude/references/tdd-discipline.md`. Even on fast path, the red step (failing test output) must be captured before writing production code. Record evidence in `implementation.md` under `## TDD Evidence`. See `.claude/references/tdd-examples.md` for patterns.
+When `state.json.pipeline.tdd_mode` is `true`, the developer agent must follow red-green-refactor discipline per `.claude/references/tdd-discipline.md`. Even on the **lean track**, the red step (failing test output) must be captured before writing production code. Record evidence in `implementation.md` under `## TDD Evidence`. See `.claude/references/tdd-examples.md` for patterns.
 
 ## Plan Quality
 
-The implementation plan must meet `.claude/references/plan-quality-bar.md` — exact file paths, complete code, verification commands with expected output. Decompose using `.claude/references/task-decomposition-guide.md`. Fast path means fewer steps, not lower quality per step.
+The implementation plan must meet `.claude/references/plan-quality-bar.md` — exact file paths, complete code, verification commands with expected output. Decompose using `.claude/references/task-decomposition-guide.md`. The lean track means fewer steps, not lower quality per step.
 
 ## Delegation
 
-Follow the same delegation model as `.claude/phases/implementation.md`, with additional subagent auto-selection for fast path:
+Follow the same delegation model as `.claude/phases/implementation.md`, with additional subagent auto-selection for the lean track:
 
 ### Pre-Delegation: Subagent Auto-Selection (Minimal Mode)
 
-1. Re-read `feasibility.md` and `fast-path-check.md` before delegating.
+1. Re-read `feasibility.md` and `lean-track-check.md` before delegating.
 2. Read `## Subagent Signals` from `feasibility.md`.
 3. If `subagent_auto_select` is enabled and a language specialist is recommended with `high` confidence AND it matches the primary language of the files to be changed:
    - Select that **one** language specialist for background advisory.
-   - No domain specialists on fast path.
+   - No domain specialists on the lean track.
 4. If `budget_remaining` < 3, skip subagent selection entirely.
 
 ### Spawning
 
 5. Spawn `.claude/agents/developer-agent.md` (primary, **foreground**) with the task scope, target files, and constraints. Tell the developer agent it may spawn 1 subagent per `.claude/phases/subagent-selection.md` if it encounters domain-specific complexity.
-6. If a language specialist was selected, spawn it in **background** (non-blocking). If fast-path-implementation finishes before the specialist returns, **proceed without waiting**.
+6. If a language specialist was selected, spawn it in **background** (non-blocking). If `lean-track-implementation` finishes before the specialist returns, **proceed without waiting**.
 7. Consider `isolation: "worktree"` for safe experimentation.
 
 ### Self-Review

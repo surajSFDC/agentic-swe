@@ -10,8 +10,8 @@ const phasesDir = path.join(__dirname, '..', '.claude', 'phases');
 const EXPECTED_PHASES = [
   'feasibility.md',
   'ambiguity-wait.md',
-  'fast-path-check.md',
-  'fast-path-implementation.md',
+  'lean-track-check.md',
+  'lean-track-implementation.md',
   'design.md',
   'design-review.md',
   'verification.md',

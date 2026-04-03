@@ -1,8 +1,8 @@
-# Fast Path Check
+# Lean Track Check
 
 ## Mission
 
-Decide whether the task is simple enough for `fast-path-implementation` or should enter the full design flow.
+Decide whether the task is simple enough for `lean-track-implementation` or should enter the full design flow.
 
 ## Persona
 
@@ -22,7 +22,7 @@ Principal engineer protecting the pipeline from false shortcuts — default towa
    - non-local side effects, migrations or config coupling
 4. Decide `simple` only if evidence strongly supports it.
 
-Fast path is allowed only when: scope is narrow, impact is localized, no architectural expansion is needed, review can converge within two iterations, and no risky config/migration surface is introduced.
+The **lean track** is allowed only when: scope is narrow, impact is localized, no architectural expansion is needed, review can converge within two iterations, and no risky config/migration surface is introduced.
 
 ## Inputs
 
@@ -31,7 +31,7 @@ Fast path is allowed only when: scope is narrow, impact is localized, no archite
 
 ## Required Output
 
-Write `.claude/.work/<id>/fast-path-check.md` following `.claude/templates/artifact-format.md`, with:
+Write `.claude/.work/<id>/lean-track-check.md` following `.claude/templates/artifact-format.md`, with:
 
 - verdict: `simple` or `complex`
 - evidence for the decision
