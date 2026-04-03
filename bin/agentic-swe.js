@@ -17,32 +17,66 @@ function pkgRoot() {
   return path.join(__dirname, '..');
 }
 
+function readVersion() {
+  try {
+    const p = path.join(pkgRoot(), 'package.json');
+    return JSON.parse(fs.readFileSync(p, 'utf8')).version || 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
+const VERSION = readVersion();
+
 function parseArgs(argv) {
-  const args = { help: false, yes: false, target: null };
+  const args = {
+    help: false,
+    version: false,
+    yes: false,
+    dryRun: false,
+    command: 'install',
+    target: null,
+  };
   const rest = [];
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-h' || a === '--help') args.help = true;
+    else if (a === '-v' || a === '--version') args.version = true;
     else if (a === '-y' || a === '--yes') args.yes = true;
+    else if (a === '-n' || a === '--dry-run') args.dryRun = true;
     else if (!a.startsWith('-')) rest.push(a);
+  }
+  if (rest[0] === 'doctor') {
+    args.command = 'doctor';
+    if (rest[1]) args.target = path.resolve(rest[1]);
+    else args.target = process.cwd();
+    return args;
   }
   if (rest[0] === 'install' && rest[1]) args.target = path.resolve(rest[1]);
   else if (rest[0] === 'install' && !rest[1]) args.target = process.cwd();
   else if (rest[0] && rest[0] !== 'install') args.target = path.resolve(rest[0]);
-  else if (!rest.length) args.target = process.cwd();
+  else args.target = process.cwd();
   return args;
 }
 
 function printHelp() {
-  console.log(`Usage:
+  console.log(`agentic-swe ${VERSION}
+
+Usage:
   agentic-swe [options] [path]
   agentic-swe install [path]
+  agentic-swe doctor [path]
 
   Install the Agentic SWE pipeline into a project directory (default: current directory).
 
 Options:
-  -y, --yes   Skip the prompt when the target is not a git repository
-  -h, --help  Show this help
+  -y, --yes     Skip the prompt when the target is not a git repository
+  -n, --dry-run Show what would be installed without writing files
+  -v, --version Print package version
+  -h, --help    Show this help
+
+Commands:
+  doctor        Check Node.js, git, and whether the pipeline is installed in [path] (default: cwd)
 `);
 }
 
@@ -107,13 +141,43 @@ function appendGitignore(targetDir) {
   }
 }
 
-function install() {
-  const args = parseArgs(process.argv);
-  if (args.help) {
-    printHelp();
-    process.exit(0);
+/**
+ * @returns {number} exit code (0 = all checks passed)
+ */
+function runDoctor(targetDir) {
+  const issues = [];
+  const ok = [];
+
+  const major = parseInt(process.versions.node.split('.')[0], 10);
+  if (major >= 18) ok.push(`Node.js ${process.version} (engine >=18)`);
+  else issues.push(`Node.js ${process.version} — need Node 18+ (see package engines)`);
+
+  const git = spawnSync('git', ['--version'], { encoding: 'utf8' });
+  if (git.status === 0) ok.push(`git: ${git.stdout.trim().split('\n')[0]}`);
+  else issues.push('git not found on PATH');
+
+  if (!fs.existsSync(targetDir)) {
+    issues.push(`Target directory does not exist: ${targetDir}`);
+  } else {
+    ok.push(`Target: ${targetDir}`);
+    const claude = path.join(targetDir, '.claude');
+    const phases = path.join(claude, 'phases');
+    const commands = path.join(claude, 'commands');
+    if (fs.existsSync(phases) && fs.existsSync(commands)) {
+      ok.push('Pipeline present (.claude/phases and .claude/commands)');
+    } else {
+      issues.push('Pipeline not installed — run: npx agentic-swe ' + targetDir);
+    }
   }
 
+  console.log('=== agentic-swe doctor ===\n');
+  for (const line of ok) console.log('  OK   ' + line);
+  for (const line of issues) console.log('  !!   ' + line);
+  console.log('');
+  return issues.length > 0 ? 1 : 0;
+}
+
+function install(args) {
   const root = pkgRoot();
   const sourceClaude = path.join(root, '.claude');
   const sourceClaudeMd = path.join(root, 'CLAUDE.md');
@@ -143,6 +207,21 @@ function install() {
   if (!fs.existsSync(targetDir)) {
     console.error(`ERROR: Directory does not exist: ${targetDir}`);
     process.exit(1);
+  }
+
+  if (args.dryRun) {
+    const targetClaude = path.join(targetDir, '.claude');
+    console.log('=== DRY RUN (no files written) ===\n');
+    console.log(`Would copy into: ${targetClaude}`);
+    console.log('Would copy subtrees: ' + SUBDIRS.join(', '));
+    console.log(`Would ensure: ${path.join(targetClaude, '.work')}/`);
+    console.log(`Would merge or create: ${path.join(targetDir, 'CLAUDE.md')}`);
+    console.log(`Would append to .gitignore if needed: .claude/.work/`);
+    if (!isGitRepo(targetDir)) {
+      console.log('Note: target is not a git repository (install would prompt unless -y).');
+    }
+    console.log('');
+    process.exit(0);
   }
 
   (async () => {
@@ -238,4 +317,20 @@ function install() {
   });
 }
 
-install();
+function main() {
+  const args = parseArgs(process.argv);
+  if (args.version) {
+    console.log(VERSION);
+    process.exit(0);
+  }
+  if (args.help) {
+    printHelp();
+    process.exit(0);
+  }
+  if (args.command === 'doctor') {
+    process.exit(runDoctor(args.target));
+  }
+  install(args);
+}
+
+main();

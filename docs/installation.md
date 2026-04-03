@@ -19,6 +19,8 @@ After install, you can add **repo-local** context the **feasibility** phase will
 
 Copy-paste guidance lives in the installed package at `.claude/templates/repo-knowledge-stub.md`. Nothing here is required for the pipeline to run.
 
+If something fails, see [troubleshooting.md](troubleshooting.md) and run **`agentic-swe doctor /path/to/your/project`** after install.
+
 ---
 
 ## Install (recommended): npm

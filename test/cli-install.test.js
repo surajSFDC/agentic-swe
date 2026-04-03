@@ -29,6 +29,38 @@ test('cli --help exits 0 and prints usage', () => {
   const r = spawnSync(process.execPath, [binPath, '--help'], { encoding: 'utf8' });
   assert.strictEqual(r.status, 0);
   assert.match(r.stdout, /Usage:/i);
+  assert.match(r.stdout, /agentic-swe \d+\.\d+\.\d+/);
+});
+
+test('cli --version prints semver', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
+  const r = spawnSync(process.execPath, [binPath, '--version'], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 0);
+  assert.strictEqual(r.stdout.trim(), pkg.version);
+});
+
+test('cli doctor on empty temp dir fails (pipeline not installed)', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-swe-doc-'));
+  const r = spawnSync(process.execPath, [binPath, 'doctor', dir], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 1);
+  assert.match(r.stdout, /Pipeline not installed/i);
+});
+
+test('cli doctor after install succeeds', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-swe-doc-'));
+  const inst = runInstall(dir);
+  assert.strictEqual(inst.status, 0, inst.stderr || inst.stdout);
+  const r = spawnSync(process.execPath, [binPath, 'doctor', dir], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 0);
+  assert.match(r.stdout, /Pipeline present/i);
+});
+
+test('cli --dry-run exits 0 without creating .claude', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-swe-dry-'));
+  const r = spawnSync(process.execPath, [binPath, '-y', '-n', dir], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 0);
+  assert.match(r.stdout, /DRY RUN/i);
+  assert.ok(!fs.existsSync(path.join(dir, '.claude')), 'dry-run must not create .claude');
 });
 
 test('install creates .claude/commands with markdown commands', () => {

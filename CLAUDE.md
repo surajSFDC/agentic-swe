@@ -321,7 +321,7 @@ Reusable slash commands that phases and agents invoke for structured, evidence-b
   - `.claude/agents/subagents/custom/` — optional repo-specific subagent definitions
 - `.claude/tools/` — Reusable tooling
   - `.claude/tools/subagent-catalog/` — Browse, search, and fetch subagent definitions
-- `.claude/templates/` — `state.json`, `progress.md`, `audit.log`, `phase-checklist.md`, `evidence-standard.md`, `artifact-format.md`, `repo-knowledge-stub.md`, `playbook-entry.md`, `evaluation-rubric.md`, `capability-gaps-section.md`
+- `.claude/templates/` — `state.json`, `progress.md`, `audit.log`, `phase-checklist.md`, `evidence-standard.md`, `artifact-format.md`, `repo-knowledge-stub.md`, `playbook-entry.md`, `evaluation-rubric.md`, `capability-gaps-section.md`, `metrics-summary.md` (optional)
 - `.claude/references/` — Authoritative tool/platform facts (readonly); includes `tooling-expectations.md`, plus material consulted by `.claude/agents/git-ops.md` and `.claude/phases/pr-created.md`
 - `.work/` — Runtime work state (gitignored)
 
