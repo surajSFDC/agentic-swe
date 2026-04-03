@@ -57,4 +57,4 @@ Given `destination_state` and `work_dir` (`.claude/.work/<id>/`), check against 
 
 **Output:** destination state, required artifacts list, per-artifact status (`EXISTS`/`MISSING`/`EMPTY`), verdict: `COMPLETE` or `INCOMPLETE`.
 
-If any required artifact is MISSING or EMPTY, list the missing items. The orchestrator must not complete the transition until the verdict is COMPLETE.
+If any required artifact is MISSING or EMPTY, list the missing items. The Hypervisor must not complete the transition until the verdict is COMPLETE.

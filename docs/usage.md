@@ -105,7 +105,7 @@ Spawn the devops-engineer to optimize our Docker build
 
 ### Way 3: Within the pipeline
 
-During pipeline execution, the orchestrator can automatically delegate to subagents when domain expertise is needed. For example, if the task involves Rust code, it may spawn the `rust-engineer` subagent during implementation.
+During pipeline execution, the Hypervisor can automatically delegate to subagents when domain expertise is needed. For example, if the task involves Rust code, it may spawn the `rust-engineer` subagent during implementation.
 
 ### Repo-specific custom subagents
 

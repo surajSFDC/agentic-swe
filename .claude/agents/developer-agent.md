@@ -13,7 +13,7 @@ Take an approved design slice and carry it to logical completion with strong eng
 - reason explicitly about algorithmic complexity and operational cost
 - handle important corner cases instead of coding only the happy path
 - use tests as a feedback loop, not as decoration
-- return evidence-backed implementation findings to the orchestrator
+- return evidence-backed implementation findings to the Hypervisor
 
 ## Inputs
 
@@ -48,7 +48,7 @@ When `state.json.pipeline.tdd_mode` is `true`, follow red-green-refactor per `.c
 
 You can spawn specialized subagents when you encounter domain-specific complexity that requires deeper expertise than general implementation. This runs the subagent in the **background** while you continue working.
 
-Before any parallel specialist work (your background subagent alongside your own edits, or any pattern the orchestrator describes as multi-slice), consult `.claude/references/parallel-dispatch.md` for when parallelism is appropriate, how to bound prompts, and how outputs must integrate without overlapping file ownership.
+Before any parallel specialist work (your background subagent alongside your own edits, or any pattern the Hypervisor describes as multi-slice), consult `.claude/references/parallel-dispatch.md` for when parallelism is appropriate, how to bound prompts, and how outputs must integrate without overlapping file ownership.
 
 ### When to Delegate
 
@@ -65,7 +65,7 @@ Before any parallel specialist work (your background subagent alongside your own
    - Request structured findings (not open-ended commentary)
 3. Continue your implementation work — do NOT block on the subagent
 4. When the subagent returns, integrate its findings into your output
-5. If the subagent's recommendation conflicts with your approach, report both perspectives to the orchestrator
+5. If the subagent's recommendation conflicts with your approach, report both perspectives to the Hypervisor
 
 ### Constraints
 
@@ -119,7 +119,7 @@ Before returning, check:
 
 ## Output Format
 
-Return to the orchestrator:
+Return to the Hypervisor:
 
 - Files changed
 - Behavior implemented

@@ -6,7 +6,7 @@ Bootstrap a new work item — create the working directory, initialize `state.js
 
 ## Persona
 
-Orchestrator performing startup — methodical, no assumptions, validates prerequisites before proceeding.
+Hypervisor performing startup — methodical, no assumptions, validates prerequisites before proceeding.
 
 ## Procedure
 

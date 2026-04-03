@@ -161,7 +161,7 @@ See [examples](https://d3pi4w4hqr9gq6.cloudfront.net/examples.md) for detailed w
 ## Architecture
 
 ```
-Orchestrator (Claude Code + CLAUDE.md policy)
+Hypervisor (Claude Code + CLAUDE.md policy)
 ├── Core Pipeline Agents
 │   ├── developer-agent.md    -- Implementation specialist
 │   ├── git-operations-agent.md -- Branch management, remote sync
@@ -179,39 +179,6 @@ Orchestrator (Claude Code + CLAUDE.md policy)
     └── research-analysis/
 ```
 
-## File Structure
-
-```
-agentic-swe/
-├── CLAUDE.md              # Orchestrator policy and state machine
-├── README.md
-├── package.json           # npm package (CLI: agentic-swe)
-├── bin/agentic-swe.js     # npm install entrypoint
-├── docs/                  # Documentation (mirrored on the [project site](https://d3pi4w4hqr9gq6.cloudfront.net/))
-│   ├── installation.md
-│   ├── usage.md
-│   ├── examples.md
-│   ├── subagent-catalog.md
-│   ├── product-positioning.md
-│   ├── licensing.md
-│   └── distribution.md
-├── PRO.md                 # Pro / commercial offers (stub)
-└── .claude/               # All pipeline files (same structure when installed)
-    ├── commands/          # Slash commands (/work, /brainstorm, /execute-plan, …)
-    ├── phases/            # Phase prompts (one per pipeline state) + subagent-selection policy
-    ├── agents/            # Core agents + 135 subagents
-    │   ├── developer-agent.md
-    │   ├── git-operations-agent.md
-    │   ├── pr-manager-agent.md
-    │   ├── panel/         # Design review panel (3 agents)
-    │   └── subagents/     # 10 category directories
-    ├── state-machine.json # Canonical transition edges (must match CLAUDE.md diagram)
-    ├── templates/         # State schema, evidence standard, artifact format
-    ├── tools/             # Subagent catalog tool
-    ├── references/        # Git and PR workflow reference docs
-    └── .work/             # Runtime state (gitignored)
-```
-
 ## Extending
 
 - **Add a subagent**: Create a `.md` file in `.claude/agents/subagents/<category>/` with frontmatter (`name`, `description`, `tools`, `model`)
@@ -223,7 +190,7 @@ agentic-swe/
 
 ## Multi-Platform Support
 
-agentic-swe works as a pipeline orchestrator across multiple AI coding platforms:
+agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** session per `CLAUDE.md` — across multiple AI coding platforms:
 
 | Platform | Install Method | Details |
 |----------|---------------|---------|

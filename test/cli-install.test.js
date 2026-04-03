@@ -81,7 +81,7 @@ test('install creates CLAUDE.md from package when missing (full copy, no merge)'
   assert.ok(fs.existsSync(claudeMd));
   const body = fs.readFileSync(claudeMd, 'utf8');
   // Installer uses copyFileSync for missing CLAUDE.md — same content as package root (no delimiter yet).
-  assert.match(body, /Orchestrator Policy/);
+  assert.match(body, /Hypervisor Policy/);
   assert.match(body, /## State Machine/);
 });
 
@@ -105,7 +105,7 @@ test('install replaces policy block when delimiter already present', () => {
   assert.strictEqual(r.status, 0, r.stderr || r.stdout);
   const body = fs.readFileSync(path.join(dir, 'CLAUDE.md'), 'utf8');
   assert.ok(!body.includes(oldPolicy), 'old policy should be replaced');
-  assert.match(body, /Orchestrator Policy/);
+  assert.match(body, /Hypervisor Policy/);
   assert.ok(body.startsWith('# Title'), 'content before delimiter preserved');
 });
 

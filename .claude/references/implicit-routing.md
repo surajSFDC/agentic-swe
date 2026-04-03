@@ -1,6 +1,6 @@
 # Implicit routing (skill-like behavior without the Skill tool)
 
-Hosts differ: some expose a **Skill** tool; agentic-swe uses **`CLAUDE.md`**, **slash commands**, and **phase prompts**. This document defines when the orchestrator should **recommend** a command or phase **before** writing production code—mirroring the **route-then-code** habit: choose a process step (phase or command) before editing production code.
+Hosts differ: some expose a **Skill** tool; agentic-swe uses **`CLAUDE.md`**, **slash commands**, and **phase prompts**. This document defines when the Hypervisor should **recommend** a command or phase **before** writing production code—mirroring the **route-then-code** habit: choose a process step (phase or command) before editing production code.
 
 ## Preconditions (always)
 

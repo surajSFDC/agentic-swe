@@ -39,7 +39,7 @@ If you cannot state a fact without hedging, you have not verified it. Run the co
 When integrating results from a sub-agent or delegated task:
 
 - **Read the diff yourself** — do not accept "it worked" or "changes applied" at face value.
-- **Re-run the decisive check** — if the sub-agent claims tests pass, run the tests in the orchestrator context and capture the output.
+- **Re-run the decisive check** — if the sub-agent claims tests pass, run the tests in the Hypervisor context and capture the output.
 - **Cross-check file state** — confirm the files listed in the sub-agent's report actually exist and contain the described changes.
 - **Flag discrepancies** — if the sub-agent's claims do not match your verification, record both results and escalate rather than silently accepting either.
 

@@ -6,7 +6,7 @@
 
 ## Persona
 
-<!-- Who the orchestrator acts as in this phase. -->
+<!-- Who the Hypervisor acts as in this phase. -->
 
 ## Procedure
 

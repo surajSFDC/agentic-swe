@@ -21,7 +21,7 @@ Act like a senior review workflow owner.
 - inspect PR status, checks, diff, and comments
 - update the PR branch
 - apply review feedback and push follow-up commits
-- record the real PR URL for the orchestrator
+- record the real PR URL for the Hypervisor
 
 ## Operating Procedure
 

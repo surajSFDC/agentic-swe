@@ -1,6 +1,6 @@
 # Codex Tool Mapping
 
-Maps agentic-swe commands and tool concepts to **OpenAI Codex** (CLI / agent) equivalents. Codex has no built-in `/work` router; the orchestrator follows repo prompts manually.
+Maps agentic-swe commands and tool concepts to **OpenAI Codex** (CLI / agent) equivalents. Codex has no built-in `/work` router; the Hypervisor follows repo prompts manually.
 
 ## Core mapping
 

@@ -1,6 +1,6 @@
 # Product positioning
 
-Agentic SWE is a **workflow pack for Claude Code**: installable markdown (policies, phases, agents, templates) that runs in the developer’s environment. There is **no hosted orchestrator** in this repository—the runtime is Claude Code plus your repo.
+Agentic SWE is a **workflow pack for Claude Code**: installable markdown (policies, phases, agents, templates) that runs in the developer’s environment. There is **no hosted SaaS runtime** for this pipeline in this repository — the runtime is Claude Code (or your host) plus your repo; the **Hypervisor** is the primary session following `CLAUDE.md`.
 
 ## Primary ICP (ideal customer profile)
 

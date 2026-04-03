@@ -40,7 +40,7 @@ After displaying the definition, show how to use it:
 
 ```
 **How to invoke:**
-- As orchestrator subagent: Agent(prompt="agents/subagents/quality-security/code-reviewer.md")
+- As Hypervisor subagent: Agent(prompt="agents/subagents/quality-security/code-reviewer.md")
 - With model override: Agent(prompt="...", model="opus")
 - In background: Agent(prompt="...", run_in_background=true)
 - In isolation: Agent(prompt="...", isolation="worktree")

@@ -4,7 +4,7 @@
 
 Automatically select and spawn specialized subagents during pipeline execution based on evidence from the task, repository, and affected files. Selection is deterministic, evidence-based, and supplementary to core pipeline agents.
 
-This policy is consulted by the orchestrator and by core agents (developer-agent.md, panel agents) at specific points during phase execution. Subagents run in the background and are advisory — the orchestrator or calling agent owns the final decision.
+This policy is consulted by the Hypervisor and by core agents (developer-agent.md, panel agents) at specific points during phase execution. Subagents run in the background and are advisory — the Hypervisor or calling agent owns the final decision.
 
 ---
 
@@ -12,11 +12,11 @@ This policy is consulted by the orchestrator and by core agents (developer-agent
 
 | Phase | Trigger | Who Reads This | Purpose |
 |-------|---------|----------------|---------|
-| feasibility | After `/repo-scan` completes | Orchestrator | Collect signals, write `## Subagent Signals` into feasibility.md |
-| lean-track-implementation | Before spawning developer-agent.md | Orchestrator | Optionally spawn 1 language specialist (background, non-blocking) |
-| implementation | Before spawning developer-agent.md | Orchestrator | Spawn language + domain specialists (background, advisory) |
-| design | Before panel invocation | Orchestrator | Spawn domain specialist for pre-design input |
-| code-review | After reading artifacts | Orchestrator | Spawn specialized reviewers in parallel |
+| feasibility | After `/repo-scan` completes | Hypervisor | Collect signals, write `## Subagent Signals` into feasibility.md |
+| lean-track-implementation | Before spawning developer-agent.md | Hypervisor | Optionally spawn 1 language specialist (background, non-blocking) |
+| implementation | Before spawning developer-agent.md | Hypervisor | Spawn language + domain specialists (background, advisory) |
+| design | Before panel invocation | Hypervisor | Spawn domain specialist for pre-design input |
+| code-review | After reading artifacts | Hypervisor | Spawn specialized reviewers in parallel |
 | (any agent work) | When agent detects domain-specific need | developer-agent.md, panel agents | Agent-to-agent delegation |
 
 ---
@@ -146,7 +146,7 @@ Set `subagent mode` to `minimal` if lean-track-check routes to the lean track, `
 
 Used when subagents provide recommendations alongside the primary developer agent.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. Applies mapping rules to select subagent(s)
 3. Spawns `developer-agent.md` (primary, foreground)
 4. Spawns selected subagent(s) in **background** with advisory prompt:
@@ -171,14 +171,14 @@ Files in scope:
 ```
 
 5. Developer-agent.md proceeds immediately — **not blocked** by subagent
-6. When subagent returns, orchestrator appends findings to `implementation.md` under `## Specialist Advisory`
-7. If subagent findings conflict with developer output, orchestrator notes the conflict but does NOT automatically re-implement — logs it for code-review consideration
+6. When subagent returns, Hypervisor appends findings to `implementation.md` under `## Specialist Advisory`
+7. If subagent findings conflict with developer output, Hypervisor notes the conflict but does NOT automatically re-implement — logs it for code-review consideration
 
 ### Parallel Review Mode (code-review)
 
 Used when specialist reviewers run alongside the main code review.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. Selects 0-2 review-oriented subagents based on domain signals:
    - Security-sensitive code → `security-auditor`
    - Performance-sensitive code → `performance-engineer`
@@ -193,7 +193,7 @@ Used when specialist reviewers run alongside the main code review.
 
 Used when domain expertise should inform the design before panel review.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. If a domain specialist is indicated with high confidence, spawn it **before** the design panel with a focused prompt:
 
 ```
@@ -226,7 +226,7 @@ Core agents (`developer-agent.md`, panel agents) can spawn subagents themselves 
 - Maximum 1 subagent spawn per calling agent per phase
 - Subagent must come from the mapping tables (no ad-hoc selection)
 - Calling agent must include the subagent's findings in its output (not silently discard)
-- If subagent contradicts the calling agent, both perspectives are reported to the orchestrator
+- If subagent contradicts the calling agent, both perspectives are reported to the Hypervisor
 
 ---
 
@@ -266,7 +266,7 @@ Core agents (`developer-agent.md`, panel agents) can spawn subagents themselves 
 - Each subagent spawn adds estimated cost to `cost_used` in state.json
 - Model routing from subagent frontmatter determines cost tier (opus > sonnet > haiku)
 - **If `budget_remaining` < 3, skip all subagent auto-selection** — preserve budget for core work
-- Maximum 2 orchestrator-spawned subagents per phase invocation
+- Maximum 2 Hypervisor-spawned subagents per phase invocation
 - Maximum 1 agent-to-agent delegation per calling agent per phase
 - Total subagent spawns tracked in `state.json.counters.subagent_spawns`
 
@@ -297,11 +297,11 @@ The `skip-subagent` entry is logged only when signals existed but selection was 
 
 ## Conflict Resolution
 
-If a subagent finding contradicts the primary agent or orchestrator:
+If a subagent finding contradicts the primary agent or Hypervisor:
 
 1. Log the conflict in `audit.log`
 2. Include both perspectives in the phase artifact (under `## Specialist Advisory` or `## Specialist Review Findings`)
-3. The orchestrator or calling agent (not the subagent) decides which perspective to follow
+3. The Hypervisor or calling agent (not the subagent) decides which perspective to follow
 4. Record the resolution rationale in the artifact
 
 Subagents are advisory. They enhance quality but never override the primary workflow.

@@ -6,7 +6,7 @@ Present the created PR to the human for review and block until approval, change 
 
 ## Persona
 
-Patient orchestrator — presents the work clearly, waits for explicit human decision, and responds to feedback precisely.
+Patient Hypervisor — presents the work clearly, waits for explicit human decision, and responds to feedback precisely.
 
 ## Inputs
 

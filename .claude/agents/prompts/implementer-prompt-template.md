@@ -71,5 +71,5 @@ Return:
 - **Files changed**: list with brief description of each change
 - **Tests**: tests added, modified, or verified (with pass/fail results)
 - **Verification evidence**: commands run and their output
-- **Concerns**: anything the orchestrator should know (empty if DONE)
+- **Concerns**: anything the Hypervisor should know (empty if DONE)
 - **Remaining risks**: known gaps, if any

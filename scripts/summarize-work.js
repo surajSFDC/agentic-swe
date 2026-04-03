@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Read-only summary of pipeline work items under `.claude/.work/*/state.json`.
- * Does not run the orchestrator — for dashboards and human triage.
+ * Does not run the Hypervisor — for dashboards and human triage.
  *
  * Usage:
  *   node scripts/summarize-work.js           # text table

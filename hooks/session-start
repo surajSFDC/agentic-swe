@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Session-start hook for agentic-swe (Claude Code + Cursor).
-# Injects orchestration context + compact implicit-routing hint.
+# Injects Hypervisor policy context + compact implicit-routing hint.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -13,7 +13,7 @@ if [ ! -f "$CLAUDE_MD" ]; then
   exit 1
 fi
 
-BASE="You are running with the agentic-swe pipeline. Follow the orchestration policy in CLAUDE.md. Check .claude/.work/ for active work items before starting new work."
+BASE="You are running with the agentic-swe pipeline. Follow the Hypervisor policy in CLAUDE.md. Check .claude/.work/ for active work items before starting new work."
 
 ROUTING=""
 if [ -f "$HINT_FILE" ]; then

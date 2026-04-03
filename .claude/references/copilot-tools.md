@@ -6,7 +6,7 @@ Maps agentic-swe concepts to **GitHub Copilot** CLI / agent surfaces (workspace-
 
 | agentic-swe Concept | Copilot Equivalent | Notes |
 |---------------------|--------------------|-------|
-| Orchestrator loop | Copilot agent session | You (or the agent) still own `state.json`, transitions, and gates per `CLAUDE.md`. |
+| Hypervisor loop | Copilot agent session | You (or the agent) still own `state.json`, transitions, and gates per `CLAUDE.md`. |
 | Agent delegation (developer, PR manager, etc.) | Copilot **agent** model / multi-step agent mode | Use for focused implementation or review tasks; paste scope + paths from phase prompts. |
 | Panel review (3-way) | Three sequential or parallel agent requests | Same content as spawning three specialists; merge into one `design-panel-review.md`-style artifact. |
 | Read / list / edit workspace | Copilot workspace tools | File read, search, and edits against the open repo; confirm paths under `.claude/`. |

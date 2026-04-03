@@ -1,9 +1,9 @@
 # agentic-swe — Gemini CLI Context
 
-> This file is the orchestration context for Gemini CLI.
+> This file is the Hypervisor context for Gemini CLI.
 > The canonical policy lives in [`CLAUDE.md`](CLAUDE.md).
 
-## You Are the Orchestrator
+## You Are the Hypervisor
 
 There is no runtime engine. You execute the pipeline by following the
 policies, phase prompts, and templates under `.claude/`.

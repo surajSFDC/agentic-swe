@@ -1,4 +1,4 @@
-# agentic-swe — Orchestration Policy
+# agentic-swe — Hypervisor policy
 
 > This file exists for Codex and generic agent platform compatibility.
 > The canonical policy lives in [`CLAUDE.md`](CLAUDE.md).
@@ -6,7 +6,7 @@
 ## Pipeline Summary
 
 agentic-swe is an autonomous software engineering pipeline. You are the
-orchestrator — there is no runtime engine. Execute the pipeline by following
+**Hypervisor** — there is no runtime engine. Execute the pipeline by following
 the policies, phase prompts, and templates under `.claude/`.
 
 ### State Machine (abbreviated)

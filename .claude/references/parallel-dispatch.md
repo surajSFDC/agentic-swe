@@ -1,6 +1,6 @@
 # Parallel agent dispatch (reference)
 
-Use this when the orchestrator or a core agent considers **multiple agents or specialists running at the same time** (e.g., several background subagents, separate developer slices, or parallel review passes). It complements delegation limits in `CLAUDE.md` and `.claude/phases/subagent-selection.md`.
+Use this when the Hypervisor or a core agent considers **multiple agents or specialists running at the same time** (e.g., several background subagents, separate developer slices, or parallel review passes). It complements delegation limits in `CLAUDE.md` and `.claude/phases/subagent-selection.md`.
 
 **Default:** prefer a single owner and serial work unless the criteria below clearly apply — parallelism trades wall-clock for coordination and merge risk.
 
@@ -27,7 +27,7 @@ Every parallel prompt should be explicit and bounded:
 | **Scope** | Exactly which files, directories, or subsystem this agent owns. |
 | **Goal** | What artifact or decision to produce (not “help with the repo”). |
 | **Constraints** | What not to touch, edit, or assume (other agents’ areas, APIs under negotiation). |
-| **Expected output** | Format, approximate length, and a clear **verdict** or structured sections the orchestrator can merge. |
+| **Expected output** | Format, approximate length, and a clear **verdict** or structured sections the Hypervisor can merge. |
 
 Vague parallel prompts produce duplicate work, drift, or silent overlap.
 
@@ -48,11 +48,11 @@ Expected output: Bullets + verdict (pass/concerns/blocker) ≤ N words; list fil
 
 ## Relationship to this pipeline
 
-- The **orchestrator** owns multi-slice splits, conflict checks after parallel returns, and whether to fan out at all given `budget_remaining`.
+- The **Hypervisor** owns multi-slice splits, conflict checks after parallel returns, and whether to fan out at all given `budget_remaining`.
 - The **developer agent** may run one background subagent while continuing work; that subagent’s prompt should still follow the scope / goal / constraints / expected-output pattern.
 - **Multi-slice implementation** (multiple developer agents with non-overlapping ownership) must be planned with this document plus `audit.log` and `implementation.md` integration so results reconcile to one coherent branch state.
 
-## Pre-flight checklist (orchestrator)
+## Pre-flight checklist (Hypervisor)
 
 - [ ] Slices are disjoint by path or concern (documented in spawn prompts).
 - [ ] No sequential dependency hidden between parallel tasks.

@@ -53,7 +53,7 @@ Status: approval-wait
 
 ## Example 3: Medium change (standard track)
 
-A scoped feature with tests where the team wants design + implementation but **not** the full design panel or separate code-review phase (orchestrator sets `pipeline.track` to `standard` at `lean-track-check` when the verdict is `standard`):
+A scoped feature with tests where the team wants design + implementation but **not** the full design panel or separate code-review phase (the Hypervisor sets `pipeline.track` to `standard` at `lean-track-check` when the verdict is `standard`):
 
 ```
 > /work Add an internal CSV export endpoint with unit tests; use standard track / lighter review

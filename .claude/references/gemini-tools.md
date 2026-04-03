@@ -38,7 +38,7 @@ Maps agentic-swe tool and command concepts to Gemini CLI equivalents.
 ## Slash Commands
 
 agentic-swe commands live in `.claude/commands/*.md` as markdown prompts.
-Gemini CLI does not natively parse these, but the orchestrator can read
+Gemini CLI does not natively parse these, but the Hypervisor can read
 and follow them manually:
 
 ```
@@ -48,7 +48,7 @@ Read .claude/commands/work.md → follow instructions within
 ## Phase Prompts
 
 Phase prompts in `.claude/phases/*.md` define each pipeline stage.
-The orchestrator reads the relevant phase file and executes its instructions:
+The Hypervisor reads the relevant phase file and executes its instructions:
 
 ```
 Read .claude/phases/feasibility.md → execute feasibility phase

@@ -48,7 +48,7 @@ export const experimental = {
         const systemMsg = {
           role: "system",
           content: [
-            "You are the orchestrator for the agentic-swe pipeline.",
+            "You are the Hypervisor for the agentic-swe pipeline.",
             "Follow the policy below for state management, transitions, and artifact requirements.",
             "",
             policy,
