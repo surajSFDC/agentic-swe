@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agentic SWE — Autonomous Software Engineering Pipeline</title>
-  <meta name="description" content="Turn Claude Code into a full SWE pipeline with 135+ specialized subagents. Pure markdown orchestration — no runtime code.">
+  <meta name="description" content="Markdown SWE pipeline for Claude Code: lean, standard, and rigorous tracks, Hypervisor policy in CLAUDE.md, human gates, 135+ subagents. No hosted runtime — pure .claude/ pack.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -303,6 +303,27 @@
       opacity: 0.7;
     }
 
+    /* ── Platforms strip ── */
+    .platforms-section {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .platforms-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+      margin-top: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text);
+    }
+    .platforms-list span {
+      color: var(--cyan);
+      opacity: 0.9;
+    }
+
     /* ── Feature cards ── */
     .features-grid {
       display: grid;
@@ -547,15 +568,17 @@
       <a href="#pipeline">Pipeline</a>
       <a href="#features">Features</a>
       <a href="#agents">Agents</a>
+      <a href="#platforms">Platforms</a>
+      <a href="#commands">Commands</a>
       <a href="#start">Get Started</a>
     </div>
   </nav>
 
   <!-- ── Hero ── -->
   <section class="hero">
-    <div class="hero-badge"><span class="dot"></span> Pure markdown orchestration</div>
+    <div class="hero-badge"><span class="dot"></span> Hypervisor policy · pure markdown · no cloud runtime</div>
     <h1>Autonomous SWE<br><span class="gradient-text">for Claude Code</span></h1>
-    <p>A state-machine pipeline that turns Claude Code into a full software engineering workflow. 135+ specialized agents. Zero runtime code. Just markdown.</p>
+    <p>A state-machine pipeline with <strong>three tracks</strong> (lean, standard, rigorous), <strong>human gates</strong>, and evidence-backed artifacts. Your primary session follows the <strong>Hypervisor</strong> policy in <code style="font-size:0.9em;">CLAUDE.md</code> — plus <strong>135+</strong> auto-selected specialists. Zero in-repo runtime: policies, phases, and agents are markdown.</p>
     <div class="hero-actions">
       <a href="#start" class="btn btn-primary">Get Started</a>
       <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener" class="btn btn-ghost">npm package</a>
@@ -567,7 +590,7 @@
     <div class="reveal">
       <div class="section-label">// how it works</div>
       <h2>Three tracks, one pipeline</h2>
-      <p class="section-desc" style="margin-left:auto;margin-right:auto;">After feasibility, <code style="font-size:0.9em;">lean-track-check</code> sets <code style="font-size:0.9em;">pipeline.track</code> in work state: <strong>lean</strong> (minimal), <strong>standard</strong> (design + tests, lighter review), or <strong>rigorous</strong> (full panel, code review, permissions). See <code style="font-size:0.9em;">CLAUDE.md</code> for the canonical graph.</p>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">After feasibility, <code style="font-size:0.9em;">lean-track-check</code> sets <code style="font-size:0.9em;">pipeline.track</code> in <code style="font-size:0.9em;">state.json</code>: <strong>lean</strong> (minimal), <strong>standard</strong> (design + tests, skips design panel and separate code-review phase), or <strong>rigorous</strong> (full panel, design-review, code-review, permissions). The <strong>Hypervisor</strong> (primary session) owns transitions and gates per <code style="font-size:0.9em;">CLAUDE.md</code>.</p>
     </div>
 
     <div class="pipeline-viz reveal">
@@ -650,7 +673,7 @@
     </div>
     <p class="pipeline-note reveal">
       <span style="color:#f59e0b;">&#9632;</span> Human gates stop the pipeline for your review. Nothing ships without approval.
-      <br><span style="color:var(--cyan);">&#9632;</span> Transition edges are also listed in <code style="font-size:0.85em;">.claude/state-machine.json</code> (kept in sync with <code style="font-size:0.85em;">CLAUDE.md</code>).
+      <br><span style="color:var(--cyan);">&#9632;</span> Transition edges live in <code style="font-size:0.85em;">.claude/state-machine.json</code> and match the fenced graph in <code style="font-size:0.85em;">CLAUDE.md</code> (verified in CI).
     </p>
   </section>
 
@@ -664,7 +687,7 @@
       <div class="feature-card reveal">
         <div class="feature-icon cyan">&#9881;</div>
         <h3>Zero runtime code</h3>
-        <p>The entire pipeline is pure markdown. Claude Code reads the policies and executes the workflow. No servers, no dependencies, no build step.</p>
+        <p>The pipeline is markdown under <code style="font-size:0.85em;">.claude/</code> plus root <code style="font-size:0.85em;">CLAUDE.md</code>. The host (e.g. Claude Code) executes it. Optional local tools like the brainstorm visual server are opt-in — not required to run <code style="font-size:0.85em;">/work</code>.</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon violet">&#9670;</div>
@@ -691,6 +714,11 @@
         <h3>Track-aware routing</h3>
         <p>Lean, standard, and rigorous tracks share one state machine; <code style="font-size:0.85em;">lean-track-check</code> records <code style="font-size:0.85em;">pipeline.track</code> so phases and budgets match risk.</p>
       </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon cyan">&#9673;</div>
+        <h3>Hypervisor session</h3>
+        <p>The primary chat session is the <strong>Hypervisor</strong>: it carries <code style="font-size:0.85em;">state.json</code>, runs mandatory <code style="font-size:0.85em;">/check</code> steps, delegates to core agents and subagents, and stays accountable — not a separate hosted service.</p>
+      </div>
     </div>
   </section>
 
@@ -715,6 +743,22 @@
     </div>
   </section>
 
+  <!-- ── Platforms ── -->
+  <section id="platforms">
+    <div class="reveal platforms-section">
+      <div class="section-label">// multi-platform</div>
+      <h2>Same pack, your editor or CLI</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Install once into the repo; the <strong>Hypervisor</strong> policy and <code style="font-size:0.9em;">.claude/</code> tree work across hosts. <strong>Claude Code</strong> is the primary path; Cursor, Codex, OpenCode, and Gemini CLI are supported via the bundled plugin / extension hooks — see the project README.</p>
+      <div class="platforms-list reveal">
+        <span>Claude Code</span>
+        <span>Cursor</span>
+        <span>Codex</span>
+        <span>OpenCode</span>
+        <span>Gemini CLI</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Get Started ── -->
   <section id="start">
     <div class="reveal">
@@ -729,6 +773,7 @@
           <div class="code-block">
             <code><span class="cmd">npx</span> agentic-swe /path/to/your/project</code>
           </div>
+          <p style="margin-top:0.75rem;font-size:0.85rem;opacity:0.75;">Or: <code style="font-size:0.8em;">npm install -g agentic-swe</code> then <code style="font-size:0.8em;">agentic-swe install</code> · Node 18+</p>
         </div>
       </div>
       <div class="step reveal">
@@ -761,10 +806,19 @@
     <div class="commands-list reveal">
       <div class="cmd-row"><span class="cmd-name">/work &lt;task&gt;</span><span class="cmd-desc">Start a new task — auto-routes lean, standard, or rigorous track</span></div>
       <div class="cmd-row"><span class="cmd-name">/work &lt;id&gt;</span><span class="cmd-desc">Resume paused work by ID</span></div>
-      <div class="cmd-row"><span class="cmd-name">/plan-only &lt;task&gt;</span><span class="cmd-desc">Analyze and design without implementing</span></div>
-      <div class="cmd-row"><span class="cmd-name">/subagent</span><span class="cmd-desc">Browse 135+ specialized subagents</span></div>
+      <div class="cmd-row"><span class="cmd-name">/plan-only &lt;task&gt;</span><span class="cmd-desc">Feasibility and design without implementing</span></div>
+      <div class="cmd-row"><span class="cmd-name">/brainstorm</span><span class="cmd-desc">Design-first exploration; optional visual server</span></div>
+      <div class="cmd-row"><span class="cmd-name">/write-plan [id]</span><span class="cmd-desc">Refine implementation plan — no coding</span></div>
+      <div class="cmd-row"><span class="cmd-name">/execute-plan [id]</span><span class="cmd-desc">Run the plan via implementation paths</span></div>
+      <div class="cmd-row"><span class="cmd-name">/author-pipeline</span><span class="cmd-desc">Safe checklist to extend phases and commands</span></div>
+      <div class="cmd-row"><span class="cmd-name">/evaluate-work &lt;id&gt;</span><span class="cmd-desc">Work item health and artifact status</span></div>
+      <div class="cmd-row"><span class="cmd-name">/subagent</span><span class="cmd-desc">Browse, search, and invoke specialists</span></div>
       <div class="cmd-row"><span class="cmd-name">/repo-scan</span><span class="cmd-desc">Structured codebase snapshot</span></div>
-      <div class="cmd-row"><span class="cmd-name">/check budget</span><span class="cmd-desc">Verify iteration and cost budgets</span></div>
+      <div class="cmd-row"><span class="cmd-name">/test-runner [scope]</span><span class="cmd-desc">Detect and run tests</span></div>
+      <div class="cmd-row"><span class="cmd-name">/lint [scope]</span><span class="cmd-desc">Linters in check mode</span></div>
+      <div class="cmd-row"><span class="cmd-name">/check budget</span><span class="cmd-desc">Before phases — budgets intact</span></div>
+      <div class="cmd-row"><span class="cmd-name">/check transition</span><span class="cmd-desc">Before state changes — edge allowed for track</span></div>
+      <div class="cmd-row"><span class="cmd-name">/check artifacts</span><span class="cmd-desc">Before transition — required files present</span></div>
     </div>
   </section>
 
