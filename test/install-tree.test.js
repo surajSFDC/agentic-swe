@@ -44,11 +44,19 @@ describe('plugin layout: pipeline dirs at repository root', () => {
     assert.ok(fs.existsSync(p), 'missing hooks/hooks.json');
   });
 
-  it('plugin.json declares Claude component paths (./ prefix)', () => {
+  it('plugin.json uses default commands/agents discovery (no directory overrides)', () => {
     const p = path.join(repoRoot, '.claude-plugin', 'plugin.json');
     const m = JSON.parse(fs.readFileSync(p, 'utf8'));
-    assert.deepStrictEqual(m.commands, ['./commands']);
-    assert.deepStrictEqual(m.agents, ['./agents']);
+    assert.strictEqual(
+      m.commands,
+      undefined,
+      'omit commands — Claude 2.1+ Zod rejects some overrides; default ./commands/ is used',
+    );
+    assert.strictEqual(
+      m.agents,
+      undefined,
+      'omit agents — directory paths in agents[] fail validate (agents: Invalid input); default ./agents/ is used',
+    );
     assert.strictEqual(m.hooks, './hooks/hooks.json');
     assert.strictEqual(m.mcpServers, './mcp-servers.json');
     const mcpPath = path.join(repoRoot, 'mcp-servers.json');
