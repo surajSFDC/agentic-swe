@@ -7,6 +7,7 @@ How the package and documentation reach users, and how that relates to **source 
 | Channel | Role |
 |---------|------|
 | **[npm](https://www.npmjs.com/package/agentic-swe)** | Install the CLI and pipeline files into a project (`npx agentic-swe`, `npm install -g agentic-swe`) |
+| **Claude Code plugin marketplace** | Git-hosted catalog ([`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)); users add the repo then install the plugin — see [claude-code-plugin.md](claude-code-plugin.md) |
 | **Source hosting** | Development, issues, and contributions—separate from installing the published package |
 | **Marketing / docs site** | Landing page and markdown docs (e.g. CloudFront); links to npm for install |
 
@@ -27,6 +28,7 @@ The deploy script syncs **`docs/`** to S3. That includes the landing page and th
 ## Alignment with product
 
 - README and the public site describe install via **npm** and link to the [installation guide](installation.md).  
+- **Claude Code** users can add this repository as a plugin marketplace and install **`agentic-swe@agentic-swe-catalog`** (details in [claude-code-plugin.md](claude-code-plugin.md)); a full project install still uses **`npx agentic-swe`** for `CLAUDE.md` merge and `.claude/` layout.  
 - **Private repo + public npm** is a common setup.
 
 Update the hero CTAs on [index.html](index.html) if your distribution model changes.

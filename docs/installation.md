@@ -106,6 +106,12 @@ If you cannot run the CLI but can use files from the **registry**, unpack the ta
 
 ---
 
+## Claude Code plugin marketplace (optional)
+
+To subscribe to updates from Git and install the pack as a **Claude Code plugin**, add this repository as a marketplace and install **`agentic-swe@agentic-swe-catalog`**. See [claude-code-plugin.md](claude-code-plugin.md) for exact slash commands and caveats. **`npx agentic-swe`** remains the recommended way to merge **`CLAUDE.md`** and lay down **`.claude/`** in a target git repo.
+
+---
+
 ## Uninstalling
 
 To remove the pipeline from a target repo:

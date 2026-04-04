@@ -194,7 +194,7 @@ agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** ses
 
 | Platform | Install Method | Details |
 |----------|---------------|---------|
-| **Claude Code** | `npx agentic-swe /path/to/repo` | Primary platform. Full pipeline support. |
+| **Claude Code** | `npx agentic-swe /path/to/repo` | Primary platform. You can also add this GitHub repo as a Claude Code **plugin marketplace** and install `agentic-swe@agentic-swe-catalog` — see [docs/claude-code-plugin.md](docs/claude-code-plugin.md) (full project merge still recommended via `npx`). |
 | **Cursor** | Plugin via `.cursor-plugin/` | Commands and agents load automatically. See `hooks/hooks-cursor.json`. |
 | **Codex** | Clone + symlink | See `.codex/INSTALL.md` and `docs/README.codex.md`. |
 | **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See `docs/README.opencode.md`. |
