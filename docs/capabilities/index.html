@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capabilities — Agentic SWE</title>
+  <meta name="description" content="What makes agentic-swe different: zero runtime, gates, agents, tracks, Hypervisor — plus multi-platform support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="content-wrap">
+  <nav>
+    <a href="../index.html" class="logo">agentic<span>SWE</span></a>
+    <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+    <div class="nav-links">
+      <a href="../documentation/index.html">Documentation</a>
+      <a href="../guide/index.html">Guide</a>
+      <a href="../support/index.html">Support</a>
+      <a href="index.html">Capabilities</a>
+      <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/surajSFDC/agentic-swe" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </nav>
+
+  <section id="overview">
+    <div class="reveal">
+      <div class="section-label">// capabilities</div>
+      <h2>What makes it different</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon cyan">&#9881;</div>
+        <h3>Zero runtime code</h3>
+        <p>The pipeline is markdown under <code style="font-size:0.85em;">.claude/</code> plus the root Hypervisor policy file. The host (e.g. Claude Code) executes it. Optional local tools like the brainstorm visual server are opt-in — not required to run <code style="font-size:0.85em;">/work</code>.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon violet">&#9670;</div>
+        <h3>Evidence-based decisions</h3>
+        <p>Every phase output follows a four-point evidence standard: observed, inferred, evidence, uncertain. No guessing.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon amber">&#9733;</div>
+        <h3>135+ specialized agents</h3>
+        <p>Auto-selected based on your codebase. Python, TypeScript, Rust, Kubernetes, security, ML — agents that know the domain.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon cyan">&#9741;</div>
+        <h3>Human gates built in</h3>
+        <p>The pipeline stops at ambiguity, approval, and escalation points. You stay in control of what ships.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon violet">&#9881;</div>
+        <h3>Multi-agent review</h3>
+        <p>Complex designs get a three-agent panel review: architect, security, and adversarial — running in parallel.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon amber">&#9889;</div>
+        <h3>Track-aware routing</h3>
+        <p>Lean, standard, and rigorous tracks share one state machine; <code style="font-size:0.85em;">lean-track-check</code> records <code style="font-size:0.85em;">pipeline.track</code> so phases and budgets match risk.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon cyan">&#9673;</div>
+        <h3>Hypervisor session</h3>
+        <p>The primary chat session is the <strong>Hypervisor</strong>: it carries <code style="font-size:0.85em;">state.json</code>, runs mandatory <code style="font-size:0.85em;">/check</code> steps, delegates to core agents and subagents, and stays accountable — not a separate hosted service.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="platforms">
+    <div class="reveal platforms-section">
+      <div class="section-label">// multi-platform</div>
+      <h2>Same pack, your editor or CLI</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Install once into the repo; the <strong>Hypervisor</strong> policy and <code style="font-size:0.9em;">.claude/</code> tree work across hosts. <strong>Claude Code</strong> is the primary path; Cursor, Codex, OpenCode, and Gemini CLI are supported via the bundled plugin / extension hooks — see <a href="../guide/index.html#platforms">Platforms</a> in the guide, or <a href="https://github.com/surajSFDC/agentic-swe/blob/main/README.md#multi-platform-support" target="_blank" rel="noopener">multi-platform support on GitHub</a>.</p>
+      <div class="platforms-list reveal">
+        <span>Claude Code</span>
+        <span>Cursor</span>
+        <span>Codex</span>
+        <span>OpenCode</span>
+        <span>Gemini CLI</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      <a href="../index.html">Home</a> &middot; <a href="index.html">Capabilities</a> &middot;
+      <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener">npm</a> &middot;
+      <a href="https://github.com/surajSFDC/agentic-swe" target="_blank" rel="noopener">GitHub</a> &middot; MIT &middot; Suraj Gupta
+    </p>
+  </footer>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+</script>
+</body>
+</html>

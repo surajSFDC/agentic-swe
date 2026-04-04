@@ -21,9 +21,10 @@
     <a href="index.html" class="logo">agentic<span>SWE</span></a>
     <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
     <div class="nav-links">
+      <a href="documentation/index.html">Documentation</a>
       <a href="guide/index.html">Guide</a>
       <a href="support/index.html">Support</a>
-      <a href="#features">Features</a>
+      <a href="capabilities/index.html">Capabilities</a>
       <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener">npm</a>
       <a href="https://github.com/surajSFDC/agentic-swe" target="_blank" rel="noopener">GitHub</a>
     </div>
@@ -35,20 +36,10 @@
     <h1>Autonomous SWE<br><span class="gradient-text">for Claude Code</span></h1>
     <p>A state-machine pipeline with <strong>three tracks</strong> (lean, standard, rigorous), <strong>human gates</strong>, and evidence-backed artifacts. Your primary session follows the <strong>Hypervisor</strong> policy in the repo root — plus <strong>135+</strong> auto-selected specialists. Zero in-repo runtime: policies, phases, and agents are markdown.</p>
     <div class="hero-actions">
-      <a href="guide/index.html" class="btn btn-primary">Read the guide</a>
+      <a href="documentation/index.html" class="btn btn-primary">Documentation</a>
+      <a href="guide/index.html" class="btn btn-ghost">Read the guide</a>
       <a href="#start" class="btn btn-ghost">Quick steps</a>
       <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener" class="btn btn-ghost">npm package</a>
-    </div>
-  </section>
-
-  <!-- ── Docs hub ── -->
-  <section class="hub-section">
-    <div class="section-label" style="text-align:center;">// documentation</div>
-    <h2>Documentation</h2>
-    <p class="hub-intro">Install, pipeline, commands, agents, platforms, and examples live on one guide page. Use Support for troubleshooting.</p>
-    <div class="hub-grid hub-grid--two">
-      <a class="hub-card" href="guide/index.html"><h3>Guide</h3><p>Everything in one place: install, tracks, slash commands, delegation, hosts, and sample flows.</p></a>
-      <a class="hub-card" href="support/index.html"><h3>Support</h3><p>Common failures, <code>agentic-swe doctor</code>, migrations, and where to get help.</p></a>
     </div>
   </section>
 
@@ -144,51 +135,6 @@
     </p>
   </section>
 
-  <!-- ── Features ── -->
-  <section id="features">
-    <div class="reveal">
-      <div class="section-label">// capabilities</div>
-      <h2>What makes it different</h2>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon cyan">&#9881;</div>
-        <h3>Zero runtime code</h3>
-        <p>The pipeline is markdown under <code style="font-size:0.85em;">.claude/</code> plus the root Hypervisor policy file. The host (e.g. Claude Code) executes it. Optional local tools like the brainstorm visual server are opt-in — not required to run <code style="font-size:0.85em;">/work</code>.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon violet">&#9670;</div>
-        <h3>Evidence-based decisions</h3>
-        <p>Every phase output follows a four-point evidence standard: observed, inferred, evidence, uncertain. No guessing.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon amber">&#9733;</div>
-        <h3>135+ specialized agents</h3>
-        <p>Auto-selected based on your codebase. Python, TypeScript, Rust, Kubernetes, security, ML — agents that know the domain.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon cyan">&#9741;</div>
-        <h3>Human gates built in</h3>
-        <p>The pipeline stops at ambiguity, approval, and escalation points. You stay in control of what ships.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon violet">&#9881;</div>
-        <h3>Multi-agent review</h3>
-        <p>Complex designs get a three-agent panel review: architect, security, and adversarial — running in parallel.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon amber">&#9889;</div>
-        <h3>Track-aware routing</h3>
-        <p>Lean, standard, and rigorous tracks share one state machine; <code style="font-size:0.85em;">lean-track-check</code> records <code style="font-size:0.85em;">pipeline.track</code> so phases and budgets match risk.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon cyan">&#9673;</div>
-        <h3>Hypervisor session</h3>
-        <p>The primary chat session is the <strong>Hypervisor</strong>: it carries <code style="font-size:0.85em;">state.json</code>, runs mandatory <code style="font-size:0.85em;">/check</code> steps, delegates to core agents and subagents, and stays accountable — not a separate hosted service.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ── Subagents ── -->
   <section id="agents">
     <div class="reveal">
@@ -207,22 +153,6 @@
       <div class="agent-row"><span class="agent-name">Business &amp; Product</span><span class="agent-count">11</span></div>
       <div class="agent-row"><span class="agent-name">Meta &amp; Orchestration</span><span class="agent-count">10</span></div>
       <div class="agent-row"><span class="agent-name">Research &amp; Analysis</span><span class="agent-count">7</span></div>
-    </div>
-  </section>
-
-  <!-- ── Platforms ── -->
-  <section id="platforms">
-    <div class="reveal platforms-section">
-      <div class="section-label">// multi-platform</div>
-      <h2>Same pack, your editor or CLI</h2>
-      <p class="section-desc" style="margin-left:auto;margin-right:auto;">Install once into the repo; the <strong>Hypervisor</strong> policy and <code style="font-size:0.9em;">.claude/</code> tree work across hosts. <strong>Claude Code</strong> is the primary path; Cursor, Codex, OpenCode, and Gemini CLI are supported via the bundled plugin / extension hooks — see <a href="guide/index.html#platforms">Platforms</a> in the guide, or <a href="https://github.com/surajSFDC/agentic-swe/blob/main/README.md#multi-platform-support" target="_blank" rel="noopener">multi-platform support on GitHub</a>.</p>
-      <div class="platforms-list reveal">
-        <span>Claude Code</span>
-        <span>Cursor</span>
-        <span>Codex</span>
-        <span>OpenCode</span>
-        <span>Gemini CLI</span>
-      </div>
     </div>
   </section>
 
@@ -293,7 +223,8 @@
   <footer>
     <p>
       <a href="index.html">Home</a>
-      &nbsp;&middot;&nbsp; <a href="guide/index.html">Guide</a>
+      &nbsp;&middot;&nbsp; <a href="documentation/index.html">Documentation</a>
+      &nbsp;&middot;&nbsp; <a href="capabilities/index.html">Capabilities</a>
       &nbsp;&middot;&nbsp; <a href="https://www.npmjs.com/package/agentic-swe" target="_blank" rel="noopener">npm</a>
       &nbsp;&middot;&nbsp; <a href="https://github.com/surajSFDC/agentic-swe" target="_blank" rel="noopener">GitHub</a>
       &nbsp;&middot;&nbsp; MIT
