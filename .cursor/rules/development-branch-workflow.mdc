@@ -68,6 +68,8 @@ Long-lived branches are protected on GitHub (no direct pushes; PR + CI + code ow
 | `main` | Release / default — [ruleset in repo settings](https://github.com/surajSFDC/agentic-swe/rules) |
 | `uat` | Pre-release / acceptance — same policy pattern as `main`; merge via PR after CI green |
 
+**Promote `main` → `uat`:** open a PR with base `uat` and compare `main` (or merge `main` into a branch and PR). Do **not** use `git push origin main:uat` — rulesets block direct updates to `uat`.
+
 Short-lived work uses the prefixes in the table above. **Branch-name enforcement** beyond that is handled here in Cursor; if you want server-side name patterns as well, add a **metadata / branch name** rule in **Settings → Rules → Rulesets** (the REST API may reject some pattern payloads on free-tier repos).
 
 ## Relation to other rules
