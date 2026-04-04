@@ -23,7 +23,7 @@ A **private** source repo and a **public** npm package can coexist; discovery is
 
 ## What gets deployed
 
-The deploy script syncs **`docs/`** to S3. That includes the landing page and these markdown files if you want them linked from the site (today the main entry is `docs/index.html`).
+The deploy script syncs **`docs/`** to S3. That includes the landing page (`docs/index.html`), the consolidated HTML guide (`docs/guide/index.html`), support page (`docs/support/index.html`), shared assets in `docs/assets/`, and these markdown files if you want them linked from the site.
 
 ## Alignment with product
 
