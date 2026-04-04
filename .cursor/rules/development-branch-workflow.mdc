@@ -59,6 +59,17 @@ Fix failures **before** pushing. Do not push to rely on CI to discover broken te
 - [ ] **`npm test`** passed locally (and site lint/build if applicable).
 - [ ] Pushed to `origin` and **PR opened** (or user told you they will open it).
 
+## GitHub rulesets (this repo)
+
+Long-lived branches are protected on GitHub (no direct pushes; PR + CI + code owners, with admin bypass on pull requests as configured in the UI):
+
+| Branch | Role |
+|--------|------|
+| `main` | Release / default — [ruleset in repo settings](https://github.com/surajSFDC/agentic-swe/rules) |
+| `uat` | Pre-release / acceptance — same policy pattern as `main`; merge via PR after CI green |
+
+Short-lived work uses the prefixes in the table above. **Branch-name enforcement** beyond that is handled here in Cursor; if you want server-side name patterns as well, add a **metadata / branch name** rule in **Settings → Rules → Rulesets** (the REST API may reject some pattern payloads on free-tier repos).
+
 ## Relation to other rules
 
 - **Git identity:** `.cursor/rules/git-identity-personal.mdc`
