@@ -44,11 +44,17 @@ describe('plugin layout: pipeline dirs at repository root', () => {
     assert.ok(fs.existsSync(p), 'missing hooks/hooks.json');
   });
 
-  it('plugin.json is minimal (default commands/agents discovery)', () => {
+  it('plugin.json declares Claude component paths (./ prefix)', () => {
     const p = path.join(repoRoot, '.claude-plugin', 'plugin.json');
     const m = JSON.parse(fs.readFileSync(p, 'utf8'));
-    assert.strictEqual(m.commands, undefined, 'omit commands for default ./commands/ discovery');
-    assert.strictEqual(m.agents, undefined, 'omit agents for default ./agents/ discovery');
+    assert.deepStrictEqual(m.commands, ['./commands']);
+    assert.deepStrictEqual(m.agents, ['./agents']);
+    assert.strictEqual(m.hooks, './hooks/hooks.json');
+    assert.strictEqual(m.mcpServers, './mcp-servers.json');
+    const mcpPath = path.join(repoRoot, 'mcp-servers.json');
+    assert.ok(fs.existsSync(mcpPath), 'missing mcp-servers.json');
+    const mcp = JSON.parse(fs.readFileSync(mcpPath, 'utf8'));
+    assert.ok(mcp && typeof mcp.mcpServers === 'object', 'mcp-servers.json should have mcpServers object');
     assert.strictEqual(m.phases, undefined);
     assert.strictEqual(m.templates, undefined);
     assert.strictEqual(m.references, undefined);

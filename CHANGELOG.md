@@ -29,6 +29,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`scripts/bump-version.sh`** / **`.version-bump.json`** — marketplace plugin version is included in sync checks and bumps via **`versionSelector`**.
 
+## [3.0.1] - 2026-04-05
+
+### Fixed
+
+- **`.claude-plugin/plugin.json`:** set explicit **`commands`**, **`agents`** (arrays with **`./`** paths), and **`hooks`** — Claude Code **v2.1+** manifest validation can fail install with **`agents: Invalid input`** when component paths are omitted (see [Claude plugin manifest — component paths](https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/plugin-structure/references/manifest-reference.md)).
+
+## [3.0.2] - 2026-04-05
+
+### Added
+
+- **`mcp-servers.json`** at repo root (empty **`mcpServers`** map) and **`mcpServers`** in **`.claude-plugin/plugin.json`** — declares the MCP config path for Claude Code; extend **`mcpServers`** for bundled servers or keep project-specific secrets in gitignored **`.mcp.json`** (see **`references/tooling-expectations.md`**). Listed in **`package.json` `files[]`** for packaging.
+
 ## [3.0.0] - 2026-04-05
 
 ### Added
