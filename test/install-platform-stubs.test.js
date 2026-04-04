@@ -37,16 +37,18 @@ function resolveFromCursorPlugin(relativePath) {
   return path.normalize(path.join(pluginCursorDir, relativePath));
 }
 
-/** Run once at load; skip validate test if `claude` is not on PATH. */
-function claudePluginValidateResult() {
-  return spawnSync('claude', ['plugin', 'validate', repoRoot], {
+/** Run once at load; skip validate tests if `claude` is not on PATH. */
+function claudePluginValidate(targetPath) {
+  return spawnSync('claude', ['plugin', 'validate', targetPath], {
     encoding: 'utf8',
     maxBuffer: 10 * 1024 * 1024,
   });
 }
 
-const _validateOnce = claudePluginValidateResult();
-const skipClaudePluginValidate = Boolean(_validateOnce.error && _validateOnce.error.code === 'ENOENT');
+const pluginManifestPath = path.join(repoRoot, '.claude-plugin', 'plugin.json');
+const _validateMarketplace = claudePluginValidate(repoRoot);
+const _validatePluginManifest = claudePluginValidate(pluginManifestPath);
+const skipClaudePluginValidate = Boolean(_validateMarketplace.error && _validateMarketplace.error.code === 'ENOENT');
 
 describe('multi-platform stubs: Claude Code', () => {
   it('plugin.json, marketplace plugin entry, and package.json share the same version', () => {
@@ -89,13 +91,20 @@ describe('multi-platform stubs: Claude Code', () => {
   });
 
   it(
-    'claude plugin validate when Claude CLI is on PATH',
+    'claude plugin validate marketplace and plugin manifest when CLI is on PATH',
     { skip: skipClaudePluginValidate },
     () => {
       assert.strictEqual(
-        _validateOnce.status,
+        _validateMarketplace.status,
         0,
-        _validateOnce.stderr || _validateOnce.stdout || 'claude plugin validate failed',
+        _validateMarketplace.stderr || _validateMarketplace.stdout || 'claude plugin validate (repo/marketplace) failed',
+      );
+      assert.strictEqual(
+        _validatePluginManifest.status,
+        0,
+        _validatePluginManifest.stderr ||
+          _validatePluginManifest.stdout ||
+          'claude plugin validate (.claude-plugin/plugin.json) failed',
       );
     },
   );
