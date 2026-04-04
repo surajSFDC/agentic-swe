@@ -40,6 +40,8 @@ Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, a
 | Troubleshooting | [Troubleshooting](https://d3pi4w4hqr9gq6.cloudfront.net/troubleshooting.md) |
 | `/check` quick reference | [Check commands](https://d3pi4w4hqr9gq6.cloudfront.net/check-commands.md) |
 
+**Marketing site (source):** the brochure app and static markdown live under **`site/`** (`site/src` for React, `site/public` for `*.md` and assets). Run **`npm run build:site`** to emit the static site to **`site/dist/`**, then **`./infra/deploy-static-site.sh`** to publish that folder to S3/CloudFront (see [infra/README.md](infra/README.md)).
+
 ## How It Works
 
 The pipeline runs a **state machine** that routes tasks through analysis, design, implementation, review, and PR creation. At each phase, it **automatically selects** specialized subagents based on the languages, frameworks, and domains detected in your codebase — agents can also call other agents in the background when they need domain-specific expertise.
@@ -194,10 +196,10 @@ agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** ses
 
 | Platform | Install Method | Details |
 |----------|---------------|---------|
-| **Claude Code** | `npx agentic-swe /path/to/repo` | Primary platform. You can also add this GitHub repo as a Claude Code **plugin marketplace** and install `agentic-swe@agentic-swe-catalog` — see [docs/claude-code-plugin.md](docs/claude-code-plugin.md) (full project merge still recommended via `npx`). |
+| **Claude Code** | `npx agentic-swe /path/to/repo` | Primary platform. You can also add this GitHub repo as a Claude Code **plugin marketplace** and install `agentic-swe@agentic-swe-catalog` — see [claude-code-plugin.md](site/public/claude-code-plugin.md) (full project merge still recommended via `npx`). |
 | **Cursor** | Plugin via `.cursor-plugin/` | Commands and agents load automatically. See `hooks/hooks-cursor.json`. |
-| **Codex** | Clone + symlink | See `.codex/INSTALL.md` and `docs/README.codex.md`. |
-| **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See `docs/README.opencode.md`. |
+| **Codex** | Clone + symlink | See `.codex/INSTALL.md` and `site/public/README.codex.md`. |
+| **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See `site/public/README.opencode.md`. |
 | **Gemini CLI** | Extension via `gemini-extension.json` | Context loaded from `GEMINI.md`. |
 
 All platforms share the same `.claude/` source content. Platform-specific tool mappings are in `.claude/references/` (`codex-tools.md`, `opencode-tools.md`, `gemini-tools.md`, `copilot-tools.md`).

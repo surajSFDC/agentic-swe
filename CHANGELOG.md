@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: `agentic-swe doctor [path]` — checks Node 18+, git, and pipeline layout
 - CLI: `--dry-run` / `-n` — prints planned install actions without writing files
 - `CHANGELOG.md` for release notes
-- `docs/troubleshooting.md`, `docs/check-commands.md`
+- `site/public/troubleshooting.md`, `site/public/check-commands.md`
 - `.claude/templates/metrics-summary.md` (optional work-item metrics)
 - `scripts/verify-sanity.js` and `npm run verify` in CI
 

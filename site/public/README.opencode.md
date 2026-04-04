@@ -8,7 +8,7 @@ it inside OpenCode via the ESM plugin.
 
 ## Installation
 
-See [`.opencode/INSTALL.md`](../.opencode/INSTALL.md) for setup steps.
+See [`.opencode/INSTALL.md`](../../.opencode/INSTALL.md) for setup steps.
 
 1. Run `npx agentic-swe` in your target repo
 2. Add the plugin entry to `opencode.json`

@@ -8,7 +8,7 @@ it inside Codex.
 
 ## Installation
 
-See [`.codex/INSTALL.md`](../.codex/INSTALL.md) for setup steps. The short
+See [`.codex/INSTALL.md`](../../.codex/INSTALL.md) for setup steps. The short
 version: run `npx agentic-swe` in your target repo, then copy `AGENTS.md`
 to the repo root.
 

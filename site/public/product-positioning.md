@@ -26,4 +26,4 @@ Lead with: governance, safety rails, and review-friendly outputs—not “more a
 
 ## What not to claim
 
-Do not promise a **multi-tenant SaaS** or “our cloud runs your pipeline” unless you ship that separately. The product is the **markdown pack** and any **services or Pro offerings** described in [PRO.md](../PRO.md).
+Do not promise a **multi-tenant SaaS** or “our cloud runs your pipeline” unless you ship that separately. The product is the **markdown pack** and any **services or Pro offerings** described in [PRO.md](../../PRO.md).

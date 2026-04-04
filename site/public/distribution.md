@@ -7,7 +7,7 @@ How the package and documentation reach users, and how that relates to **source 
 | Channel | Role |
 |---------|------|
 | **[npm](https://www.npmjs.com/package/agentic-swe)** | Install the CLI and pipeline files into a project (`npx agentic-swe`, `npm install -g agentic-swe`) |
-| **Claude Code plugin marketplace** | Git-hosted catalog ([`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)); users add the repo then install the plugin — see [claude-code-plugin.md](claude-code-plugin.md) |
+| **Claude Code plugin marketplace** | Git-hosted catalog ([`.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json)); users add the repo then install the plugin — see [claude-code-plugin.md](claude-code-plugin.md) |
 | **Source hosting** | Development, issues, and contributions—separate from installing the published package |
 | **Marketing / docs site** | Landing page and markdown docs (e.g. CloudFront); links to npm for install |
 
@@ -15,7 +15,7 @@ A **private** source repo and a **public** npm package can coexist; discovery is
 
 ## Marketing and documentation site
 
-- **S3 + CloudFront** — This repo can deploy the static content under `docs/` (including `index.html`) with [infra/deploy-static-site.sh](../infra/deploy-static-site.sh). See [infra/README.md](../infra/README.md) for env setup and custom-domain notes.  
+- **S3 + CloudFront** — This repo can deploy the built site from **`site/dist/`** (including `index.html`) with [infra/deploy-static-site.sh](../../infra/deploy-static-site.sh). See [infra/README.md](../../infra/README.md) for env setup and custom-domain notes.  
 - **GitHub Pages (free)** — Works well with a **public** repo. For a **private** repo on a free GitHub plan, Pages behavior may be limited; do not rely on `*.github.io` as the only brochure if you need private code + public marketing without upgrading GitHub.  
 - **Custom domain** — Point DNS at CloudFront (or Pages) for a professional URL; HTTPS via ACM where applicable.
 
@@ -23,7 +23,7 @@ A **private** source repo and a **public** npm package can coexist; discovery is
 
 ## What gets deployed
 
-The deploy script syncs **`docs/`** to S3. That includes the landing page (`docs/index.html`), documentation hub (`docs/documentation/index.html`), capabilities page (`docs/capabilities/index.html`), consolidated guide (`docs/guide/index.html`), support page (`docs/support/index.html`), shared assets in `docs/assets/`, and these markdown files if you want them linked from the site.
+The deploy script runs **`npm run build:site`** (Vite app in `site/`) then syncs **`site/dist/`** to S3. **Source** lives under **`site/`** (React in `site/src/`, static `*.md` and assets in `site/public/`). The build writes `site/dist/index.html`, hashed bundles under `site/dist/assets/`, and copies `site/public/` to the site root inside `dist/` (e.g. `installation.md`, `favicon.svg`). CloudFront should map **403/404 → `/index.html`** for client routes (`/guide`, `/documentation`, `/capabilities`, `/support`, `/product`).
 
 ## Alignment with product
 
@@ -31,4 +31,4 @@ The deploy script syncs **`docs/`** to S3. That includes the landing page (`docs
 - **Claude Code** users can add this repository as a plugin marketplace and install **`agentic-swe@agentic-swe-catalog`** (details in [claude-code-plugin.md](claude-code-plugin.md)); a full project install still uses **`npx agentic-swe`** for `CLAUDE.md` merge and `.claude/` layout.  
 - **Private repo + public npm** is a common setup.
 
-Update the hero CTAs on [index.html](index.html) if your distribution model changes.
+Update hero CTAs and routes in the **`site/`** app if your distribution model changes.
