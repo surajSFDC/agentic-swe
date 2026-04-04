@@ -213,6 +213,7 @@ describe('multi-platform stubs: npm package files[]', () => {
     '.codex/',
     '.opencode/',
     'gemini-extension.json',
+    'mcp-servers.json',
     'hooks/',
     '.claude-plugin/',
   ];
