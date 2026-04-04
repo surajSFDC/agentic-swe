@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Install brainstorm-server dependencies
-        run: npm install --prefix tools/brainstorm-server
+        run: npm install --prefix tools/brainstorm-server --registry=https://registry.npmjs.org/
 
       - name: Install and build docs site (Vite)
         run: npm ci --prefix site --registry=https://registry.npmjs.org/ && npm run build --prefix site
