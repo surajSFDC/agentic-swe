@@ -40,6 +40,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Marketing site build output (Vite)
+site/dist/
+
 # Node
 node_modules/
 *.tgz

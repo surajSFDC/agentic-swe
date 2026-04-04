@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Deploy docs/ to S3 and invalidate CloudFront cache.
+# Build the Vite app in site/ and sync site/dist/ to S3, then invalidate CloudFront.
 # Set S3_STATIC_BUCKET and CLOUDFRONT_DISTRIBUTION_ID (e.g. in infra/.env — see infra/.env.example).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SITE_DIST="${ROOT}/site/dist"
 ENV_FILE="$ROOT/infra/.env"
 if [[ -f "$ENV_FILE" ]]; then
   set -a
@@ -23,8 +24,16 @@ if [[ -z "$BUCKET" || -z "$DIST_ID" ]]; then
   exit 1
 fi
 
-echo "Syncing ${ROOT}/docs/ -> s3://${BUCKET}/"
-aws s3 sync "${ROOT}/docs/" "s3://${BUCKET}/" --delete --region "${REGION}"
+echo "Building marketing site (Vite → site/dist/)…"
+npm run build:site --prefix "${ROOT}"
+
+if [[ ! -d "${SITE_DIST}" ]] || [[ ! -f "${SITE_DIST}/index.html" ]]; then
+  echo "Expected ${SITE_DIST}/index.html after build — aborting." >&2
+  exit 1
+fi
+
+echo "Syncing ${SITE_DIST}/ -> s3://${BUCKET}/"
+aws s3 sync "${SITE_DIST}/" "s3://${BUCKET}/" --delete --region "${REGION}"
 
 echo "Creating invalidation for /* on distribution ${DIST_ID}"
 aws cloudfront create-invalidation --distribution-id "${DIST_ID}" --paths "/*" --output text

@@ -40,30 +40,60 @@ Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, a
 | Troubleshooting | [Troubleshooting](https://d3pi4w4hqr9gq6.cloudfront.net/troubleshooting.md) |
 | `/check` quick reference | [Check commands](https://d3pi4w4hqr9gq6.cloudfront.net/check-commands.md) |
 
+**Marketing site (source):** the brochure app and static markdown live under **`site/`** (`site/src` for React, `site/public` for `*.md` and assets). Run **`npm run build:site`** to emit the static site to **`site/dist/`**, then **`./infra/deploy-static-site.sh`** to publish that folder to S3/CloudFront (see [infra/README.md](infra/README.md)).
+
 ## How It Works
 
 The pipeline runs a **state machine** that routes tasks through analysis, design, implementation, review, and PR creation. At each phase, it **automatically selects** specialized subagents based on the languages, frameworks, and domains detected in your codebase — agents can also call other agents in the background when they need domain-specific expertise.
 
 ```
-              fast path (simple tasks)
+              lean track (simple tasks)
              ┌─────────────────────────────────────────────────────┐
-initialized -> feasibility -> fast-path-check -> fast-implementation -> validation -> pr-created -> completed
+initialized -> feasibility -> lean-track-check -> lean-track-implementation -> validation -> pr-creation -> completed
                                     |
-                                    v  full path (complex tasks)
-                              design -> design-review -> verification -> test ->
-                              implementation -> self-review -> code-review ->
-                              permissions -> validation -> pr-created -> completed
+                    ┌───────────────┴────────────────┐
+                    v                                v
+         standard track (medium)          rigorous track (complex)
+    design -> verification -> test ->     design -> design-review -> verification ->
+    implementation -> self-review ->      test-strategy -> implementation -> self-review ->
+    validation -> pr-creation -> ...      code-review -> permissions-check -> validation -> ...
 ```
 
+**Standard track** skips the design panel, `design-review`, `code-review`, and `permissions-check` (see `CLAUDE.md` for exact allowed transitions and `pipeline.track`).
+
 Human gates stop the pipeline at `ambiguity-wait`, `approval-wait`, and escalation states.
+
+## Quick Start Walkthrough
+
+Example tasks and the routes they follow (see the **state machine** diagram above).
+
+**Lean track** (small bug fix):
+
+```
+/work "Fix the off-by-one error in calculateTotal"
+```
+
+→ feasibility → lean-track-check (low risk) → lean-track-implementation → validation → pr-creation → approval-wait → completed
+
+**Rigorous track** (new feature):
+
+```
+/work "Add user authentication with JWT tokens"
+```
+
+→ feasibility → lean-track-check (high risk) → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed
 
 ## Key Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/work <task>` | Start a new task (auto-routes fast/full path) |
+| `/work <task>` | Start a new task (auto-routes lean, standard, or rigorous track) |
 | `/work <id>` | Resume paused work |
 | `/plan-only <task>` | Analyze and design without implementing |
+| `/brainstorm` | Design-first exploration (design phase + optional visual server) |
+| `/write-plan [id]` | Refine `implementation.md` plan to plan-quality bar (no coding) |
+| `/execute-plan [id]` | Run the plan via implementation / lean-track-implementation |
+| `/author-pipeline` | Checklist to extend phases, commands, agents safely |
 | `/subagent` | Browse 135+ specialized subagents |
 | `/subagent search <query>` | Find subagents by keyword |
 | `/subagent invoke <name> <task>` | Spawn a specialist for a task |
@@ -94,12 +124,12 @@ See the [subagent catalog](https://d3pi4w4hqr9gq6.cloudfront.net/subagent-catalo
 
 ## Examples
 
-**Simple bug fix** (fast path, ~3-5 min):
+**Simple bug fix** (lean track, ~3-5 min):
 ```
 /work Fix the off-by-one error in pagination logic in src/api/list.py
 ```
 
-**Complex feature** (full path with design review, ~10-30 min):
+**Complex feature** (rigorous track with design review, ~10-30 min):
 ```
 /work Add rate limiting middleware to the Express API with Redis backing
 ```
@@ -120,67 +150,61 @@ to audit the payment processing module in src/payments/
 /plan-only Migrate the monolithic API to microservices with gRPC
 ```
 
+**Workflow shortcuts** (same pipeline, familiar command names):
+
+```
+/brainstorm Design the event-sourcing layer for order history
+/write-plan
+/execute-plan
+```
+
 See [examples](https://d3pi4w4hqr9gq6.cloudfront.net/examples.md) for detailed walkthroughs.
 
 ## Architecture
 
 ```
-Orchestrator (Claude Code + CLAUDE.md policy)
+Hypervisor (Claude Code + CLAUDE.md policy)
 ├── Core Pipeline Agents
-│   ├── developer.md          -- Implementation specialist
-│   ├── git-ops.md            -- Branch management, remote sync
-│   ├── pr-manager.md         -- PR creation and management
+│   ├── developer-agent.md    -- Implementation specialist
+│   ├── git-operations-agent.md -- Branch management, remote sync
+│   ├── pr-manager-agent.md   -- PR creation and management
 │   └── panel/                -- Design review panel (parallel)
-│       ├── architect.md
-│       ├── security.md
-│       └── adversarial.md
+│       ├── architect-reviewer.md
+│       ├── security-reviewer.md
+│       └── adversarial-reviewer.md
 │
 └── Specialized Subagents (135+ agents, 10 categories)
-    ├── 01-core-development/
-    ├── 02-language-specialists/
-    ├── 03-infrastructure/
+    ├── core-development/
+    ├── language-specialists/
+    ├── infrastructure/
     ├── ...
-    └── 10-research-analysis/
-```
-
-## File Structure
-
-```
-agentic-swe/
-├── CLAUDE.md              # Orchestrator policy and state machine
-├── README.md
-├── package.json           # npm package (CLI: agentic-swe)
-├── bin/agentic-swe.js     # npm install entrypoint
-├── docs/                  # Documentation (mirrored on the [project site](https://d3pi4w4hqr9gq6.cloudfront.net/))
-│   ├── installation.md
-│   ├── usage.md
-│   ├── examples.md
-│   ├── subagent-catalog.md
-│   ├── product-positioning.md
-│   ├── licensing.md
-│   └── distribution.md
-├── PRO.md                 # Pro / commercial offers (stub)
-└── .claude/               # All pipeline files (same structure when installed)
-    ├── commands/          # 13 slash commands (/work, /check, /subagent, etc.)
-    ├── phases/            # 18 phase prompts + subagent-selection policy
-    ├── agents/            # Core agents + 135 subagents
-    │   ├── developer.md
-    │   ├── git-ops.md
-    │   ├── pr-manager.md
-    │   ├── panel/         # Design review panel (3 agents)
-    │   └── subagents/     # 10 category directories
-    ├── templates/         # State schema, evidence standard, artifact format
-    ├── tools/             # Subagent catalog tool
-    ├── references/        # Git and PR workflow reference docs
-    └── .work/             # Runtime state (gitignored)
+    └── research-analysis/
 ```
 
 ## Extending
 
 - **Add a subagent**: Create a `.md` file in `.claude/agents/subagents/<category>/` with frontmatter (`name`, `description`, `tools`, `model`)
-- **Add a phase**: Create `.md` in `.claude/phases/`, add state to `CLAUDE.md`
+- **Add a phase**: Create `.md` in `.claude/phases/`, add the state to `CLAUDE.md` (diagram, Required Artifacts, transitions), and update **`.claude/state-machine.json`** so it matches the fenced transition block (`npm test` includes `state-machine-json`).
 - **Add a core agent**: Create `.md` in `.claude/agents/`, reference in `CLAUDE.md`
 - **Adjust budgets**: Edit `CLAUDE.md` Budgets section and `.claude/templates/state.json`
+- **Inspect work folders**: From the pack/repo root, `npm run summarize-work` (or `node scripts/summarize-work.js --json`)
+- **Migrate old work state**: `node scripts/migrate-work-state.js` then `node scripts/migrate-work-state.js --apply` after major upgrades (see `CHANGELOG.md`)
+
+## Multi-Platform Support
+
+agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** session per `CLAUDE.md` — across multiple AI coding platforms:
+
+| Platform | Install Method | Details |
+|----------|---------------|---------|
+| **Claude Code** | `npx agentic-swe /path/to/repo` | Primary platform. You can also add this GitHub repo as a Claude Code **plugin marketplace** and install `agentic-swe@agentic-swe-catalog` — see [claude-code-plugin.md](site/public/claude-code-plugin.md) (full project merge still recommended via `npx`). |
+| **Cursor** | Plugin via `.cursor-plugin/` | Commands and agents load automatically. See `hooks/hooks-cursor.json`. |
+| **Codex** | Clone + symlink | See `.codex/INSTALL.md` and `site/public/README.codex.md`. |
+| **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See `site/public/README.opencode.md`. |
+| **Gemini CLI** | Extension via `gemini-extension.json` | Context loaded from `GEMINI.md`. |
+
+All platforms share the same `.claude/` source content. Platform-specific tool mappings are in `.claude/references/` (`codex-tools.md`, `opencode-tools.md`, `gemini-tools.md`, `copilot-tools.md`).
+
+**Skill-like triggering:** agentic-swe does not use a separate Skill-tool registry. The same habit is implemented with **session hooks** (`hooks/hooks.json` for Claude Code, `hooks/hooks-cursor.json` for Cursor) running `hooks/session-start`, plus `.claude/references/implicit-routing.md` for intent → command/phase hints. The pipeline remains authoritative in root `CLAUDE.md`.
 
 ## Research Basis
 

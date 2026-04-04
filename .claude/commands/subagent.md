@@ -90,7 +90,7 @@ Agent(
 
 ## When to Use Subagents
 
-The orchestrator should consider invoking a subagent when:
+The Hypervisor should consider invoking a subagent when:
 
 1. **Language-specific expertise needed** — e.g., Rust borrow checker issues, Python async patterns
 2. **Domain specialist required** — e.g., Kubernetes deployment, database optimization, security audit
@@ -102,8 +102,8 @@ The orchestrator should consider invoking a subagent when:
 
 Subagents complement the core pipeline agents:
 
-- **developer.md** handles general implementation; language specialists handle language-specific expertise
+- **developer-agent.md** handles general implementation; language specialists handle language-specific expertise
 - **panel/*.md** handles design review; quality-security subagents provide deeper audits
-- **git-ops.md** handles git workflow; devops subagents handle infrastructure concerns
+- **git-operations-agent.md** handles git workflow; devops subagents handle infrastructure concerns
 
-The orchestrator delegates to subagents the same way as core agents — with explicit scope, evidence requirements, and audit logging.
+The Hypervisor delegates to subagents the same way as core agents — with explicit scope, evidence requirements, and audit logging.

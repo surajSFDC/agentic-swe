@@ -19,13 +19,15 @@ Read the active `.claude/.work/<id>/state.json` and check:
 1. **Iteration budget**: Is `budget.budget_remaining > 0`?
 2. **Cost budget**: Is `budget.cost_used < budget.cost_budget_usd`?
 3. **Loop counters**:
-   - `counters.fast_iter` must be ≤ 2
+   - `counters.lean_iter` must be ≤ 2
    - `counters.design_iter` must be ≤ 3 (or ≤ 4 if `risk.score >= 4`)
    - `counters.code_iter` must be ≤ 5
    - `counters.merge_iter` must be ≤ 2
    - `counters.approval_iter` must be ≤ 3
+   - `counters.self_review_iter` must be ≤ 1
+   - `counters.test_adequacy_iter` must be ≤ 1
 
-**Output:** iteration budget `<remaining>/<total>`, cost budget `$<used>/$<total>`, loop counters `fast=<n>/2, design=<n>/3, code=<n>/5, merge=<n>/2, approval=<n>/3`, verdict: `PROCEED` or `STOP`.
+**Output:** iteration budget `<remaining>/<total>`, cost budget `$<used>/$<total>`, loop counters `fast=<n>/2, design=<n>/3, code=<n>/5, merge=<n>/2, approval=<n>/3, self_review=<n>/1, test_adequacy=<n>/1`, verdict: `PROCEED` or `STOP`.
 
 If any budget or counter is exhausted, output a clear **STOP** directive naming the exhausted resource.
 
@@ -55,4 +57,4 @@ Given `destination_state` and `work_dir` (`.claude/.work/<id>/`), check against 
 
 **Output:** destination state, required artifacts list, per-artifact status (`EXISTS`/`MISSING`/`EMPTY`), verdict: `COMPLETE` or `INCOMPLETE`.
 
-If any required artifact is MISSING or EMPTY, list the missing items. The orchestrator must not complete the transition until the verdict is COMPLETE.
+If any required artifact is MISSING or EMPTY, list the missing items. The Hypervisor must not complete the transition until the verdict is COMPLETE.

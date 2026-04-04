@@ -81,7 +81,7 @@ test('install creates CLAUDE.md from package when missing (full copy, no merge)'
   assert.ok(fs.existsSync(claudeMd));
   const body = fs.readFileSync(claudeMd, 'utf8');
   // Installer uses copyFileSync for missing CLAUDE.md — same content as package root (no delimiter yet).
-  assert.match(body, /Orchestrator Policy/);
+  assert.match(body, /Hypervisor Policy/);
   assert.match(body, /## State Machine/);
 });
 
@@ -105,6 +105,38 @@ test('install replaces policy block when delimiter already present', () => {
   assert.strictEqual(r.status, 0, r.stderr || r.stdout);
   const body = fs.readFileSync(path.join(dir, 'CLAUDE.md'), 'utf8');
   assert.ok(!body.includes(oldPolicy), 'old policy should be replaced');
-  assert.match(body, /Orchestrator Policy/);
+  assert.match(body, /Hypervisor Policy/);
   assert.ok(body.startsWith('# Title'), 'content before delimiter preserved');
+});
+
+const EXPECTED_SUBTREES = ['commands', 'phases', 'agents', 'templates', 'references', 'tools'];
+
+test('install copies ALL expected subtrees into .claude/', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-swe-sub-'));
+  const r = runInstall(dir);
+  assert.strictEqual(r.status, 0, r.stderr || r.stdout);
+  for (const sub of EXPECTED_SUBTREES) {
+    const target = path.join(dir, '.claude', sub);
+    assert.ok(fs.existsSync(target), `expected .claude/${sub} to exist after install`);
+    const entries = fs.readdirSync(target);
+    assert.ok(entries.length > 0, `.claude/${sub} should not be empty`);
+  }
+});
+
+test('install creates .work/.gitkeep', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agentic-swe-wk-'));
+  const r = runInstall(dir);
+  assert.strictEqual(r.status, 0, r.stderr || r.stdout);
+  const gitkeep = path.join(dir, '.claude', '.work', '.gitkeep');
+  assert.ok(fs.existsSync(gitkeep), '.work/.gitkeep must exist after install');
+});
+
+test('error: target directory does not exist', () => {
+  const missing = path.join(os.tmpdir(), 'agentic-swe-noexist-' + Date.now());
+  const r = spawnSync(process.execPath, [binPath, '-y', missing], {
+    encoding: 'utf8',
+    cwd: repoRoot,
+  });
+  assert.notStrictEqual(r.status, 0, 'should fail for missing directory');
+  assert.match(r.stderr, /does not exist/i);
 });

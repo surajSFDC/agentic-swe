@@ -10,7 +10,7 @@ Use this when implementation or permissions touches **external systems**, **MCP*
 | Structured repo overview | `/repo-scan` (read-only) |
 | Issue tracker, docs site, APIs | MCP servers configured for the workspace |
 | Package install, build, test, lint | Terminal with repo’s documented commands |
-| Git operations | Git / `gh` per `.claude/agents/git-ops.md` |
+| Git operations | Git / `gh` per `.claude/agents/git-operations-agent.md` |
 
 ## MCP
 
@@ -21,7 +21,7 @@ Use this when implementation or permissions touches **external systems**, **MCP*
 
 - No production credentials in prompts or logs; use existing secret patterns from `/security-scan`.
 - Destructive or wide-scope shell commands require explicit alignment with design and **permissions** phase.
-- Read-only discovery first; mutate only after design approval (full path) or within fast-path scope.
+- Read-only discovery first; mutate only after design approval (rigorous track) or within lean-track scope.
 
 ## Relation to `/repo-scan`
 

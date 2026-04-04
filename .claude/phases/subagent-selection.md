@@ -4,7 +4,7 @@
 
 Automatically select and spawn specialized subagents during pipeline execution based on evidence from the task, repository, and affected files. Selection is deterministic, evidence-based, and supplementary to core pipeline agents.
 
-This policy is consulted by the orchestrator and by core agents (developer.md, panel agents) at specific points during phase execution. Subagents run in the background and are advisory — the orchestrator or calling agent owns the final decision.
+This policy is consulted by the Hypervisor and by core agents (developer-agent.md, panel agents) at specific points during phase execution. Subagents run in the background and are advisory — the Hypervisor or calling agent owns the final decision.
 
 ---
 
@@ -12,12 +12,12 @@ This policy is consulted by the orchestrator and by core agents (developer.md, p
 
 | Phase | Trigger | Who Reads This | Purpose |
 |-------|---------|----------------|---------|
-| feasibility | After `/repo-scan` completes | Orchestrator | Collect signals, write `## Subagent Signals` into feasibility.md |
-| fast-implementation | Before spawning developer.md | Orchestrator | Optionally spawn 1 language specialist (background, non-blocking) |
-| implementation | Before spawning developer.md | Orchestrator | Spawn language + domain specialists (background, advisory) |
-| design | Before panel invocation | Orchestrator | Spawn domain specialist for pre-design input |
-| code-review | After reading artifacts | Orchestrator | Spawn specialized reviewers in parallel |
-| (any agent work) | When agent detects domain-specific need | developer.md, panel agents | Agent-to-agent delegation |
+| feasibility | After `/repo-scan` completes | Hypervisor | Collect signals, write `## Subagent Signals` into feasibility.md |
+| lean-track-implementation | Before spawning developer-agent.md | Hypervisor | Optionally spawn 1 language specialist (background, non-blocking) |
+| implementation | Before spawning developer-agent.md | Hypervisor | Spawn language + domain specialists (background, advisory) |
+| design | Before panel invocation | Hypervisor | Spawn domain specialist for pre-design input |
+| code-review | After reading artifacts | Hypervisor | Spawn specialized reviewers in parallel |
+| (any agent work) | When agent detects domain-specific need | developer-agent.md, panel agents | Agent-to-agent delegation |
 
 ---
 
@@ -60,7 +60,7 @@ Write into `feasibility.md`:
 - **Subagent mode**: full | minimal
 ```
 
-Set `subagent mode` to `minimal` if fast-path-check routes to fast path, `full` otherwise.
+Set `subagent mode` to `minimal` if lean-track-check routes to the lean track, `full` otherwise.
 
 ---
 
@@ -142,13 +142,13 @@ Set `subagent mode` to `minimal` if fast-path-check routes to fast path, `full` 
 
 ## Composition Rules
 
-### Advisory Mode (implementation, fast-implementation)
+### Advisory Mode (implementation, lean-track-implementation)
 
 Used when subagents provide recommendations alongside the primary developer agent.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. Applies mapping rules to select subagent(s)
-3. Spawns `developer.md` (primary, foreground)
+3. Spawns `developer-agent.md` (primary, foreground)
 4. Spawns selected subagent(s) in **background** with advisory prompt:
 
 ```
@@ -170,15 +170,15 @@ Files in scope:
 [file list]
 ```
 
-5. Developer.md proceeds immediately — **not blocked** by subagent
-6. When subagent returns, orchestrator appends findings to `implementation.md` under `## Specialist Advisory`
-7. If subagent findings conflict with developer output, orchestrator notes the conflict but does NOT automatically re-implement — logs it for code-review consideration
+5. Developer-agent.md proceeds immediately — **not blocked** by subagent
+6. When subagent returns, Hypervisor appends findings to `implementation.md` under `## Specialist Advisory`
+7. If subagent findings conflict with developer output, Hypervisor notes the conflict but does NOT automatically re-implement — logs it for code-review consideration
 
 ### Parallel Review Mode (code-review)
 
 Used when specialist reviewers run alongside the main code review.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. Selects 0-2 review-oriented subagents based on domain signals:
    - Security-sensitive code → `security-auditor`
    - Performance-sensitive code → `performance-engineer`
@@ -193,7 +193,7 @@ Used when specialist reviewers run alongside the main code review.
 
 Used when domain expertise should inform the design before panel review.
 
-1. Orchestrator reads `## Subagent Signals` from feasibility.md
+1. Hypervisor reads `## Subagent Signals` from feasibility.md
 2. If a domain specialist is indicated with high confidence, spawn it **before** the design panel with a focused prompt:
 
 ```
@@ -210,7 +210,7 @@ Feasibility context:
 
 ### Agent-to-Agent Delegation
 
-Core agents (`developer.md`, panel agents) can spawn subagents themselves when they encounter domain-specific complexity during their work.
+Core agents (`developer-agent.md`, panel agents) can spawn subagents themselves when they encounter domain-specific complexity during their work.
 
 **Rules for agent-to-agent delegation:**
 
@@ -226,31 +226,37 @@ Core agents (`developer.md`, panel agents) can spawn subagents themselves when t
 - Maximum 1 subagent spawn per calling agent per phase
 - Subagent must come from the mapping tables (no ad-hoc selection)
 - Calling agent must include the subagent's findings in its output (not silently discard)
-- If subagent contradicts the calling agent, both perspectives are reported to the orchestrator
+- If subagent contradicts the calling agent, both perspectives are reported to the Hypervisor
 
 ---
 
-## Fast Path vs Full Path
+## Lean track vs rigorous track
 
-### Fast path (`subagent-mode: minimal`)
+### Lean track (`subagent-mode: minimal`)
 
 - Signal collection happens in feasibility (zero extra cost)
-- During fast-implementation: spawn **at most 1** language specialist
+- During lean-track-implementation: spawn **at most 1** language specialist
   - Only if confidence is `high`
   - Only if the language matches the primary language of changed files
   - Runs in **background** (non-blocking)
-  - If fast-implementation finishes before specialist returns, **proceed without waiting**
-- No domain specialists on fast path
-- No review specialists on fast path (fast path has no separate code-review phase)
-- Developer.md can still use agent-to-agent delegation (1 spawn max)
+  - If lean-track-implementation finishes before specialist returns, **proceed without waiting**
+- No domain specialists on the lean track
+- No review specialists on the lean track (no separate code-review phase)
+- Developer-agent.md can still use agent-to-agent delegation (1 spawn max)
 
-### Full path (`subagent-mode: full`)
+### Rigorous track (`subagent-mode: full`)
 
 - Up to 2 subagents per phase (typically 1 language + 1 domain)
 - Implementation: language specialist + domain specialist (both background, advisory)
 - Code-review: up to 2 review specialists in parallel with main review
 - Design: up to 1 domain specialist as pre-design input (foreground, focused scope)
-- Developer.md can use agent-to-agent delegation (1 spawn max)
+- Developer-agent.md can use agent-to-agent delegation (1 spawn max)
+
+### Standard track (`pipeline.track` is `standard`)
+
+- **Design**: optional domain pre-design input (same as rigorous) if budget allows; **no** design panel (architect / security / adversarial) unless the user explicitly requests it in-session.
+- **Implementation**: same advisory subagent rules as **rigorous** (language + domain background) — standard track still runs `implementation` and `self-review`; it **does not** run `code-review` or `permissions-check`.
+- **No** parallel review specialists at a dedicated code-review phase (that phase is skipped).
 
 ---
 
@@ -260,7 +266,7 @@ Core agents (`developer.md`, panel agents) can spawn subagents themselves when t
 - Each subagent spawn adds estimated cost to `cost_used` in state.json
 - Model routing from subagent frontmatter determines cost tier (opus > sonnet > haiku)
 - **If `budget_remaining` < 3, skip all subagent auto-selection** — preserve budget for core work
-- Maximum 2 orchestrator-spawned subagents per phase invocation
+- Maximum 2 Hypervisor-spawned subagents per phase invocation
 - Maximum 1 agent-to-agent delegation per calling agent per phase
 - Total subagent spawns tracked in `state.json.counters.subagent_spawns`
 
@@ -291,11 +297,11 @@ The `skip-subagent` entry is logged only when signals existed but selection was 
 
 ## Conflict Resolution
 
-If a subagent finding contradicts the primary agent or orchestrator:
+If a subagent finding contradicts the primary agent or Hypervisor:
 
 1. Log the conflict in `audit.log`
 2. Include both perspectives in the phase artifact (under `## Specialist Advisory` or `## Specialist Review Findings`)
-3. The orchestrator or calling agent (not the subagent) decides which perspective to follow
+3. The Hypervisor or calling agent (not the subagent) decides which perspective to follow
 4. Record the resolution rationale in the artifact
 
 Subagents are advisory. They enhance quality but never override the primary workflow.

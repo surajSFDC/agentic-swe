@@ -14,7 +14,7 @@ The core pipeline is **MIT-licensed** open source. Paid offers are **people, pri
 
 ## What we do not sell (today)
 
-- **Hosted orchestrator SaaS** — The pipeline runs in **Claude Code** on the customer’s machine; there is no multi-tenant cloud product in this repo.  
+- **Hosted SaaS runtime** — The pipeline runs in **Claude Code** on the customer’s machine; there is no multi-tenant cloud product in this repo.  
 - **Guaranteed SLAs** — Unless agreed in a signed enterprise statement of work.
 
 ## First paid offers

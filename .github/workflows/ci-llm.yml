@@ -1,0 +1,46 @@
+# Optional LLM checks — manual by default (cost + secrets).
+#
+# How to run
+#   GitHub → Actions → "LLM tests (manual)" → Run workflow
+#
+# Runner requirements
+#   - Node 20+
+#   - `claude` on PATH (install Claude Code / CLI on the runner)
+#   - API auth for your provider, e.g. one of:
+#       ANTHROPIC_API_KEY   (common for Anthropic)
+#     Add as repository or environment secrets; never commit keys.
+#
+# Scheduled runs (optional — uncomment below). Weekly runs still consume API quota.
+#
+# on:
+#   schedule:
+#     - cron: '0 6 * * 0'   # Sundays 06:00 UTC
+#   workflow_dispatch:
+
+name: LLM tests (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  llm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install root devDependencies
+        run: npm install
+
+      - name: LLM tests (requires claude CLI + auth on runner)
+        env:
+          AGENTIC_SWE_LLM_TESTS: '1'
+          # Set ANTHROPIC_API_KEY (or your host's secret) in repo Settings → Secrets
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "If this fails: install claude on the runner and configure ANTHROPIC_API_KEY (or equivalent) as a secret."
+          command -v claude || { echo "claude not found — add an install step or use a self-hosted runner"; exit 1; }
+          npm run test:llm

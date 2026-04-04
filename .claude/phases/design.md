@@ -26,9 +26,10 @@ Experienced software architect — optimizes for correctness, simplicity, and im
 
 ### Panel Review
 
-7. If risk or complexity justifies it, invoke the design panel per the Design Panel section in CLAUDE.md. Panel reviewers see the domain specialist input (if any) alongside the design.
-8. Integrate panel feedback into the design.
-9. When design review finds issues, revise within the allowed budget.
+7. If `state.json.pipeline.track` is **`standard`**, **do not** spawn the design panel (architect / security / adversarial) unless the user explicitly asks for it in this session. Still complete `design.md` with the same quality bar and refinement checklist below; transition to **`verification`** when done (standard track skips `design-review`).
+8. If `pipeline.track` is **`rigorous`** (or unset, treated as rigorous per CLAUDE.md) and risk or complexity justifies it, invoke the design panel per the Design Panel section in CLAUDE.md. Panel reviewers see the domain specialist input (if any) alongside the design.
+9. Integrate panel feedback into the design when a panel was run.
+10. When design review finds issues, revise within the allowed budget.
 
 ## Inputs
 
@@ -36,6 +37,37 @@ Experienced software architect — optimizes for correctness, simplicity, and im
 - Relevant repository source files
 - Panel feedback (if panelized)
 - Design review feedback (if iterating)
+
+## Design Refinement
+
+Before finalizing the design artifact, apply this refinement loop to ensure quality and alignment.
+
+### Incremental Clarification
+
+When the task has ambiguity, ask clarifying questions **one at a time**. Each question should build on the previous answer — do not batch unrelated questions. Stop asking once the design direction is unambiguous. Record answers as constraints in the design artifact.
+
+### Approach Selection
+
+Present 2–3 candidate approaches with trade-offs before committing. Follow `.claude/references/design-approaches-format.md` for structure. When the best choice is obvious and low-risk, a single recommended approach with brief rejected-alternative notes is acceptable. For high-stakes or unclear-requirement tasks, expand to 3 approaches with full trade-off analysis.
+
+### Incremental Presentation
+
+Present the design in digestible sections for incremental approval rather than a single monolithic document. Walk through: problem framing → approach selection → file-level plan → risk register, confirming alignment at each step before proceeding.
+
+### Self-Review Gate
+
+Before presenting the design, run the checklist in `.claude/templates/spec-self-review-checklist.md`. Every item must pass. If any item fails, fix the design before presenting — do not flag failures and move on. Record the self-review pass in the design artifact's metadata.
+
+### Visual companion (optional)
+
+When layout, spatial structure, or iterative UI exploration would help the human decide faster, offer a **local visual companion**:
+
+1. From the repo root, run `tools/brainstorm-server/start-server.sh` (or `cd tools/brainstorm-server && npm install && npm start`). Default URL: `http://127.0.0.1:47821` — WebSocket at `/ws`. Optional: set **`BRAINSTORM_WATCH_DIR`** to a folder so the server pushes **`file-change`** events over the socket when files update (see `tools/brainstorm-server/README.md`).
+2. Tell the human the URL. They can use the page to send short **companion** notes; you can also connect tooling to `ws://127.0.0.1:<port>/ws` with JSON messages `{ "type": "companion", "message": "..." }` and `{ "type": "ping" }` for health checks.
+3. **Stop** the server when the design session ends: `tools/brainstorm-server/stop-server.sh` or Ctrl+C. Do not leave it running unattended.
+4. Security: server binds to **127.0.0.1** only. See `tools/brainstorm-server/README.md` for protocol details.
+
+This does not replace written `design.md` artifacts or human approval — it is an optional aid during refinement.
 
 ## Required Output
 

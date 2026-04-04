@@ -2,7 +2,7 @@
 
 This project’s marketing/docs site can be deployed to AWS as a **private S3 bucket** in front of **CloudFront** (Origin Access Control). Objects are not publicly readable from S3; only the CloudFront distribution can read them.
 
-For how this fits **product distribution** (public vs private repo, GitHub Pages, custom domains), see [docs/distribution.md](../docs/distribution.md).
+For how this fits **product distribution** (public vs private repo, GitHub Pages, custom domains), see [distribution.md](../site/public/distribution.md).
 
 ## Configure deploy (local only)
 
@@ -24,12 +24,16 @@ Do **not** commit real bucket names, distribution IDs, or account-specific value
 ./infra/deploy-static-site.sh
 ```
 
-This syncs `docs/` to the bucket and creates a **cache invalidation** for `/*`.
+This runs **`npm run build:site`** (Vite + React in `site/` → output in **`site/dist/`**), then syncs **`site/dist/`** to the bucket and creates a **cache invalidation** for `/*`.
+
+### SPA routing (CloudFront)
+
+The marketing site is a **single-page app**: routes such as `/guide`, `/documentation`, and `/capabilities` are handled in the browser. Configure the distribution so **403 and 404 responses from S3** return **`/index.html`** with status **200** (custom error responses), or deep links and refreshes on those paths will fail.
 
 Manual one-liner (after exporting the same variables):
 
 ```bash
-aws s3 sync ./docs/ "s3://${S3_STATIC_BUCKET}/" --delete --region "${AWS_REGION:-us-east-1}"
+aws s3 sync ./site/dist/ "s3://${S3_STATIC_BUCKET}/" --delete --region "${AWS_REGION:-us-east-1}"
 aws cloudfront create-invalidation --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" --paths "/*"
 ```
 
