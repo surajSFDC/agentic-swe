@@ -29,11 +29,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`scripts/bump-version.sh`** / **`.version-bump.json`** — marketplace plugin version is included in sync checks and bumps via **`versionSelector`**.
 
+## [3.0.3] - 2026-04-05
+
+### Fixed
+
+- **`.claude-plugin/plugin.json`:** removed **`commands`** and **`agents`** overrides. Claude Code **v2.1.92** `claude plugin validate` and marketplace install reject **`agents: ["./agents"]`** / **`["./agents/"]`** with **`agents: Invalid input`** (Zod expects agent **file** paths in the array, not a directory entry). Omitting both fields restores default discovery of **`./commands/`** and **`./agents/`** at the plugin root — same layout, install succeeds.
+- **`test/install-platform-stubs.test.js`:** when the **`claude`** CLI is on PATH, run **`claude plugin validate`** on **`.claude-plugin/plugin.json`** as well as the repo (marketplace), so manifest regressions fail **`npm test`** locally/CI.
+
 ## [3.0.1] - 2026-04-05
 
 ### Fixed
 
-- **`.claude-plugin/plugin.json`:** set explicit **`commands`**, **`agents`** (arrays with **`./`** paths), and **`hooks`** — Claude Code **v2.1+** manifest validation can fail install with **`agents: Invalid input`** when component paths are omitted (see [Claude plugin manifest — component paths](https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/plugin-structure/references/manifest-reference.md)).
+- **`.claude-plugin/plugin.json`:** set explicit **`commands`**, **`agents`** (arrays with **`./`** paths), and **`hooks`**. **Update (3.0.3):** directory-style **`agents`** entries still fail **`claude plugin validate`** / install on **v2.1.92**; **`agents`** and **`commands`** overrides were removed again so defaults apply (see **[3.0.3]**).
 
 ## [3.0.2] - 2026-04-05
 
