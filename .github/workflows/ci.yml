@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      # Vite 8 + @vitejs/plugin-react 6 require Node ^20.19 || >=22.12 (no Node 18).
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
 
