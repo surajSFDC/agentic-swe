@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Site:** [Plugin privacy](https://surajSFDC.github.io/agentic-swe/docs/privacy) at **`/docs/privacy`** (`site/src/content/docs/privacy.md`) for directory listings and transparency; linked from **Licensing** and **Support**.
+- **Docs:** link to **[plugin submission tracker](https://claude.ai/settings/plugins/submissions)** in **Distribution** and **Claude Code plugin** (maintainers).
 
 ## [3.0.5] - 2026-04-05
 

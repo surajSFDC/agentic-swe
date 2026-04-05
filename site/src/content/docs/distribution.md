@@ -9,6 +9,7 @@ How users get **agentic-swe**, and how that relates to **source hosting** (e.g. 
 | **Claude Code plugin marketplace** | **Primary.** Git-hosted catalog ([`.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json)); users add the repo then **`/plugin install`** — see [claude-code-plugin.md](claude-code-plugin.md) |
 | **Source hosting** | Development, issues, contributions, and **`claude --plugin-dir`** local dev |
 | **Marketing / docs site** | Landing page and markdown docs (**[GitHub Pages](https://surajSFDC.github.io/agentic-swe/)** canonical, CloudFront mirror); describes plugin install |
+| **[Anthropic plugin directory](https://claude.com/plugins)** (optional) | Curated catalog; **separate** from the Git marketplace. Submit via Anthropic’s form; **track submissions:** [claude.ai — Settings → Plugins → Submissions](https://claude.ai/settings/plugins/submissions) |
 
 ## Marketing and documentation site
 

@@ -34,6 +34,8 @@ After this catalog is **pushed to a public GitHub repo** (e.g. `surajSFDC/agenti
 
    For public plugin directories that ask for a **privacy policy URL**, use the published page: **[Plugin privacy](privacy.md)** (`https://surajSFDC.github.io/agentic-swe/docs/privacy`).
 
+   **Anthropic directory submissions:** track status under your account at **`https://claude.ai/settings/plugins/submissions`** (see also [Distribution — optional directory](distribution.md)).
+
 5. Session hooks live in **`hooks/hooks.json`** at the plugin root ([`hooks/hooks.json`](../../hooks/hooks.json)); Claude loads it automatically — no **`hooks`** key in **`plugin.json`** unless you add a second config file.
 
 6. **`phases/`**, **`templates/`**, **`references/`**, **`tools/`**, and **`state-machine.json`** are **not** manifest component keys; policy and phases reference them via **`${CLAUDE_PLUGIN_ROOT}/...`**.
