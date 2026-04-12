@@ -38,7 +38,7 @@ After this catalog is **pushed to a public GitHub repo** (e.g. `surajSFDC/agenti
 
 5. Session hooks live in **`hooks/hooks.json`** at the plugin root ([`hooks/hooks.json`](../../hooks/hooks.json)); Claude loads it automatically — no **`hooks`** key in **`plugin.json`** unless you add a second config file.
 
-6. **`phases/`**, **`templates/`**, **`references/`**, **`tools/`**, and **`state-machine.json`** are **not** manifest component keys; policy and phases reference them via **`${CLAUDE_PLUGIN_ROOT}/...`**.
+6. **`phases/`**, **`templates/`**, **`references/`**, **`agents/plugin-runtime/`** (bundled helpers), and **`state-machine.json`** are **not** manifest component keys; policy and phases reference them via **`${CLAUDE_PLUGIN_ROOT}/...`**.
 
 ## Layout notes
 

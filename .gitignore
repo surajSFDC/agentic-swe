@@ -28,7 +28,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
-infra/.env
 
 # Logs
 *.log

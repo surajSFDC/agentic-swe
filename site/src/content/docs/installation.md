@@ -85,7 +85,7 @@ If you previously copied **`.claude/commands`**, **`.claude/phases`**, etc. into
 
 ## Selective copy (advanced)
 
-If you only want subagents or catalog files without the full plugin, clone this repository and copy the directories you need from the repo root (e.g. `agents/subagents/`, `tools/subagent-catalog/`). Prefer the plugin for a supported, updatable install.
+If you only want subagents or catalog files without the full plugin, clone this repository and copy the directories you need from the repo root (e.g. `agents/subagents/`, `agents/plugin-runtime/subagent-catalog/`). Prefer the plugin for a supported, updatable install.
 
 ---
 
