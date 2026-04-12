@@ -4,13 +4,15 @@ Local **HTTP + WebSocket** helper for visual or structured brainstorming during 
 
 ## Install (once)
 
-From **`tools/brainstorm-server/`** (recommended — keeps `ws` + `chokidar` together):
+From **`agents/plugin-runtime/brainstorm-server/`** (recommended — keeps `ws` + `chokidar` together):
 
 ```bash
-cd tools/brainstorm-server && npm install
+cd agents/plugin-runtime/brainstorm-server && npm install
 ```
 
-CI and contributors: the repo root `npm test` flow runs `npm install --prefix tools/brainstorm-server` so integration tests can start this server. You do **not** need a separate `ws` install at the repo root for the brainstorm server.
+CI and contributors: the repo root `npm test` flow runs `npm install --prefix agents/plugin-runtime/brainstorm-server` so integration tests can start this server. You do **not** need a separate `ws` install at the repo root for the brainstorm server.
+
+**Claude Code:** Submitting **`/brainstorm`** triggers an async **`UserPromptSubmit`** hook (`hooks/brainstorm-on-prompt.sh`) that starts this server if the listen port is free (see repo **`hooks/hooks.json`**).
 
 ## Run
 

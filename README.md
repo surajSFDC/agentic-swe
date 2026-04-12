@@ -21,7 +21,7 @@ Then start a task:
 /work Add retry logic to the API client
 ```
 
-See the [installation guide](https://surajSFDC.github.io/agentic-swe/docs/installation) · [CloudFront mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/installation) and the [Claude Code plugin](https://surajSFDC.github.io/agentic-swe/docs/claude-code-plugin) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/claude-code-plugin) for details, upgrades, and **optional org knowledge files** (`AGENTS.md`, `docs/agentic-swe/`).
+See the [installation guide](https://surajSFDC.github.io/agentic-swe/docs/installation) and the [Claude Code plugin](https://surajSFDC.github.io/agentic-swe/docs/claude-code-plugin) for details, upgrades, and **optional org knowledge files** (`AGENTS.md`, `docs/agentic-swe/`).
 
 **What this is:** a **markdown workflow pack** that runs inside **Claude Code** on your repo (phases, gates, evidence). It is **not** a hosted async coding agent or cloud sandbox—that is a different class of product (e.g. remote harnesses with triggers and isolated runners).
 
@@ -29,18 +29,17 @@ See the [installation guide](https://surajSFDC.github.io/agentic-swe/docs/instal
 
 Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, and agents)—not a hosted cloud runtime. More on the product and licensing:
 
-**Public site:** **[GitHub Pages](https://surajSFDC.github.io/agentic-swe/)** (canonical) · [CloudFront mirror](https://d3pi4w4hqr9gq6.cloudfront.net/) — same build; either URL is fine.
+**Public site:** **[GitHub Pages](https://surajSFDC.github.io/agentic-swe/)**
 
-| Topic | GitHub Pages | CloudFront |
-|-------|--------------|------------|
-| Who it is for and hero messaging | [Product positioning](https://surajSFDC.github.io/agentic-swe/docs/product-positioning) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/product-positioning) |
-| MIT and commercial strategy | [Licensing](https://surajSFDC.github.io/agentic-swe/docs/licensing) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/licensing) |
-| Pro / services (first paid wedges) | [Pro & services](https://surajSFDC.github.io/agentic-swe/docs/pro) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/pro) |
-| Distribution and hosting | [Distribution](https://surajSFDC.github.io/agentic-swe/docs/distribution) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/distribution) |
-| Troubleshooting | [Troubleshooting](https://surajSFDC.github.io/agentic-swe/docs/troubleshooting) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/troubleshooting) |
-| `/check` quick reference | [Check commands](https://surajSFDC.github.io/agentic-swe/docs/check-commands) | [mirror](https://d3pi4w4hqr9gq6.cloudfront.net/docs/check-commands) |
+| Topic | Docs |
+|-------|------|
+| Who it is for and hero messaging | [Product positioning](https://surajSFDC.github.io/agentic-swe/docs/product-positioning) |
+| MIT and commercial strategy | [Licensing](https://surajSFDC.github.io/agentic-swe/docs/licensing) |
+| Distribution and hosting | [Distribution](https://surajSFDC.github.io/agentic-swe/docs/distribution) |
+| Troubleshooting | [Troubleshooting](https://surajSFDC.github.io/agentic-swe/docs/troubleshooting) |
+| `/check` quick reference | [Check commands](https://surajSFDC.github.io/agentic-swe/docs/check-commands) |
 
-**Marketing site (source):** the React app lives under **`site/src/`**; long-form docs are **`site/src/content/docs/*.md`** (rendered at **`/docs/*`**). **`site/public/`** holds static assets (favicon, icons). Run **`npm run build:site`** to emit **`site/dist/`**. Publish via **`./infra/deploy-static-site.sh`** to S3/CloudFront (see [infra/README.md](infra/README.md)), or via **GitHub Actions** to Pages: **Settings → Pages → Source: GitHub Actions**; pushes to **`main`** run [`.github/workflows/pages.yml`](.github/workflows/pages.yml) → **`https://surajSFDC.github.io/agentic-swe/`** (adjust owner/repo if you fork).
+**Marketing site (source):** the React app lives under **`site/src/`**; long-form docs are **`site/src/content/docs/*.md`** (rendered at **`/docs/*`**). **`site/public/`** holds static assets (favicon, icons). Run **`npm run build:site`** to emit **`site/dist/`**. Publish via **GitHub Actions** to Pages: **Settings → Pages → Source: GitHub Actions**; pushes to **`main`** run [`.github/workflows/pages.yml`](.github/workflows/pages.yml) → **`https://surajSFDC.github.io/agentic-swe/`** (adjust owner/repo if you fork).
 
 ## How It Works
 
@@ -101,7 +100,7 @@ Example tasks and the routes they follow (see the **state machine** diagram abov
 | `/repo-scan` | Structured codebase snapshot |
 | `/check budget` | Verify iteration budgets |
 
-See the [usage reference](https://surajSFDC.github.io/agentic-swe/docs/usage) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/usage) for the full commands list.
+See the [usage reference](https://surajSFDC.github.io/agentic-swe/docs/usage) for the full commands list.
 
 ## Specialized Subagents
 
@@ -120,7 +119,7 @@ See the [usage reference](https://surajSFDC.github.io/agentic-swe/docs/usage) ·
 | **Meta & Orchestration** | 10 | `multi-agent-coordinator`, `workflow-orchestrator` |
 | **Research & Analysis** | 7 | `competitive-analyst`, `trend-analyst`, `research-analyst` |
 
-See the [subagent catalog](https://surajSFDC.github.io/agentic-swe/docs/subagent-catalog) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/subagent-catalog) for the full catalog with models and descriptions.
+See the [subagent catalog](https://surajSFDC.github.io/agentic-swe/docs/subagent-catalog) for the full catalog with models and descriptions.
 
 ## Examples
 
@@ -158,7 +157,7 @@ to audit the payment processing module in src/payments/
 /execute-plan
 ```
 
-See [examples](https://surajSFDC.github.io/agentic-swe/docs/examples) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/examples) for detailed walkthroughs.
+See [examples](https://surajSFDC.github.io/agentic-swe/docs/examples) for detailed walkthroughs.
 
 ## Architecture
 
@@ -208,7 +207,7 @@ All platforms share the same markdown source at this repo’s **plugin root** (`
 
 ## CI and pre-push checks
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on **push / pull request** to **`main`**, on **merge queue**, and **manually** (`workflow_dispatch`). It uses **Node 20 and 22**, **`npm ci`** for root, **`site/`**, and **`tools/brainstorm-server`**, then **site lint**, **site build**, **`npm run verify`**, **`npm run version:check`**, optional **`claude plugin validate`**, and **`npm test`** (state machine, references, **multi-platform wiring**, brainstorm-server, etc.).
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on **push / pull request** to **`main`**, on **merge queue**, and **manually** (`workflow_dispatch`). It uses **Node 20 and 22**, **`npm ci`** for root, **`site/`**, and **`agents/plugin-runtime/brainstorm-server`**, then **site lint**, **site build**, **`npm run verify`**, **`npm run version:check`**, optional **`claude plugin validate`**, and **`npm test`** (state machine, references, **multi-platform wiring**, brainstorm-server, etc.).
 
 Locally, with dependencies installed under **`site/`**, run **`npm run ci`** for the same bar (minus the Node matrix and unless **`claude`** is on your **`PATH`**). See the [Release checklist](https://surajSFDC.github.io/agentic-swe/docs/release-checklist) for the full maintainer sequence (mirrors CI plus optional manual smoke).
 
@@ -218,4 +217,4 @@ Built on research from SWE-agent, Agentless, Ambig-SWE, Reflexion, Self-Refine, 
 
 ## License
 
-[MIT](LICENSE). Commercial services and optional Pro offerings are described on the [Pro & services](https://surajSFDC.github.io/agentic-swe/docs/pro) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/pro) page; see [licensing](https://surajSFDC.github.io/agentic-swe/docs/licensing) · [CloudFront](https://d3pi4w4hqr9gq6.cloudfront.net/docs/licensing) for how MIT relates to product packaging (not legal advice).
+[MIT](LICENSE). See [licensing](https://surajSFDC.github.io/agentic-swe/docs/licensing) for how the license applies to the pack and typical use (not legal advice).

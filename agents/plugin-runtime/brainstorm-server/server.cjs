@@ -53,7 +53,7 @@ if (watchDir) {
     process.stdout.write(`brainstorm-server file-watch ${abs}\n`);
   } catch (e) {
     process.stderr.write(
-      `brainstorm-server: BRAINSTORM_WATCH_DIR set but file watch failed (${e.message}). Run npm install in tools/brainstorm-server (needs chokidar).\n`
+      `brainstorm-server: BRAINSTORM_WATCH_DIR set but file watch failed (${e.message}). Run npm install in agents/plugin-runtime/brainstorm-server (needs chokidar).\n`
     );
   }
 }

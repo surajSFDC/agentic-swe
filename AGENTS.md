@@ -43,7 +43,7 @@ initialized → feasibility → lean-track-check → branch by pipeline.track �
 
 - `${CLAUDE_PLUGIN_ROOT}/commands/` — slash command definitions (per [Claude Plugins reference](https://code.claude.com/docs/en/plugins-reference#skills), plugins may use `commands/*.md` or `skills/<name>/SKILL.md`; this pack uses **`commands/`** only)
 - `${CLAUDE_PLUGIN_ROOT}/phases/` — phase prompts (one per pipeline state)
-- `${CLAUDE_PLUGIN_ROOT}/agents/` — specialist agent prompts (135+ subagents)
+- `${CLAUDE_PLUGIN_ROOT}/agents/` — specialist agent prompts (135+ subagents) and **`agents/plugin-runtime/`** (bundled helpers: subagent-catalog shell, brainstorm server)
 - `${CLAUDE_PLUGIN_ROOT}/templates/` — state, progress, and evidence templates
 - `${CLAUDE_PLUGIN_ROOT}/references/` — authoritative tool and process references
 

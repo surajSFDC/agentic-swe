@@ -337,7 +337,7 @@ Permission-gated; the user sees each check.
 | `/ci-status [PR|branch]` | CI and mergeability | `pr-creation`, `merge-completion` |
 | `/conflict-resolver [command]` | Git conflicts | `merge-completion`, git-ops agent |
 | `/security-scan [scope]` | Deps, secrets, risky patterns | `permissions-check`, security panel |
-| `/brainstorm` | Design-first exploration; optional **`${CLAUDE_PLUGIN_ROOT}/tools/brainstorm-server/`** | `design` |
+| `/brainstorm` | Design-first exploration; optional UI **`${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/brainstorm-server/`** (auto-started on **`/brainstorm`** via **`hooks/hooks.json`** → `UserPromptSubmit` in Claude Code) | `design` |
 | `/write-plan` | Refine `implementation.md` to plan bar (no code) | `plan-quality-bar`, `plan-only` |
 | `/execute-plan` | Execute plan via implementation or lean path per `state.json` | `developer-agent` |
 | `/author-pipeline` | Safe extension checklist | `authoring-pipeline-capabilities` |
@@ -350,7 +350,7 @@ Permission-gated; the user sees each check.
 - **`${CLAUDE_PLUGIN_ROOT}/state-machine.json`** — Canonical edges; must match the fenced block in this file
 - **`${CLAUDE_PLUGIN_ROOT}/phases/`** — Phase prompts + **`subagent-selection.md`**
 - **`${CLAUDE_PLUGIN_ROOT}/agents/`** — Core agents, **`panel/`**, **`subagents/`**, **`subagents/custom/`**
-- **`${CLAUDE_PLUGIN_ROOT}/tools/`** — e.g. **`subagent-catalog/`**
+- **`${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/`** — e.g. **`subagent-catalog/`**, **`brainstorm-server/`**
 - **`${CLAUDE_PLUGIN_ROOT}/templates/`** — `state.json`, `progress.md`, `audit.log`, `phase-checklist.md`, `evidence-standard.md`, `artifact-format.md`, `repo-knowledge-stub.md`, `playbook-entry.md`, `evaluation-rubric.md`, `capability-gaps-section.md`, `metrics-summary.md` (optional)
 - **`${CLAUDE_PLUGIN_ROOT}/references/`** — Readonly facts; **`tooling-expectations.md`**, git/PR material for agents and phases
 - **`.worklogs/<id>/`** — Runtime work state in the **user’s project** (optional **`.gitignore`**; see **`${CLAUDE_PLUGIN_ROOT}/commands/install.md`**)
@@ -392,7 +392,7 @@ The pipeline synthesizes ideas from autonomous SWE and agentic coding literature
 | Start work | **`/work`** + task description |
 | Resume | **`/work <id>`** |
 | Plan only | **`/plan-only`** |
-| Design exploration | **`/brainstorm`** (optional UI: **`${CLAUDE_PLUGIN_ROOT}/tools/brainstorm-server/`**) |
+| Design exploration | **`/brainstorm`** (optional UI: **`${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/brainstorm-server/`**; Claude Code starts it on submit via hooks) |
 | Refine plan only | **`/write-plan`** |
 | Execute plan | **`/execute-plan`** |
 | Health check | **`/evaluate-work`** |

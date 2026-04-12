@@ -1,9 +1,6 @@
----
-name: list
-description: "List all categories and agents in the local subagent catalog. Use when user wants to browse available subagents."
----
+# Subagent Catalog — List (documentation)
 
-# Subagent Catalog - List
+Optional reference for the shell helpers in this folder. The supported entry point in the pack is **`/subagent`** (see **`commands/subagent.md`**), which sources **`config.sh`** directly.
 
 Browse all available categories and agents from the local subagent catalog.
 
@@ -16,7 +13,7 @@ No arguments required.
 ### Step 1: List categories and agents
 
 ```bash
-source tools/subagent-catalog/config.sh
+source "${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/subagent-catalog/config.sh"
 
 for category in $(subagent_catalog_list_categories); do
   echo "### $category"
@@ -43,6 +40,6 @@ typescript-pro, python-pro, rust-engineer, golang-pro, ...
 
 ### Tips
 
-- use `/subagent-catalog:search <query>` to filter by keyword
-- use `/subagent-catalog:fetch <name>` to get full definition
-- agents are stored locally in `agents/subagents/`
+- use **`/subagent search <query>`** to filter by keyword
+- use **`/subagent info <name>`** to show a full definition
+- agents are stored locally in **`agents/subagents/`**

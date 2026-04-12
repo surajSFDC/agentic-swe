@@ -19,9 +19,9 @@ describe('plugin layout: pipeline dirs at repository root', () => {
     });
   }
 
-  it('tools/subagent-catalog exists and has markdown', () => {
-    const cat = path.join(repoRoot, 'tools', 'subagent-catalog');
-    assert.ok(fs.existsSync(cat), 'missing tools/subagent-catalog/');
+  it('agents/plugin-runtime/subagent-catalog exists and has markdown', () => {
+    const cat = path.join(repoRoot, 'agents', 'plugin-runtime', 'subagent-catalog');
+    assert.ok(fs.existsSync(cat), 'missing agents/plugin-runtime/subagent-catalog/');
     const md = fs.readdirSync(cat).filter((f) => f.endsWith('.md'));
     assert.ok(md.length > 0, 'subagent-catalog should contain .md files');
   });

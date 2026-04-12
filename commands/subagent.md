@@ -37,7 +37,7 @@ Usage:
 List all categories with their agents:
 
 ```bash
-source ${CLAUDE_PLUGIN_ROOT}/tools/subagent-catalog/config.sh
+source ${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/subagent-catalog/config.sh
 for category in $(subagent_catalog_list_categories); do
   echo "### $category"
   subagent_catalog_list_agents_in "$category" | tr '\n' ', ' | sed 's/,$//'
@@ -48,7 +48,7 @@ done
 ### Action: search <query>
 
 ```bash
-source ${CLAUDE_PLUGIN_ROOT}/tools/subagent-catalog/config.sh
+source ${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/subagent-catalog/config.sh
 subagent_catalog_search "<query>"
 ```
 
@@ -58,7 +58,7 @@ Display results as a table with category, name, and description.
 
 1. Find the agent file:
 ```bash
-source ${CLAUDE_PLUGIN_ROOT}/tools/subagent-catalog/config.sh
+source ${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/subagent-catalog/config.sh
 subagent_catalog_find "<name>"
 ```
 

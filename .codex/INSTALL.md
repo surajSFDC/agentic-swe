@@ -1,6 +1,6 @@
 # Installing agentic-swe for Codex
 
-The **npm CLI (`npx agentic-swe`) was removed in v3**. Codex users should treat this repository as the **source of truth** for markdown (plugin root: `commands/`, `phases/`, `agents/`, `templates/`, `references/`, `tools/`, `state-machine.json`).
+The **npm CLI (`npx agentic-swe`) was removed in v3**. Codex users should treat this repository as the **source of truth** for markdown (plugin root: `commands/`, `phases/`, `agents/` including `agents/plugin-runtime/`, `templates/`, `references/`, `state-machine.json`).
 
 ## Prerequisites
 

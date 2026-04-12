@@ -4,7 +4,7 @@ Use before tagging a release or after changing **`hooks/`**, **`.cursor-plugin/`
 
 ## Automated (CI / local)
 
-Run from repo root (after **`npm ci`** at root, **`npm ci --prefix site`**, and **`npm ci --prefix tools/brainstorm-server`** — same as **GitHub Actions**):
+Run from repo root (after **`npm ci`** at root, **`npm ci --prefix site`**, and **`npm ci --prefix agents/plugin-runtime/brainstorm-server`** — same as **GitHub Actions**):
 
 ```bash
 npm run verify
@@ -56,12 +56,12 @@ After the **automated** bar passes and you have run **any** manual smoke you car
 3. Record **who** ran the checks (initials or handle).
 4. Mark **✓** only for hosts you actually exercised; use **—** for not run this cycle.
 5. In **Notes**, put **app versions** (Cursor build, Claude Code / desktop version, Gemini CLI version, etc.) and optionally a link to the **release PR**, **GitHub Release**, or **CI run**.
-6. Spot-check the **public docs site** once per release (e.g. open [Installation](installation.md) and one other `/docs/*` page on **GitHub Pages** and, if you still use it, the **CloudFront** mirror) — mark **✓** under **Public docs** when done.
+6. Spot-check the **public docs site** once per release (e.g. open [Installation](installation.md) and one other `/docs/*` page on **GitHub Pages**) — mark **✓** under **Public docs** when done.
 
 **Where to keep this row:** paste into the **release PR** description, the **GitHub Release** body, a **tag annotation** (`git tag -a …`), or your team’s internal runbook — whichever you use for audit trail.
 
 | Date (UTC) | Commit / tag | Verifier | Public docs | Claude Code | Cursor | Codex | OpenCode | Gemini | Notes |
 |------------|--------------|----------|-------------|-------------|--------|-------|----------|--------|-------|
-| _YYYY-MM-DD_ | _abc1234 or vX.Y.Z_ | _name_ | ✓/— | ✓/— | ✓/— | ✓/— | ✓/— | ✓/— | _PR #…, host versions, mirror URL if checked_ |
+| _YYYY-MM-DD_ | _abc1234 or vX.Y.Z_ | _name_ | ✓/— | ✓/— | ✓/— | ✓/— | ✓/— | ✓/— | _PR #…, host versions, Pages URL if checked_ |
 
 Keep one row per **release** (or per **candidate SHA** if you verify before tagging). Link out for long prose instead of growing the table.
