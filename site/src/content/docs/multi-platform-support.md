@@ -7,7 +7,7 @@ agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** ses
 | Platform | Install method | Where to read more |
 |----------|----------------|-------------------|
 | **Claude Code** | Add the marketplace, then **`/plugin install agentic-swe@agentic-swe-catalog`** (or **`claude --plugin-dir /path/to/this/repo`** for dev) | [Claude Code plugin](claude-code-plugin.md), [Installation](installation.md) |
-| **Cursor** | Bundled **`.cursor-plugin/`**; rules + **`hooks/hooks-cursor.json`** | Project rules should point at root **`CLAUDE.md`** and plugin paths; slash commands are not automatic — use phase prompts or custom rules as needed |
+| **Cursor** | **`scripts/install-cursor-plugin.sh`** (or Marketplace after publish); **`.cursor-plugin/`** + default **`commands/`** / **`agents/`**; **`hooks/hooks-cursor.json`** on session start | [Cursor plugin](cursor-plugin.md) — one-line **`curl \| bash`** install, **`CLAUDE.md`** merge in the target repo, optional **`.cursor/rules`** stub |
 | **Codex** | Clone / submodule this repo; symlink or copy pack dirs into the target project | [.codex/INSTALL.md](../../.codex/INSTALL.md), [Codex](README.codex.md) |
 | **OpenCode** | **`.opencode/`** plugin entry | [OpenCode](README.opencode.md) |
 | **Gemini CLI** | **`gemini-extension.json`** | Context from **`GEMINI.md`** at repo root |

@@ -196,7 +196,7 @@ agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** ses
 | Platform | Install Method | Details |
 |----------|---------------|---------|
 | **Claude Code** | Plugin marketplace + `/plugin install` (or `claude --plugin-dir` for dev) | Primary platform. See [claude-code-plugin.md](site/src/content/docs/claude-code-plugin.md). |
-| **Cursor** | Plugin via `.cursor-plugin/` | Commands and agents load automatically. See `hooks/hooks-cursor.json`. |
+| **Cursor** | Plugin via `.cursor-plugin/` | `curl -fsSL https://raw.githubusercontent.com/surajSFDC/agentic-swe/main/scripts/install-cursor-plugin.sh \| bash` then reload; add **`AGENTIC_SWE_TARGET_REPO=/path/to/app`** on the same line to auto-merge **`CLAUDE.md`** (needs **`node`**). [Cursor plugin](https://surajSFDC.github.io/agentic-swe/docs/cursor-plugin). |
 | **Codex** | Clone + symlink or copy | See `.codex/INSTALL.md` and `site/src/content/docs/README.codex.md`. |
 | **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See `site/src/content/docs/README.opencode.md`. |
 | **Gemini CLI** | Extension via `gemini-extension.json` | Context loaded from `GEMINI.md`. |

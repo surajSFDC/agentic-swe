@@ -33,8 +33,17 @@ function countMdUnder(dir) {
   return n;
 }
 
-function resolveFromCursorPlugin(relativePath) {
-  return path.normalize(path.join(pluginCursorDir, relativePath));
+/** Resolve manifest paths the same way as Cursor: plugin root = repo root; legacy `../` paths are relative to `.cursor-plugin/`. */
+function resolveCursorManifestPath(manifestValue, fallbackDir) {
+  if (manifestValue === undefined || manifestValue === null) {
+    return path.join(repoRoot, fallbackDir);
+  }
+  const raw = String(manifestValue).replace(/\\/g, '/');
+  const trimmed = raw.replace(/^\.\//, '');
+  if (trimmed.startsWith('../')) {
+    return path.normalize(path.join(pluginCursorDir, trimmed));
+  }
+  return path.normalize(path.join(repoRoot, trimmed));
 }
 
 /** Run once at load; skip validate tests if `claude` is not on PATH. */
@@ -138,22 +147,22 @@ describe('multi-platform stubs: Cursor plugin', () => {
     const pkg = readJson(path.join(repoRoot, 'package.json'));
     assert.strictEqual(m.version, pkg.version, 'cursor plugin version should match package.json');
 
-    const commandsDir = resolveFromCursorPlugin(m.commands);
+    const commandsDir = resolveCursorManifestPath(m.commands, 'commands');
     assert.ok(fs.existsSync(commandsDir), `commands path missing: ${m.commands} -> ${commandsDir}`);
     assert.ok(fs.statSync(commandsDir).isDirectory());
 
-    const agentsDir = resolveFromCursorPlugin(m.agents);
+    const agentsDir = resolveCursorManifestPath(m.agents, 'agents');
     assert.ok(fs.existsSync(agentsDir), `agents path missing: ${m.agents} -> ${agentsDir}`);
     assert.ok(fs.statSync(agentsDir).isDirectory());
 
-    const hooksFile = resolveFromCursorPlugin(m.hooks);
+    const hooksFile = resolveCursorManifestPath(m.hooks, '');
     assert.ok(fs.existsSync(hooksFile), `hooks file missing: ${m.hooks} -> ${hooksFile}`);
   });
 
   it('commands/ and agents/ expose markdown (Cursor discovers .md)', () => {
     const m = readJson(path.join(pluginCursorDir, 'plugin.json'));
-    const commandsDir = resolveFromCursorPlugin(m.commands);
-    const agentsDir = resolveFromCursorPlugin(m.agents);
+    const commandsDir = resolveCursorManifestPath(m.commands, 'commands');
+    const agentsDir = resolveCursorManifestPath(m.agents, 'agents');
     assert.ok(countMdUnder(commandsDir) >= 5, 'commands/ should contain multiple .md files');
     assert.ok(countMdUnder(agentsDir) >= 5, 'agents/ should contain multiple .md files');
   });
@@ -171,6 +180,20 @@ describe('multi-platform stubs: Cursor plugin', () => {
       const target = path.join(repoRoot, rel);
       assert.ok(fs.existsSync(target), `hook command missing: ${hook.command} -> ${target}`);
     }
+  });
+
+  it('scripts/install-cursor-plugin.sh exists for one-command Cursor local install', () => {
+    const sh = path.join(repoRoot, 'scripts', 'install-cursor-plugin.sh');
+    assert.ok(fs.existsSync(sh), 'missing scripts/install-cursor-plugin.sh');
+    const body = fs.readFileSync(sh, 'utf8');
+    assert.ok(body.includes('.cursor/plugins/local'), 'install script should target Cursor local plugins dir');
+    assert.ok(body.includes('AGENTIC_SWE_PACK_ROOT'), 'install script should document symlink override');
+    assert.ok(body.includes('AGENTIC_SWE_TARGET_REPO'), 'install script should document auto CLAUDE.md merge');
+  });
+
+  it('scripts/merge-claude-policy.js exists for automated CLAUDE.md merge', () => {
+    const js = path.join(repoRoot, 'scripts', 'merge-claude-policy.js');
+    assert.ok(fs.existsSync(js), 'missing scripts/merge-claude-policy.js');
   });
 });
 

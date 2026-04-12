@@ -17,7 +17,7 @@ const GROUPS: { label: string; slugs: DocSlug[] }[] = [
   },
   {
     label: 'Other hosts',
-    slugs: ['opencode', 'codex'],
+    slugs: ['cursor-plugin', 'opencode', 'codex'],
   },
 ]
 

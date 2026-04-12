@@ -368,8 +368,9 @@ claude`}
 
       <h3>Cursor</h3>
       <p>
-        Use project rules to point agents at the root Hypervisor policy and <code>{'${CLAUDE_PLUGIN_ROOT}/phases/'}</code>. Slash commands
-        are not automatic — invoke phase files or wrap them in custom rules/skills as needed.
+        Install the bundled <strong>.cursor-plugin</strong> from a checkout of this repository, merge <code>CLAUDE.md</code> in your target
+        repo, and use project rules so paths resolve to the pack (submodule paths work well). Slash-style shortcuts are host-dependent — open{' '}
+        <code>commands/*.md</code> or follow <Link to="/docs/cursor-plugin">Cursor plugin</Link>.
       </p>
 
       <h3>Codex / other assistants</h3>
