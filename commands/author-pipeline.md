@@ -11,7 +11,7 @@ Extend or modify the **agentic-swe** workflow pack (phases, commands, agents, te
 
 You are running `/author-pipeline`.
 
-**Goal:** Apply a structured change to the **plugin-root** trees (`commands/`, `phases/`, `agents/`, `templates/`, `references/`, `tools/`) and root `CLAUDE.md` when the state machine changes, with tests passing and documentation updated.
+**Goal:** Apply a structured change to the **plugin-root** trees (`commands/`, `phases/`, `agents/`, `templates/`, `references/`) and root `CLAUDE.md` when the state machine changes, with tests passing and documentation updated.
 
 ### Before editing
 
@@ -22,7 +22,7 @@ You are running `/author-pipeline`.
 
 1. **Scope** — State what the user wants: new command, new phase/state, new reference, new subagent, or doc-only fix.
 2. **Design the change** — List files to create/modify; if state machine changes, list new transitions and required artifacts.
-3. **Implement** — Create or edit markdown under **`commands/`**, **`phases/`**, **`agents/`**, **`templates/`**, **`references/`**, or **`tools/`** at the plugin root; use `${CLAUDE_PLUGIN_ROOT}/templates/new-phase-stub.md` for new phases.
+3. **Implement** — Create or edit markdown under **`commands/`**, **`phases/`**, **`agents/`**, **`templates/`**, or **`references/`** at the plugin root (including **`agents/plugin-runtime/`** for bundled non-agent tooling); use `${CLAUDE_PLUGIN_ROOT}/templates/new-phase-stub.md` for new phases.
 4. **Update policy** — If states changed: update `CLAUDE.md` (diagram, transition block, Required Artifacts table, Utility Skills if needed) and **`${CLAUDE_PLUGIN_ROOT}/state-machine.json`** so it matches the fenced transition block.
 5. **Update discovery** — Add new slash commands to `README.md` Key Commands; link new references from relevant phases.
 6. **CHANGELOG + version** — For any user-visible pack change, add an entry under `CHANGELOG.md` `[Unreleased]`. Before a release, run `npm run version:check` and bump versions listed in `.version-bump.json` (`npm run version:bump` when ready). Do not ship silent doc-only or behavior changes without a note.

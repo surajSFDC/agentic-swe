@@ -1,9 +1,6 @@
----
-name: fetch
-description: "Read and display the full definition of a specific subagent from the local catalog."
----
+# Subagent Catalog — Fetch (documentation)
 
-# Subagent Catalog - Fetch
+Optional reference for the shell helpers in this folder. The supported entry point in the pack is **`/subagent info <name>`**.
 
 Get the full definition of a specific agent from local storage.
 
@@ -16,7 +13,7 @@ Accepts: agent name (e.g., `code-reviewer`, `python-pro`)
 ### Step 1: Find agent file
 
 ```bash
-source tools/subagent-catalog/config.sh
+source "${CLAUDE_PLUGIN_ROOT}/agents/plugin-runtime/subagent-catalog/config.sh"
 subagent_catalog_find "{{NAME}}"
 ```
 
@@ -50,5 +47,5 @@ After displaying the definition, show how to use it:
 
 | error | suggestion |
 |-------|------------|
-| not found | run `/subagent-catalog:search <partial>` |
+| not found | run **`/subagent search <partial>`** |
 | multiple matches | list them, ask user to specify |

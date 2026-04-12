@@ -62,10 +62,10 @@ Before presenting the design, run the checklist in `${CLAUDE_PLUGIN_ROOT}/templa
 
 When layout, spatial structure, or iterative UI exploration would help the human decide faster, offer a **local visual companion**:
 
-1. From the repo root, run `tools/brainstorm-server/start-server.sh` (or `cd tools/brainstorm-server && npm install && npm start`). Default URL: `http://127.0.0.1:47821` — WebSocket at `/ws`. Optional: set **`BRAINSTORM_WATCH_DIR`** to a folder so the server pushes **`file-change`** events over the socket when files update (see `tools/brainstorm-server/README.md`).
+1. **Claude Code:** Submitting **`/brainstorm`** runs the **`UserPromptSubmit`** hook (`hooks/brainstorm-on-prompt.sh`, async), which starts **`agents/plugin-runtime/brainstorm-server/`** if nothing is listening on **`BRAINSTORM_PORT`** (default **47821**). You can still start manually: `agents/plugin-runtime/brainstorm-server/start-server.sh` (or `cd` there and `npm install && npm start`). Default URL: `http://127.0.0.1:47821` — WebSocket at **`/ws`**. Optional: set **`BRAINSTORM_WATCH_DIR`** so the server pushes **`file-change`** events (see **`agents/plugin-runtime/brainstorm-server/README.md`**).
 2. Tell the human the URL. They can use the page to send short **companion** notes; you can also connect tooling to `ws://127.0.0.1:<port>/ws` with JSON messages `{ "type": "companion", "message": "..." }` and `{ "type": "ping" }` for health checks.
-3. **Stop** the server when the design session ends: `tools/brainstorm-server/stop-server.sh` or Ctrl+C. Do not leave it running unattended.
-4. Security: server binds to **127.0.0.1** only. See `tools/brainstorm-server/README.md` for protocol details.
+3. **Stop** the server when the design session ends: `agents/plugin-runtime/brainstorm-server/stop-server.sh` or Ctrl+C. Do not leave it running unattended.
+4. Security: server binds to **127.0.0.1** only. See **`agents/plugin-runtime/brainstorm-server/README.md`** for protocol details.
 
 This does not replace written `design.md` artifacts or human approval — it is an optional aid during refinement.
 

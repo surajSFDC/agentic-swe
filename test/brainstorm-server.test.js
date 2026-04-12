@@ -1,5 +1,5 @@
 /**
- * Integration test for tools/brainstorm-server (skipped if deps not installed).
+ * Integration test for agents/plugin-runtime/brainstorm-server (skipped if deps not installed).
  */
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert');
@@ -9,14 +9,14 @@ const fs = require('fs');
 const os = require('os');
 
 const root = path.join(__dirname, '..');
-const serverDir = path.join(root, 'tools', 'brainstorm-server');
+const serverDir = path.join(root, 'agents', 'plugin-runtime', 'brainstorm-server');
 const serverReadyMarker = 'brainstorm-server listening';
 const hasServerDeps = fs.existsSync(path.join(serverDir, 'node_modules', 'ws', 'package.json'));
 const hasChokidar = fs.existsSync(path.join(serverDir, 'node_modules', 'chokidar', 'package.json'));
 
 function describeOrSkip(name, fn) {
   if (!hasServerDeps) {
-    describe.skip(`${name} (install: cd tools/brainstorm-server && npm install)`, fn);
+    describe.skip(`${name} (install: cd agents/plugin-runtime/brainstorm-server && npm install)`, fn);
     return;
   }
   describe(name, fn);
@@ -91,7 +91,7 @@ describeOrSkip('brainstorm-server', () => {
 
 function describeOrSkipWatch(name, fn) {
   if (!hasServerDeps || !hasChokidar) {
-    describe.skip(`${name} (install: cd tools/brainstorm-server && npm install)`, fn);
+    describe.skip(`${name} (install: cd agents/plugin-runtime/brainstorm-server && npm install)`, fn);
     return;
   }
   describe(name, fn);

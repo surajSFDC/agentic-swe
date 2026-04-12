@@ -29,8 +29,6 @@
     "templates",
     "references",
     "state-machine.json",
-    "tools",
-    "tools/brainstorm-server/",
     ".claude-plugin/",
     ".cursor-plugin/",
     ".codex/",
