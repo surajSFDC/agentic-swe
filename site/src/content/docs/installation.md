@@ -61,6 +61,28 @@ claude --plugin-dir /path/to/agentic-swe
 
 The repo root is the plugin root (`commands/`, `phases/`, `agents/`, …).
 
+---
+
+## Cursor (IDE plugin)
+
+**Fastest:** install into Cursor’s local plugins directory (then reload the window):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/surajSFDC/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
+```
+
+**Same command — auto-merge `CLAUDE.md`** in your app repo (requires **`node`** on **`PATH`**):
+
+```bash
+AGENTIC_SWE_TARGET_REPO=/path/to/your-app curl -fsSL https://raw.githubusercontent.com/surajSFDC/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
+```
+
+Add **`AGENTIC_SWE_AUTO_GITIGNORE=1`** to append **`.worklogs/`** to **`.gitignore`** when missing.
+
+Cursor loads **`commands/`**, **`agents/`**, and **`hooks/hooks-cursor.json`** from the pack root. Use **`.worklogs/<id>/`** in the target repo the same way as with Claude Code.
+
+Full steps, marketplace submission, env overrides, and differences from Claude Code (for example brainstorm auto-hook): **[Cursor plugin](cursor-plugin.md)**.
+
 ### Upgrades and repairs
 
 Update the plugin from the marketplace (or pull Git and bump the plugin version). Re-run **`/install`** if you need to refresh the appended **`CLAUDE.md`** block or worklog setup.

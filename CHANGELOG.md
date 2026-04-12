@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Cursor manifest:** **`.cursor-plugin/plugin.json`** follows [Cursor’s plugin reference](https://cursor.com/docs/reference/plugins.md): default discovery for **`commands/`** and **`agents/`** at repo root (explicit **`../…`** paths removed), **`hooks`** set to **`hooks/hooks-cursor.json`**, **`author`** as an object, plus **`homepage`** and **`repository`** for marketplace submission.
 - **Git workflow:** removed the **`uat`** line for this repo — topic branches open PRs **directly to `main`**; **`.github/workflows/main-merge-source.yml`** no longer restricts PR heads. **`docs/branch-workflow.md`** and **`.cursor/rules/development-branch-workflow.mdc`** describe **`main`**-only flow and that **only `@surajSFDC`** should merge (**GitHub** collaborator + branch rules, not YAML). CI **`push` / `pull_request`** triggers run on **`main`** only.
 - **Plugin layout:** moved **`tools/brainstorm-server/`** and **`tools/subagent-catalog/`** to **`agents/plugin-runtime/`** so tooling ships next to **`agents/`** without mixing into **`agents/subagents/`**. **`package.json` `files[]`** no longer lists a top-level **`tools/`** tree. CI installs brainstorm deps via **`npm ci --prefix agents/plugin-runtime/brainstorm-server`**.
 - **Claude Code hooks:** **`hooks/hooks.json`** adds async **`UserPromptSubmit`** → **`hooks/brainstorm-on-prompt.sh`** to start the brainstorm HTTP/WebSocket server when the user submits **`/brainstorm`** (if the listen port is free).
@@ -19,8 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`scripts/merge-claude-policy.js`** — non-interactive **`CLAUDE.md`** merge for a target repo (create / append delimiter / upgrade), matching **`commands/install.md`**; optional **`--gitignore`**. Invoked automatically from **`scripts/install-cursor-plugin.sh`** when **`AGENTIC_SWE_TARGET_REPO`** is set (**`AGENTIC_SWE_AUTO_GITIGNORE=1`** opts into **`.worklogs/`** in **`.gitignore`**). Covered by **`test/merge-claude-policy.test.js`**.
 - **Site:** [Plugin privacy](https://surajSFDC.github.io/agentic-swe/docs/privacy) at **`/docs/privacy`** (`site/src/content/docs/privacy.md`) for directory listings and transparency; linked from **Licensing** and **Support**.
 - **Docs:** link to **[plugin submission tracker](https://claude.ai/settings/plugins/submissions)** in **Distribution** and **Claude Code plugin** (maintainers).
+- **Cursor:** [Cursor plugin](https://surajSFDC.github.io/agentic-swe/docs/cursor-plugin) guide — one-command local install (**`scripts/install-cursor-plugin.sh`** → **`~/.cursor/plugins/local/`**), Marketplace submit link, and doc updates across **README**, **installation**, **distribution**, **Guide**, **Support**, **PageShell**, **multi-platform-support**, **`site/src/docs/registry.ts`** (see **Changed** for manifest layout).
+- **Templates:** **`templates/cursor-rules-stub.md`** — copy-paste stub for the target repo’s **`.cursor/rules/`** with a **`PACK_ROOT`** placeholder; linked from the Cursor plugin doc.
 
 ## [3.0.5] - 2026-04-05
 

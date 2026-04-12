@@ -15,6 +15,16 @@ export function SupportPage() {
         <code>{'${CLAUDE_PLUGIN_ROOT}/commands/'}</code>. Open Claude Code in <strong>that</strong> project directory.
       </p>
 
+      <h2>Using Cursor instead of Claude Code</h2>
+      <p>
+        One-command install (then reload the window):{' '}
+        <code>
+          curl -fsSL https://raw.githubusercontent.com/surajSFDC/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
+        </code>
+        . Prefix with <code>AGENTIC_SWE_TARGET_REPO=/path/to/your-app</code> (and optional <code>AGENTIC_SWE_AUTO_GITIGNORE=1</code>) on the same line to auto-merge root <code>CLAUDE.md</code> via <code>scripts/merge-claude-policy.js</code> (requires <code>node</code>).{' '}
+        <Link to="/docs/cursor-plugin">Cursor plugin</Link>.
+      </p>
+
       <h2>Partial setup (no policy or worklogs)</h2>
       <p>
         Run <code>/install</code> in the target repo to merge <code>CLAUDE.md</code> and configure <code>.worklogs/</code>.

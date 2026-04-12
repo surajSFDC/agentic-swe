@@ -78,7 +78,7 @@ export function PageShell() {
           <p style={{ marginTop: '0.75rem', fontSize: '0.78rem' }}>
             More detail:{' '}
             <Link to="/docs/installation">Installation</Link> · <Link to="/docs/usage">Usage</Link> ·{' '}
-            <Link to="/docs/examples">Examples</Link> · <Link to="/docs/claude-code-plugin">Claude Code plugin</Link>
+            <Link to="/docs/examples">Examples</Link> · <Link to="/docs/claude-code-plugin">Claude Code plugin</Link> · <Link to="/docs/cursor-plugin">Cursor</Link>
           </p>
         </motion.footer>
       </div>
