@@ -85,6 +85,24 @@ describe('multi-platform stubs: Claude Code', () => {
     assert.ok(sawSessionStart, 'no SessionStart command hook found');
   });
 
+  it('hooks/hooks.json UserPromptSubmit starts brainstorm helper when /brainstorm is used', () => {
+    const j = readJson(path.join(repoRoot, 'hooks', 'hooks.json'));
+    const hookScript = path.join(repoRoot, 'hooks', 'brainstorm-on-prompt.sh');
+    assert.ok(fs.existsSync(hookScript), 'hooks/brainstorm-on-prompt.sh missing');
+    const blocks = j.hooks?.UserPromptSubmit;
+    assert.ok(Array.isArray(blocks), 'hooks.hooks.UserPromptSubmit should be an array');
+    let saw = false;
+    for (const block of blocks) {
+      for (const h of block.hooks || []) {
+        if (h.type === 'command' && typeof h.command === 'string' && h.command.includes('brainstorm-on-prompt')) {
+          assert.strictEqual(h.async, true, 'brainstorm UserPromptSubmit hook should be async');
+          saw = true;
+        }
+      }
+    }
+    assert.ok(saw, 'no UserPromptSubmit brainstorm hook found');
+  });
+
   it('session-start references exist (CLAUDE.md, session-routing-hint)', () => {
     assert.ok(fs.existsSync(path.join(repoRoot, 'CLAUDE.md')));
     assert.ok(fs.existsSync(path.join(repoRoot, 'references', 'session-routing-hint.md')));

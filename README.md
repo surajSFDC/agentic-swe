@@ -208,7 +208,7 @@ All platforms share the same markdown source at this repo’s **plugin root** (`
 
 ## CI and pre-push checks
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on **push / pull request** to **`main`**, on **merge queue**, and **manually** (`workflow_dispatch`). It uses **Node 20 and 22**, **`npm ci`** for root, **`site/`**, and **`tools/brainstorm-server`**, then **site lint**, **site build**, **`npm run verify`**, **`npm run version:check`**, optional **`claude plugin validate`**, and **`npm test`** (state machine, references, **multi-platform wiring**, brainstorm-server, etc.).
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on **push / pull request** to **`main`**, on **merge queue**, and **manually** (`workflow_dispatch`). It uses **Node 20 and 22**, **`npm ci`** for root, **`site/`**, and **`agents/plugin-runtime/brainstorm-server`**, then **site lint**, **site build**, **`npm run verify`**, **`npm run version:check`**, optional **`claude plugin validate`**, and **`npm test`** (state machine, references, **multi-platform wiring**, brainstorm-server, etc.).
 
 Locally, with dependencies installed under **`site/`**, run **`npm run ci`** for the same bar (minus the Node matrix and unless **`claude`** is on your **`PATH`**). See the [Release checklist](https://surajSFDC.github.io/agentic-swe/docs/release-checklist) for the full maintainer sequence (mirrors CI plus optional manual smoke).
 

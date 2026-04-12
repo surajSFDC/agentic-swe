@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Plugin layout:** moved **`tools/brainstorm-server/`** and **`tools/subagent-catalog/`** to **`agents/plugin-runtime/`** so tooling ships next to **`agents/`** without mixing into **`agents/subagents/`**. **`package.json` `files[]`** no longer lists a top-level **`tools/`** tree. CI installs brainstorm deps via **`npm ci --prefix agents/plugin-runtime/brainstorm-server`**.
+- **Claude Code hooks:** **`hooks/hooks.json`** adds async **`UserPromptSubmit`** → **`hooks/brainstorm-on-prompt.sh`** to start the brainstorm HTTP/WebSocket server when the user submits **`/brainstorm`** (if the listen port is free).
+
 ### Added
 
 - **Site:** [Plugin privacy](https://surajSFDC.github.io/agentic-swe/docs/privacy) at **`/docs/privacy`** (`site/src/content/docs/privacy.md`) for directory listings and transparency; linked from **Licensing** and **Support**.
