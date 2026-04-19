@@ -11,6 +11,8 @@ the policies, phase prompts, and templates under **`${CLAUDE_PLUGIN_ROOT}/`** wh
 
 For **headless checks** (CI, scripts), run **`node ${CLAUDE_PLUGIN_ROOT}/scripts/work-engine.cjs help`** — same budget/transition/artifact rules as **`/check`**, implemented in **`scripts/lib/work-engine/`**.
 
+**Optional durable memory:** **`AGENTIC_SWE_MEMORY_PRIME=1`** can append **memory prime** at session start (`hooks/session-start`); **`npm run memory-prime`** / **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** produce the same advisory digest. **`state.json`** remains authoritative—see **`CLAUDE.md`**.
+
 ### State Machine (abbreviated)
 
 ```

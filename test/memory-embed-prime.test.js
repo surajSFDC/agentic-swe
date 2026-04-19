@@ -30,7 +30,7 @@ describe('embeddings + semantic prime (test backend)', () => {
       JSON.stringify(
         {
           embeddings: { enabled: true, provider: 'test' },
-          prime: { retrieval_mode: 'semantic', max_fts_hits: 8 },
+          prime: { retrieval_mode: 'auto', max_fts_hits: 8 },
         },
         null,
         2
@@ -55,7 +55,7 @@ describe('embeddings + semantic prime (test backend)', () => {
     }
   });
 
-  it('indexes embeddings and finds chunk via semantic mode', async () => {
+  it('indexes embeddings and finds chunk via auto→hybrid when embeddings exist', async () => {
     const r = await runMemoryIndex({ projectRoot: tmp, pluginRoot: root });
     assert.ok(r.stats.embedded >= 1, `expected embedded >= 1, got ${r.stats.embedded}`);
 
@@ -65,6 +65,6 @@ describe('embeddings + semantic prime (test backend)', () => {
       query: 'OmegaEmbedPhrase99 unique body for semantic match.',
     });
     assert.ok(md.includes('docs/embed.md'), md);
-    assert.ok(md.includes('Chunk search (semantic)'), md);
+    assert.ok(md.includes('Chunk search (hybrid)'), md);
   });
 });

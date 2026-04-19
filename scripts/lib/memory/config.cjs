@@ -34,7 +34,7 @@ function loadMergedMemoryConfig(pluginRoot, projectRoot) {
       prime: {
         max_chars_out: 12000,
         max_fts_hits: 12,
-        retrieval_mode: 'lexical',
+        retrieval_mode: 'auto',
         rrf_k: 60,
         semantic_candidate_limit: 8000,
       },

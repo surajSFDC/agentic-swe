@@ -187,7 +187,7 @@ async function buildPrimeMarkdown(opts) {
 
   const maxOut = merged.prime && merged.prime.max_chars_out ? merged.prime.max_chars_out : 12000;
   const maxHits = merged.prime && merged.prime.max_fts_hits ? merged.prime.max_fts_hits : 12;
-  const retrievalMode = (merged.prime && merged.prime.retrieval_mode) || 'lexical';
+  const retrievalMode = (merged.prime && merged.prime.retrieval_mode) || 'auto';
   const rrfK = merged.prime && merged.prime.rrf_k != null ? merged.prime.rrf_k : 60;
   const semScan =
     merged.prime && merged.prime.semantic_candidate_limit != null
@@ -233,15 +233,29 @@ async function buildPrimeMarkdown(opts) {
     if (tokens.length) {
       const rt = resolveEmbeddingRuntime(merged);
       let requested = String(retrievalMode).toLowerCase();
-      if (requested !== 'lexical' && requested !== 'semantic' && requested !== 'hybrid') {
-        requested = 'lexical';
+      if (
+        requested !== 'lexical' &&
+        requested !== 'semantic' &&
+        requested !== 'hybrid' &&
+        requested !== 'auto'
+      ) {
+        requested = 'auto';
       }
-      let mode = requested;
+      let mode =
+        requested === 'auto'
+          ? embCount > 0 && rt
+            ? 'hybrid'
+            : 'lexical'
+          : requested;
+
       if ((mode === 'semantic' || mode === 'hybrid') && (!rt || embCount === 0)) {
-        lines.push(
-          `_Retrieval mode \`${requested}\` needs embeddings enabled and indexed rows; falling back to lexical._`
-        );
-        lines.push('');
+        const explicitFail = requested === 'semantic' || requested === 'hybrid';
+        if (explicitFail) {
+          lines.push(
+            `_Retrieval mode \`${requested}\` needs embeddings enabled and indexed rows; falling back to lexical._`
+          );
+          lines.push('');
+        }
         mode = 'lexical';
       }
 

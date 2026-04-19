@@ -12,7 +12,7 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 
 | Layer | Description |
 | :--- | :--- |
-| **A — Core** | Deterministic graph ingest + chunked text index + `memory-prime` (**lexical** by default, optional **semantic** / **hybrid** when embeddings are indexed); config in [`config/memory.default.json`](../../config/memory.default.json), overrides in `.agentic-swe/memory.json`. |
+| **A — Core** | Deterministic graph ingest + chunked text index + `memory-prime` (**`auto`** retrieval: **hybrid** when embeddings are indexed, else **lexical**); config in [`config/memory.default.json`](../../config/memory.default.json), overrides in `.agentic-swe/memory.json`. |
 | **B — User pipelines** | Any tooling the repo author runs outside this pack. |
 | **C — Import boundary** | Future `memory-import`: validated JSON with provenance, caps (`import_adapter` in config), merge into the same SQLite store. |
 
@@ -48,6 +48,7 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 
 - **CLI:** `npm run memory-prime --` or `node scripts/memory-prime.cjs [--query "…"] [--work-id <id>]` — env **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** when `--query` omitted.
 - **Output:** bounded markdown: graph digest (counts, high-degree nodes, embedding row count) + optional chunk hits with path:line citations. Capped by `prime.max_chars_out` / `prime.max_fts_hits` (name kept for config compatibility).
+- **Retrieval:** `prime.retrieval_mode` — **`auto`** (default): use **`hybrid`** when embedding rows exist and a backend is configured, otherwise **`lexical`**; or set **`lexical`** / **`semantic`** / **`hybrid`** explicitly.
 - **Implementation:** [`scripts/lib/memory/memory-prime.cjs`](../../scripts/lib/memory/memory-prime.cjs), entry [`scripts/memory-prime.cjs`](../../scripts/memory-prime.cjs).
 
 ## S4 — Optional embeddings + hybrid retrieval
@@ -55,7 +56,7 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 - **Config:** [`config/memory.default.json`](../../config/memory.default.json) → `embeddings.*` (merge in `.agentic-swe/memory.json`). **`embeddings.enabled`** must be true to run the embed step or semantic modes.
 - **Backends (env):** `AGENTIC_SWE_EMBEDDINGS_BACKEND` — **`test`** (deterministic vectors, for CI), **`ollama`** (`AGENTIC_SWE_OLLAMA_HOST`, `AGENTIC_SWE_OLLAMA_MODEL`), **`openai`** (`OPENAI_API_KEY` or `AGENTIC_SWE_OPENAI_API_KEY`, `AGENTIC_SWE_OPENAI_EMBEDDING_MODEL`). **`none`** / unset skips vectors even if `enabled` is true (use `enabled: false` for clarity).
 - **Index:** `memory-index` runs chunk ingest, then writes **`chunk_embeddings`** (model id, dimension, sha256, float32 blob) for chunks missing or stale vs `chunks.content_sha256`. Stats line includes an **embeddings** count; JSON includes `stats.embedded` (and `embedError` on failure).
-- **Prime:** `prime.retrieval_mode` — **`lexical`** (default), **`semantic`** (cosine vs stored vectors), **`hybrid`** (reciprocal rank fusion of lexical + semantic lists; `prime.rrf_k`, `prime.semantic_candidate_limit`). Semantic/hybrid fall back to lexical when no embedding rows exist.
+- **Prime:** `prime.retrieval_mode` — **`auto`** (default: **hybrid** when embedding rows exist and a backend is active, else **lexical**), or **`lexical`** / **`semantic`** / **`hybrid`** explicitly. **`semantic`** / **`hybrid`** fall back to lexical when no embedding rows exist or the backend is unavailable.
 - **Code:** [`scripts/lib/memory/embeddings-backend.cjs`](../../scripts/lib/memory/embeddings-backend.cjs), [`scripts/lib/memory/chunk-embed.cjs`](../../scripts/lib/memory/chunk-embed.cjs).
 
 ## S5 — Deterministic context compact (batch)
