@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const SCHEMA_VERSION = '1';
+const CHUNKS_SCHEMA_VERSION = '1';
 
 const DDL = `
 CREATE TABLE IF NOT EXISTS memory_meta (
@@ -29,6 +30,20 @@ CREATE INDEX IF NOT EXISTS idx_edges_src ON edges(src_id);
 CREATE INDEX IF NOT EXISTS idx_edges_dst ON edges(dst_id);
 `;
 
+const CHUNKS_DDL = `
+CREATE TABLE IF NOT EXISTS chunks (
+  chunk_id TEXT PRIMARY KEY,
+  path TEXT NOT NULL,
+  work_id TEXT,
+  start_line INTEGER NOT NULL,
+  end_line INTEGER NOT NULL,
+  content_sha256 TEXT NOT NULL,
+  body TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_chunks_path ON chunks(path);
+CREATE INDEX IF NOT EXISTS idx_chunks_work_id ON chunks(work_id);
+`;
+
 /** @param {*} db sql.js Database */
 function initSchema(db) {
   db.run(DDL);
@@ -37,6 +52,33 @@ function initSchema(db) {
   );
   stmt.run(['graph_schema_version', SCHEMA_VERSION]);
   stmt.free();
+}
+
+/**
+ * Chunk table (S2). sql.js builds omit the FTS5 extension, so search uses LIKE on `chunks.body`.
+ * @param {*} db
+ */
+function ensureChunksSchema(db) {
+  try {
+    db.run('DROP TABLE IF EXISTS chunk_fts;');
+  } catch {
+    /* legacy FTS5 table from earlier dev builds; sql.js has no fts5 module */
+  }
+  db.run(CHUNKS_DDL);
+  const m = db.prepare(
+    'INSERT OR REPLACE INTO memory_meta (key, value) VALUES (?, ?)'
+  );
+  m.run(['chunks_schema_version', CHUNKS_SCHEMA_VERSION]);
+  m.free();
+}
+
+/** @param {*} db */
+function clearChunkTables(db) {
+  try {
+    db.run('DELETE FROM chunks;');
+  } catch {
+    /* ignore */
+  }
 }
 
 /** @param {*} db */
@@ -69,6 +111,7 @@ async function openOrCreateDatabase(sqlitePath) {
     db = new SQL.Database();
   }
   initSchema(db);
+  ensureChunksSchema(db);
   return { db, SQL };
 }
 
@@ -93,9 +136,12 @@ function closeDatabase(db) {
 
 module.exports = {
   initSchema,
+  ensureChunksSchema,
   clearGraphTables,
+  clearChunkTables,
   openOrCreateDatabase,
   persistDatabase,
   closeDatabase,
   SCHEMA_VERSION,
+  CHUNKS_SCHEMA_VERSION,
 };

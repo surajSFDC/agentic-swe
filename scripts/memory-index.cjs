@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Build / refresh the local deterministic project graph (SQLite) for Phase 2 memory.
+ * Build / refresh the local deterministic project graph + chunked FTS (SQLite) for Phase 2 memory.
  *
  * Usage:
- *   node scripts/memory-index.cjs [--project-root <dir>] [--plugin-root <dir>] [--json]
+ *   node scripts/memory-index.cjs [--project-root <dir>] [--plugin-root <dir>] [--graph-only] [--chunks-only] [--json]
  */
 'use strict';
 
 const path = require('node:path');
 const { getDefaultPluginRoot } = require('./lib/work-engine/engine.cjs');
-const { ingestGraphProject } = require('./lib/memory/graph-ingest.cjs');
+const { runMemoryIndex } = require('./lib/memory/memory-pipeline.cjs');
 const { queryGraphStats } = require('./lib/memory/graph-query.cjs');
 
 function parseArgs(argv) {
@@ -19,6 +19,8 @@ function parseArgs(argv) {
     if (a === '--json') out.json = true;
     else if (a === '--project-root') out.projectRoot = path.resolve(argv[++i]);
     else if (a === '--plugin-root') out.pluginRoot = path.resolve(argv[++i]);
+    else if (a === '--graph-only') out.graphOnly = true;
+    else if (a === '--chunks-only') out.chunksOnly = true;
   }
   return out;
 }
@@ -28,7 +30,14 @@ async function main() {
   const projectRoot = args.projectRoot || process.cwd();
   const pluginRoot = args.pluginRoot || getDefaultPluginRoot();
 
-  const r = await ingestGraphProject({ projectRoot, pluginRoot });
+  const skipGraph = args.chunksOnly === true;
+  const skipChunks = args.graphOnly === true;
+  if (args.graphOnly && args.chunksOnly) {
+    console.error('memory-index: specify at most one of --graph-only / --chunks-only');
+    process.exit(2);
+  }
+
+  const r = await runMemoryIndex({ projectRoot, pluginRoot, skipGraph, skipChunks });
   const stats = await queryGraphStats(r.sqlitePath);
 
   if (args.json) {
@@ -39,7 +48,8 @@ async function main() {
           sqlitePath: r.sqlitePath,
           ingest: r.stats,
           query: stats,
-          skipped: r.skipped === true,
+          graphSkipped: r.graphSkipped,
+          chunksSkipped: r.chunksSkipped,
         },
         null,
         2
@@ -49,7 +59,7 @@ async function main() {
   }
 
   console.log(`memory-index: wrote ${r.sqlitePath}`);
-  console.log(`  nodes: ${stats.nodes}  edges: ${stats.edges}`);
+  console.log(`  nodes: ${stats.nodes}  edges: ${stats.edges}  chunks indexed: ${r.stats.chunks}`);
   if (stats.kinds && stats.kinds.nodes) {
     console.log(`  node kinds: ${JSON.stringify(stats.kinds.nodes)}`);
   }

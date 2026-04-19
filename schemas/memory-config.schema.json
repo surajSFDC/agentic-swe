@@ -30,7 +30,12 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
         },
-        "max_file_bytes": { "type": "integer", "minimum": 1024, "maximum": 104857600 }
+        "max_file_bytes": { "type": "integer", "minimum": 1024, "maximum": 104857600 },
+        "max_chunk_chars": { "type": "integer", "minimum": 512, "maximum": 500000 },
+        "chunk_extensions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
       }
     },
     "prime": {

@@ -248,6 +248,8 @@ async function ingestGraphProject(opts) {
 
 module.exports = {
   ingestGraphProject,
+  ingestPackageManifests,
+  ingestImportEdges,
   walkPackageJsonFiles,
   walkCodeFiles,
   PROJECT_NODE_ID,

@@ -56,11 +56,13 @@
     "seed-dashboard-demo": "node scripts/seed-dashboard-demo.cjs",
     "work-engine": "node scripts/work-engine.cjs",
     "memory-index": "node scripts/memory-index.cjs",
+    "memory-prime": "node scripts/memory-prime.cjs",
     "version:check": "bash scripts/bump-version.sh check",
     "version:bump": "bash scripts/bump-version.sh bump"
   },
   "dependencies": {
     "ajv": "^8.18.0",
+    "minimatch": "^9.0.5",
     "sql.js": "^1.11.0"
   }
 }

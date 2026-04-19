@@ -18,7 +18,9 @@
       "**/.git/**",
       "**/coverage/**"
     ],
-    "max_file_bytes": 1048576
+    "max_file_bytes": 1048576,
+    "max_chunk_chars": 8000,
+    "chunk_extensions": [".md"]
   },
   "prime": {
     "max_chars_out": 12000,

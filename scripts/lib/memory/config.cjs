@@ -24,7 +24,13 @@ function loadMergedMemoryConfig(pluginRoot, projectRoot) {
     merged = {
       schema_version: 1,
       store: { sqlite_relative_path: 'memory.sqlite', directory_relative: '.agentic-swe' },
-      ingest: { include_globs: [], exclude_globs: [], max_file_bytes: 1048576 },
+      ingest: {
+        include_globs: [],
+        exclude_globs: [],
+        max_file_bytes: 1048576,
+        max_chunk_chars: 8000,
+        chunk_extensions: ['.md'],
+      },
       prime: { max_chars_out: 12000, max_fts_hits: 12 },
       graph: { enabled: true, package_manifests: ['package.json'] },
       import_adapter: { enabled: false, max_nodes_per_merge: 5000, max_edges_per_merge: 20000 },
