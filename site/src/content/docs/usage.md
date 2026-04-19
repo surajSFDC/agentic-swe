@@ -195,4 +195,4 @@ This shows:
 
 ## Durable memory (optional)
 
-Local graph + chunk index under **`.agentic-swe/memory.sqlite`** (`npm run memory-index`), bounded **memory prime** output (`npm run memory-prime`), optional **session-start** injection when **`AGENTIC_SWE_MEMORY_PRIME=1`**, and optional **embeddings** / **hybrid** retrieval. Does not replace **`state.json`**. See [Durable memory](durable-memory.md).
+Local graph + chunk index under **`.agentic-swe/memory.sqlite`** (`npm run memory-index`), bounded **memory prime** (`npm run memory-prime`), **graph import** (`npm run memory-import`), **transcript sliding summary** (`npm run memory-sliding-summary`), optional **embeddings** / **hybrid** retrieval. Session start **injects memory prime by default** (disable with **`AGENTIC_SWE_MEMORY_PRIME=0`**). Does not replace **`state.json`**. See [Durable memory](durable-memory.md).

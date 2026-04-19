@@ -1,6 +1,6 @@
 **Implicit routing (read before coding):**
 1. List `.worklogs/` — if a work folder exists, read its `state.json` and continue that pipeline; do not start a second work item unless the user asks.
-2. **Memory prime (optional)** — If this session included a **memory prime** block (env **`AGENTIC_SWE_MEMORY_PRIME=1`** on session start), treat it as **advisory** retrieval only; **`state.json`** and repo files win on conflict (`CLAUDE.md` Source priority).
+2. **Memory prime (default on)** — Session start usually includes a **memory prime** block unless **`AGENTIC_SWE_MEMORY_PRIME=0`**. Treat it as **advisory** retrieval only; **`state.json`** and repo files win on conflict (`CLAUDE.md` Source priority).
 3. Match user intent to entry points:
    - Small fix, typo, single module → `/work` → expect **lean track** after `lean-track-check`.
    - Medium scope, tests + design but lighter review → `/work` → **standard track** may apply (`pipeline.track` `standard`).

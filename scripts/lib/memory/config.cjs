@@ -54,6 +54,13 @@ function loadMergedMemoryConfig(pluginRoot, projectRoot) {
       },
       graph: { enabled: true, package_manifests: ['package.json'] },
       import_adapter: { enabled: false, max_nodes_per_merge: 5000, max_edges_per_merge: 20000 },
+      sliding: {
+        recent_turns_verbatim: 8,
+        max_old_turn_chars: 240,
+        output_filename: 'sliding-summary.md',
+        llm_enabled: false,
+        llm_model: 'gpt-4o-mini',
+      },
     };
   }
 

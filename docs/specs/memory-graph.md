@@ -16,7 +16,7 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 | :--- | :--- |
 | **A — Core** | Deterministic graph ingest + chunked text index + `memory-prime` (**`auto`** retrieval: **hybrid** when embeddings are indexed, else **lexical**); config in [`config/memory.default.json`](../../config/memory.default.json), overrides in `.agentic-swe/memory.json`. |
 | **B — User pipelines** | Any tooling the repo author runs outside this pack. |
-| **C — Import boundary** | Future `memory-import`: validated JSON with provenance, caps (`import_adapter` in config), merge into the same SQLite store. |
+| **C — Import boundary** | **`memory-import`**: validated JSON bundle ([`schemas/memory-import-bundle.schema.json`](../../schemas/memory-import-bundle.schema.json)) merges **nodes** / **edges** into the same SQLite store; caps from `import_adapter`; requires `import_adapter.enabled` or **`--force`** on the CLI. |
 
 ## Storage layout
 
@@ -66,9 +66,21 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 - **CLI:** `npm run memory-compact -- --work-dir /abs/path/.worklogs/<id>` — writes **`compact.output_filename`** (default `context-compact.md`) under that work dir by concatenating **`compact.include_names`** with per-file and total caps (`compact.max_chars_per_file`, `compact.max_total_chars`). No LLM; complements human-written `progress.md`.
 - **Implementation:** [`scripts/lib/memory/memory-compact.cjs`](../../scripts/lib/memory/memory-compact.cjs), [`scripts/memory-compact.cjs`](../../scripts/memory-compact.cjs).
 
-## Session-start hook (optional memory prime)
+## S6 — Graph import (CLI)
 
-- When **`AGENTIC_SWE_MEMORY_PRIME=1`**, [`hooks/session-start`](../../hooks/session-start) appends the same markdown as `memory-prime` after the routing hint (best-effort; failures are ignored). Uses **`AGENTIC_SWE_PROJECT_ROOT`**, else hook JSON **`cwd`** (when `jq` is available), else `pwd`. Optional **`AGENTIC_SWE_WORK_DIR`** → passes **`--work-id`** (basename). Optional **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** → **`--query`**.
+- **CLI:** `npm run memory-import -- --project-root <dir> [--file bundle.json] [--force] [--json]` — stdin or **`--file`** for JSON. Schema: [`schemas/memory-import-bundle.schema.json`](../../schemas/memory-import-bundle.schema.json). **`import_adapter.enabled`** must be true unless **`--force`**.
+- **Implementation:** [`scripts/lib/memory/memory-import-apply.cjs`](../../scripts/lib/memory/memory-import-apply.cjs), [`scripts/memory-import.cjs`](../../scripts/memory-import.cjs).
+
+## S7 — Transcript sliding summary
+
+- **CLI:** `npm run memory-sliding-summary -- --work-dir /abs/.worklogs/<id> --transcript-path /abs/transcript.jsonl [--llm]` — writes **`sliding.output_filename`** (default **`sliding-summary.md`**) under the work dir. Parses Claude Code JSONL (**`user`** / **`assistant`** lines with `message.content`).
+- **Deterministic:** older turns become capped bullets (`sliding.max_old_turn_chars`); recent **`sliding.recent_turns_verbatim`** turns stay verbatim.
+- **Optional LLM:** **`--llm`** or **`sliding.llm_enabled`** — summarizes the “older” block via OpenAI (**`OPENAI_API_KEY`** / **`AGENTIC_SWE_OPENAI_API_KEY`**; model **`sliding.llm_model`** or **`AGENTIC_SWE_SLIDING_SUMMARY_MODEL`**). On failure, falls back to deterministic bullets.
+- **Implementation:** [`scripts/lib/memory/transcript-sliding.cjs`](../../scripts/lib/memory/transcript-sliding.cjs), [`scripts/memory-sliding-summary.cjs`](../../scripts/memory-sliding-summary.cjs).
+
+## Session-start hook (memory prime default on)
+
+- By default, [`hooks/session-start`](../../hooks/session-start) appends the same markdown as **`memory-prime`** after the routing hint (best-effort; failures are ignored). **Opt out:** set **`AGENTIC_SWE_MEMORY_PRIME=0`** (or **`false`**, **`no`**, **`off`**). Uses **`AGENTIC_SWE_PROJECT_ROOT`**, else hook JSON **`cwd`** (when `jq` is available), else `pwd`. Optional **`AGENTIC_SWE_WORK_DIR`** → **`--work-id`** (basename). Optional **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** → **`--query`**.
 
 ## Governance
 

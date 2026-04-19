@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Session-start hook for agentic-swe (Claude Code + Cursor).
 # Injects Hypervisor policy context + compact implicit-routing hint.
-# Optional: when AGENTIC_SWE_MEMORY_PRIME=1, appends memory-prime output (bounded markdown).
+# Appends memory-prime by default (bounded markdown). Opt out: AGENTIC_SWE_MEMORY_PRIME=0
 set -euo pipefail
 
 INPUT=$(cat || true)
@@ -34,7 +34,12 @@ if [[ -z "$PROJECT_ROOT" ]]; then
 fi
 
 MEM_PRIME_BLOCK=""
-if [[ "${AGENTIC_SWE_MEMORY_PRIME:-}" = "1" ]]; then
+RUN_MEM_PRIME=1
+case "${AGENTIC_SWE_MEMORY_PRIME:-}" in
+  0|false|FALSE|no|NO|off|OFF) RUN_MEM_PRIME=0 ;;
+esac
+
+if [[ "$RUN_MEM_PRIME" = "1" ]]; then
   MP_ARGS=(--project-root "$PROJECT_ROOT" --plugin-root "$REPO_ROOT")
   if [[ -n "${AGENTIC_SWE_WORK_DIR:-}" ]]; then
     WID=$(basename "$AGENTIC_SWE_WORK_DIR")

@@ -12,7 +12,8 @@
     "embeddings",
     "compact",
     "graph",
-    "import_adapter"
+    "import_adapter",
+    "sliding"
   ],
   "properties": {
     "schema_version": { "type": "integer", "minimum": 1 },
@@ -122,6 +123,24 @@
         "enabled": { "type": "boolean" },
         "max_nodes_per_merge": { "type": "integer", "minimum": 1, "maximum": 1000000 },
         "max_edges_per_merge": { "type": "integer", "minimum": 1, "maximum": 5000000 }
+      }
+    },
+    "sliding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recent_turns_verbatim",
+        "max_old_turn_chars",
+        "output_filename",
+        "llm_enabled",
+        "llm_model"
+      ],
+      "properties": {
+        "recent_turns_verbatim": { "type": "integer", "minimum": 1, "maximum": 200 },
+        "max_old_turn_chars": { "type": "integer", "minimum": 80, "maximum": 10000 },
+        "output_filename": { "type": "string", "minLength": 1 },
+        "llm_enabled": { "type": "boolean" },
+        "llm_model": { "type": "string", "minLength": 1 }
       }
     }
   }

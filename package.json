@@ -58,6 +58,8 @@
     "memory-index": "node scripts/memory-index.cjs",
     "memory-prime": "node scripts/memory-prime.cjs",
     "memory-compact": "node scripts/memory-compact.cjs",
+    "memory-import": "node scripts/memory-import.cjs",
+    "memory-sliding-summary": "node scripts/memory-sliding-summary.cjs",
     "version:check": "bash scripts/bump-version.sh check",
     "version:bump": "bash scripts/bump-version.sh bump"
   },
