@@ -27,6 +27,14 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 - Node: [`scripts/lib/memory/config.cjs`](../../scripts/lib/memory/config.cjs) — `loadMergedMemoryConfig(pluginRoot, projectRoot)`, `sqlitePathForProject`.
 - Merge order: defaults → `AGENTIC_SWE_MEMORY_CONFIG` → `.agentic-swe/memory.json`.
 
+## S1 — Deterministic graph ingest
+
+- **CLI:** `npm run memory-index --` or `node scripts/memory-index.cjs [--project-root <dir>] [--json]` builds/refreshes **`.agentic-swe/memory.sqlite`** (gitignored).
+- **Tables:** `nodes` (`project`, `manifest`, `file`, `npm`) and `edges` (`has_manifest`, `depends_on`, `has_file`, `imports`).
+- **Manifests:** every `package.json` under the tree (skipping `node_modules`, `dist`, `.git`, `coverage`, `.agentic-swe`) feeds `depends_on` edges from declared dependency sections.
+- **Imports:** line-scanned `import` / `export … from` / `require()` in `.{js,cjs,mjs,ts,tsx}`; relative specifiers resolve to existing files; bare specifiers map to `npm:<package>` (first segment, scoped packages preserved).
+- **Implementation:** [`scripts/lib/memory/graph-ingest.cjs`](../../scripts/lib/memory/graph-ingest.cjs), [`scripts/lib/memory/import-extract.cjs`](../../scripts/lib/memory/import-extract.cjs), [`scripts/lib/memory/graph-store.cjs`](../../scripts/lib/memory/graph-store.cjs) (SQLite via [`sql.js`](https://github.com/sql-js/sql.js)); stats helpers in [`scripts/lib/memory/graph-query.cjs`](../../scripts/lib/memory/graph-query.cjs).
+
 ## Governance
 
 - Injected memory remains **advisory**; `state.json` and repo files stay authoritative per [`CLAUDE.md`](../../CLAUDE.md).
