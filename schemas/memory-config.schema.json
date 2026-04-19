@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-swe.local/schemas/memory-config.schema.json",
+  "title": "agentic-swe memory config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "store", "ingest", "prime", "graph", "import_adapter"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "description": { "type": "string" },
+    "store": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sqlite_relative_path", "directory_relative"],
+      "properties": {
+        "sqlite_relative_path": { "type": "string", "minLength": 1 },
+        "directory_relative": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ingest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include_globs", "exclude_globs", "max_file_bytes"],
+      "properties": {
+        "include_globs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "exclude_globs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "max_file_bytes": { "type": "integer", "minimum": 1024, "maximum": 104857600 }
+      }
+    },
+    "prime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_chars_out", "max_fts_hits"],
+      "properties": {
+        "max_chars_out": { "type": "integer", "minimum": 512, "maximum": 500000 },
+        "max_fts_hits": { "type": "integer", "minimum": 1, "maximum": 200 }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "package_manifests"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "package_manifests": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "import_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "max_nodes_per_merge", "max_edges_per_merge"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "max_nodes_per_merge": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "max_edges_per_merge": { "type": "integer", "minimum": 1, "maximum": 5000000 }
+      }
+    }
+  }
+}
