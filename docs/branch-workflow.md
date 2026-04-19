@@ -94,5 +94,6 @@ Transfers and new repos **do not copy** rulesets, required status checks, **Secr
 3. **Environments** — **`github-pages`** on **agentic-swe-site** for the Pages deploy job; confirm **Settings → Pages → Source: GitHub Actions**.
 4. **Org Actions** — **[Organization → Settings → Actions](https://github.com/organizations/agentic-swe/settings/actions)** — allow the same **Actions** and reusable workflows you rely on (often stricter than a personal account).
 5. **Secrets** — Recreate repo or environment secrets (for example optional **LLM** workflow API keys) on the new location.
+6. **Fork PR workflows (org repos)** — If CI **does not run** on pull requests from **forks**, open **Repository → Settings → Actions → General** and under **Fork pull request workflows from outside collaborators** choose **Require approval for first-time contributors** (or **Require approval for all outside collaborators**) **or** enable runs as your policy allows. At the **organization**, ensure Actions are not disabled for fork PRs (**Organization → Settings → Actions**). Until approved, runs appear as **Awaiting approval** on the PR ([approve fork runs](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/approve-runs-from-forks)).
 
 After any change, open a small PR to confirm every required check appears and passes.

@@ -5,8 +5,14 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    # Explicit types: omitting `types` defaults to opened/synchronize/reopened only.
+    # Include ready_for_review so CI re-runs when a draft PR is marked ready (same as main-merge-source.yml).
+    types: [opened, synchronize, reopened, ready_for_review]
   merge_group:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   test:
