@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Emit a bounded markdown "memory prime" block: graph digest + optional FTS hits.
+ * Emit a bounded markdown "memory prime" block: graph digest + optional chunk hits (lexical / semantic / hybrid per config).
  *
  * Usage:
  *   node scripts/memory-prime.cjs [--project-root <dir>] [--plugin-root <dir>] [--query "terms"] [--work-id <id>]

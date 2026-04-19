@@ -11,6 +11,7 @@ const {
 } = require('./graph-store.cjs');
 const { ingestPackageManifests, ingestImportEdges } = require('./graph-ingest.cjs');
 const { ingestChunksIntoDb } = require('./chunk-ingest.cjs');
+const { syncChunkEmbeddings } = require('./chunk-embed.cjs');
 
 /**
  * Full memory index: deterministic graph + chunked FTS (unless skipped).
@@ -45,10 +46,16 @@ async function runMemoryIndex(opts) {
       }
     }
 
-    let chunkStats = { chunks: 0 };
+    let chunkStats = { chunks: 0, embedded: 0 };
     if (!skipChunks) {
       clearChunkTables(db);
-      chunkStats = ingestChunksIntoDb(merged, projectRoot, db);
+      const ing = ingestChunksIntoDb(merged, projectRoot, db);
+      const embR = await syncChunkEmbeddings(db, merged);
+      chunkStats = {
+        chunks: ing.chunks,
+        embedded: embR.embedded || 0,
+        ...(embR.error ? { embedError: embR.error } : {}),
+      };
     }
 
     const m1 = db.prepare('INSERT OR REPLACE INTO memory_meta (key, value) VALUES (?, ?)');
@@ -78,6 +85,8 @@ async function runMemoryIndex(opts) {
         nodes: nodeCount,
         edges: edgeCount,
         chunks: chunkStats.chunks,
+        embedded: chunkStats.embedded,
+        ...(chunkStats.embedError ? { embedError: chunkStats.embedError } : {}),
       },
     };
   } finally {

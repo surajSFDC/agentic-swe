@@ -59,7 +59,13 @@ async function main() {
   }
 
   console.log(`memory-index: wrote ${r.sqlitePath}`);
-  console.log(`  nodes: ${stats.nodes}  edges: ${stats.edges}  chunks indexed: ${r.stats.chunks}`);
+  const emb = r.stats.embedded != null ? r.stats.embedded : 0;
+  console.log(
+    `  nodes: ${stats.nodes}  edges: ${stats.edges}  chunks indexed: ${r.stats.chunks}  embeddings: ${emb}`
+  );
+  if (r.stats.embedError) {
+    console.log(`  embedding sync warning: ${r.stats.embedError}`);
+  }
   if (stats.kinds && stats.kinds.nodes) {
     console.log(`  node kinds: ${JSON.stringify(stats.kinds.nodes)}`);
   }

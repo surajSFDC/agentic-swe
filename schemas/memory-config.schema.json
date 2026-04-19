@@ -4,7 +4,16 @@
   "title": "agentic-swe memory config",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "store", "ingest", "prime", "graph", "import_adapter"],
+  "required": [
+    "schema_version",
+    "store",
+    "ingest",
+    "prime",
+    "embeddings",
+    "compact",
+    "graph",
+    "import_adapter"
+  ],
   "properties": {
     "schema_version": { "type": "integer", "minimum": 1 },
     "description": { "type": "string" },
@@ -41,10 +50,56 @@
     "prime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max_chars_out", "max_fts_hits"],
+      "required": [
+        "max_chars_out",
+        "max_fts_hits",
+        "retrieval_mode",
+        "rrf_k",
+        "semantic_candidate_limit"
+      ],
       "properties": {
         "max_chars_out": { "type": "integer", "minimum": 512, "maximum": 500000 },
-        "max_fts_hits": { "type": "integer", "minimum": 1, "maximum": 200 }
+        "max_fts_hits": { "type": "integer", "minimum": 1, "maximum": 200 },
+        "retrieval_mode": {
+          "type": "string",
+          "enum": ["lexical", "semantic", "hybrid"]
+        },
+        "rrf_k": { "type": "integer", "minimum": 1, "maximum": 500 },
+        "semantic_candidate_limit": { "type": "integer", "minimum": 100, "maximum": 500000 }
+      }
+    },
+    "embeddings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "provider",
+        "model",
+        "ollama_host",
+        "openai_model",
+        "test_dimension"
+      ],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "ollama_host": { "type": "string", "minLength": 1 },
+        "openai_model": { "type": "string", "minLength": 1 },
+        "test_dimension": { "type": "integer", "minimum": 8, "maximum": 4096 }
+      }
+    },
+    "compact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include_names", "max_chars_per_file", "max_total_chars", "output_filename"],
+      "properties": {
+        "include_names": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "max_chars_per_file": { "type": "integer", "minimum": 256, "maximum": 500000 },
+        "max_total_chars": { "type": "integer", "minimum": 512, "maximum": 2000000 },
+        "output_filename": { "type": "string", "minLength": 1 }
       }
     },
     "graph": {

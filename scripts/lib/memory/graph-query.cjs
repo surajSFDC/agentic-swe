@@ -91,10 +91,22 @@ function queryChunkCountDb(db) {
   return 0;
 }
 
+/** @param {*} db */
+function queryEmbeddingCountDb(db) {
+  try {
+    const r = db.exec('SELECT COUNT(*) AS c FROM chunk_embeddings');
+    if (r[0] && r[0].values[0]) return Number(r[0].values[0][0]);
+  } catch {
+    /* no table */
+  }
+  return 0;
+}
+
 module.exports = {
   queryGraphStats,
   queryGraphStatsDb,
   queryTopNodesByDegree,
   queryTopNodesByDegreeDb,
   queryChunkCountDb,
+  queryEmbeddingCountDb,
 };

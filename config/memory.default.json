@@ -24,7 +24,24 @@
   },
   "prime": {
     "max_chars_out": 12000,
-    "max_fts_hits": 12
+    "max_fts_hits": 12,
+    "retrieval_mode": "lexical",
+    "rrf_k": 60,
+    "semantic_candidate_limit": 8000
+  },
+  "embeddings": {
+    "enabled": false,
+    "provider": "none",
+    "model": "nomic-embed-text",
+    "ollama_host": "http://127.0.0.1:11434",
+    "openai_model": "text-embedding-3-small",
+    "test_dimension": 32
+  },
+  "compact": {
+    "include_names": ["progress.md", "design.md", "feasibility.md", "implementation.md"],
+    "max_chars_per_file": 8000,
+    "max_total_chars": 24000,
+    "output_filename": "context-compact.md"
   },
   "graph": {
     "enabled": true,

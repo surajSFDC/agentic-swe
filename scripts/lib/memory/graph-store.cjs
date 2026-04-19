@@ -5,6 +5,7 @@ const path = require('node:path');
 
 const SCHEMA_VERSION = '1';
 const CHUNKS_SCHEMA_VERSION = '1';
+const EMBEDDINGS_SCHEMA_VERSION = '1';
 
 const DDL = `
 CREATE TABLE IF NOT EXISTS memory_meta (
@@ -44,6 +45,17 @@ CREATE INDEX IF NOT EXISTS idx_chunks_path ON chunks(path);
 CREATE INDEX IF NOT EXISTS idx_chunks_work_id ON chunks(work_id);
 `;
 
+const CHUNK_EMBEDDINGS_DDL = `
+CREATE TABLE IF NOT EXISTS chunk_embeddings (
+  chunk_id TEXT PRIMARY KEY,
+  model_id TEXT NOT NULL,
+  dim INTEGER NOT NULL,
+  content_sha256 TEXT NOT NULL,
+  vec BLOB NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_chunk_embeddings_model ON chunk_embeddings(model_id);
+`;
+
 /** @param {*} db sql.js Database */
 function initSchema(db) {
   db.run(DDL);
@@ -72,8 +84,26 @@ function ensureChunksSchema(db) {
   m.free();
 }
 
+/**
+ * Vector metadata per chunk (S4). Vectors are stored as raw Float32 bytes in `vec`.
+ * @param {*} db
+ */
+function ensureEmbeddingsSchema(db) {
+  db.run(CHUNK_EMBEDDINGS_DDL);
+  const m = db.prepare(
+    'INSERT OR REPLACE INTO memory_meta (key, value) VALUES (?, ?)'
+  );
+  m.run(['embeddings_schema_version', EMBEDDINGS_SCHEMA_VERSION]);
+  m.free();
+}
+
 /** @param {*} db */
 function clearChunkTables(db) {
+  try {
+    db.run('DELETE FROM chunk_embeddings;');
+  } catch {
+    /* ignore */
+  }
   try {
     db.run('DELETE FROM chunks;');
   } catch {
@@ -112,6 +142,7 @@ async function openOrCreateDatabase(sqlitePath) {
   }
   initSchema(db);
   ensureChunksSchema(db);
+  ensureEmbeddingsSchema(db);
   return { db, SQL };
 }
 
@@ -137,6 +168,7 @@ function closeDatabase(db) {
 module.exports = {
   initSchema,
   ensureChunksSchema,
+  ensureEmbeddingsSchema,
   clearGraphTables,
   clearChunkTables,
   openOrCreateDatabase,
@@ -144,4 +176,5 @@ module.exports = {
   closeDatabase,
   SCHEMA_VERSION,
   CHUNKS_SCHEMA_VERSION,
+  EMBEDDINGS_SCHEMA_VERSION,
 };

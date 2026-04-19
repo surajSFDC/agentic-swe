@@ -12,7 +12,7 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 
 | Layer | Description |
 | :--- | :--- |
-| **A — Core** | Deterministic graph ingest + chunked text index + **lexical** `memory-prime` (optional embeddings later); config in [`config/memory.default.json`](../../config/memory.default.json), overrides in `.agentic-swe/memory.json`. |
+| **A — Core** | Deterministic graph ingest + chunked text index + `memory-prime` (**lexical** by default, optional **semantic** / **hybrid** when embeddings are indexed); config in [`config/memory.default.json`](../../config/memory.default.json), overrides in `.agentic-swe/memory.json`. |
 | **B — User pipelines** | Any tooling the repo author runs outside this pack. |
 | **C — Import boundary** | Future `memory-import`: validated JSON with provenance, caps (`import_adapter` in config), merge into the same SQLite store. |
 
@@ -47,8 +47,25 @@ This spec complements [`docs/roadmap.md`](../roadmap.md) Phase 2 and root [`CLAU
 ## S3 — Memory prime
 
 - **CLI:** `npm run memory-prime --` or `node scripts/memory-prime.cjs [--query "…"] [--work-id <id>]` — env **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** when `--query` omitted.
-- **Output:** bounded markdown: graph digest (counts, high-degree nodes) + optional lexical chunk hits with path:line citations. Capped by `prime.max_chars_out` / `prime.max_fts_hits` (name kept for config compatibility).
+- **Output:** bounded markdown: graph digest (counts, high-degree nodes, embedding row count) + optional chunk hits with path:line citations. Capped by `prime.max_chars_out` / `prime.max_fts_hits` (name kept for config compatibility).
 - **Implementation:** [`scripts/lib/memory/memory-prime.cjs`](../../scripts/lib/memory/memory-prime.cjs), entry [`scripts/memory-prime.cjs`](../../scripts/memory-prime.cjs).
+
+## S4 — Optional embeddings + hybrid retrieval
+
+- **Config:** [`config/memory.default.json`](../../config/memory.default.json) → `embeddings.*` (merge in `.agentic-swe/memory.json`). **`embeddings.enabled`** must be true to run the embed step or semantic modes.
+- **Backends (env):** `AGENTIC_SWE_EMBEDDINGS_BACKEND` — **`test`** (deterministic vectors, for CI), **`ollama`** (`AGENTIC_SWE_OLLAMA_HOST`, `AGENTIC_SWE_OLLAMA_MODEL`), **`openai`** (`OPENAI_API_KEY` or `AGENTIC_SWE_OPENAI_API_KEY`, `AGENTIC_SWE_OPENAI_EMBEDDING_MODEL`). **`none`** / unset skips vectors even if `enabled` is true (use `enabled: false` for clarity).
+- **Index:** `memory-index` runs chunk ingest, then writes **`chunk_embeddings`** (model id, dimension, sha256, float32 blob) for chunks missing or stale vs `chunks.content_sha256`. Stats line includes an **embeddings** count; JSON includes `stats.embedded` (and `embedError` on failure).
+- **Prime:** `prime.retrieval_mode` — **`lexical`** (default), **`semantic`** (cosine vs stored vectors), **`hybrid`** (reciprocal rank fusion of lexical + semantic lists; `prime.rrf_k`, `prime.semantic_candidate_limit`). Semantic/hybrid fall back to lexical when no embedding rows exist.
+- **Code:** [`scripts/lib/memory/embeddings-backend.cjs`](../../scripts/lib/memory/embeddings-backend.cjs), [`scripts/lib/memory/chunk-embed.cjs`](../../scripts/lib/memory/chunk-embed.cjs).
+
+## S5 — Deterministic context compact (batch)
+
+- **CLI:** `npm run memory-compact -- --work-dir /abs/path/.worklogs/<id>` — writes **`compact.output_filename`** (default `context-compact.md`) under that work dir by concatenating **`compact.include_names`** with per-file and total caps (`compact.max_chars_per_file`, `compact.max_total_chars`). No LLM; complements human-written `progress.md`.
+- **Implementation:** [`scripts/lib/memory/memory-compact.cjs`](../../scripts/lib/memory/memory-compact.cjs), [`scripts/memory-compact.cjs`](../../scripts/memory-compact.cjs).
+
+## Session-start hook (optional memory prime)
+
+- When **`AGENTIC_SWE_MEMORY_PRIME=1`**, [`hooks/session-start`](../../hooks/session-start) appends the same markdown as `memory-prime` after the routing hint (best-effort; failures are ignored). Uses **`AGENTIC_SWE_PROJECT_ROOT`**, else hook JSON **`cwd`** (when `jq` is available), else `pwd`. Optional **`AGENTIC_SWE_WORK_DIR`** → passes **`--work-id`** (basename). Optional **`AGENTIC_SWE_MEMORY_PRIME_QUERY`** → **`--query`**.
 
 ## Governance
 
