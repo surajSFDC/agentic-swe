@@ -57,7 +57,18 @@ if [[ "$RUN_MEM_PRIME" = "1" ]]; then
   fi
 fi
 
+MODEL_TIER_BLOCK=""
+if [[ "${AGENTIC_SWE_MODEL_TIER_HINT:-}" != "0" ]]; then
+  set +e
+  MODEL_TIER_BLOCK=$(node "$REPO_ROOT/scripts/session-model-tier-hint.cjs" --project-root "$PROJECT_ROOT" --plugin-root "$REPO_ROOT" 2>/dev/null)
+  set -e
+fi
+
 FULL_CTX="${BASE}"$'\n\n'"${ROUTING}"
+
+if [[ -n "$MODEL_TIER_BLOCK" ]]; then
+  FULL_CTX="${FULL_CTX}"$'\n\n'"${MODEL_TIER_BLOCK}"
+fi
 
 if [[ -n "$MEM_PRIME_BLOCK" ]]; then
   FULL_CTX="${FULL_CTX}"$'\n\n'"---"$'\n\n'"${MEM_PRIME_BLOCK}"

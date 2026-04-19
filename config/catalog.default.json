@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "description": "Subagent catalog embedding index and routing. Merge with .agentic-swe/catalog.json in the target repo. Embeddings mirror memory config shape (see resolveEmbeddingRuntime).",
+  "embeddings": {
+    "enabled": true,
+    "provider": "test",
+    "test_dimension": 32,
+    "openai_model": "text-embedding-3-small",
+    "ollama_host": "http://127.0.0.1:11434",
+    "model": "nomic-embed-text"
+  },
+  "index": {
+    "relative_path": "catalog-embeddings.json",
+    "directory_relative": ".agentic-swe"
+  }
+}

@@ -42,6 +42,9 @@ initialized → feasibility → lean-track-check → branch by pipeline.track �
 | `/test-runner [scope]` | Run detected test suites |
 | `/lint [scope]` | Run linters in check mode |
 | `/subagent` | Browse and invoke specialist agents |
+| `npm run catalog:lint` | Lint **`agents/subagents`** (CI via **`npm run verify`**) |
+| `npm run catalog:route` | Top‑k subagents from a query (**`--mode auto|lexical|semantic`**) |
+| `npm run catalog:index` | Build **`.agentic-swe/catalog-embeddings.json`** for semantic routing |
 
 ### Key Directories
 
