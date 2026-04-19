@@ -89,7 +89,7 @@ The workflow **[`.github/workflows/main-merge-source.yml`](../.github/workflows/
 
 Transfers and new repos **do not copy** rulesets, required status checks, **Secrets**, **Variables**, or **Environments**. Mirror your previous setup on **each** repo that needs it:
 
-1. **Rulesets / branch protection on `main`** — Require PR before merge; add required checks that match workflow job names (this pack: **`test (20)`**, **`test (22)`**, **`main-merge-source`** when used; **agentic-swe-site**: **`site (20)`**, **`site (22)`**, **`main-merge-source`** if enabled).
+1. **Rulesets / branch protection on `main`** — Require PR before merge; add required checks that match workflow job names (this pack: **`test (20)`**, **`test (22)`**, **`main-merge-source`** when used; **agentic-swe-site**: **`site (20)`**, **`site (22)`**, **`main-merge-source`**). For **agentic-swe-site**, re-apply the canonical ruleset with **`bash scripts/github/apply-agentic-swe-site-main-ruleset.sh`** (uses **`gh`** + [`scripts/github/agentic-swe-site-main-ruleset.json`](../scripts/github/agentic-swe-site-main-ruleset.json); create-or-update by ruleset name).
 2. **Collaborators / roles** — Who may merge to **`main`** (org owners + your user as needed).
 3. **Environments** — **`github-pages`** on **agentic-swe-site** for the Pages deploy job; confirm **Settings → Pages → Source: GitHub Actions**.
 4. **Org Actions** — **[Organization → Settings → Actions](https://github.com/organizations/agentic-swe/settings/actions)** — allow the same **Actions** and reusable workflows you rely on (often stricter than a personal account).
