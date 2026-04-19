@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`scripts/github/apply-agentic-swe-site-main-ruleset.sh`** (+ JSON payload) — idempotently create/update the **`main`** branch ruleset on **`agentic-swe/agentic-swe-site`** with required checks **`site (20)`**, **`site (22)`**, and **`main-merge-source`**, aligned with that repo’s workflows. Documented in **`docs/branch-workflow.md`**.
+
 ### Changed
 
 - **Organization & repositories:** canonical GitHub location is **[agentic-swe/agentic-swe](https://github.com/agentic-swe/agentic-swe)**. The Vite docs/marketing site source lives in **[agentic-swe/agentic-swe-site](https://github.com/agentic-swe/agentic-swe-site)** with GitHub Pages at **`https://agentic-swe.github.io/agentic-swe-site/`**; pack **`homepage`** and plugin **`homepage`** fields point there. Optional private workspace: **[agentic-swe/agentic-swe-lab](https://github.com/agentic-swe/agentic-swe-lab)**. Root **`npm run ci`** no longer builds **`site/`** (site has its own CI).
