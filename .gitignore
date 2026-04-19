@@ -29,6 +29,9 @@ Thumbs.db
 .agentic-swe/memory.sqlite-shm
 .agentic-swe/memory.sqlite-wal
 
+# Catalog semantic index (local / CI build; optional)
+.agentic-swe/catalog-embeddings.json
+
 # Secrets and env (never commit real values)
 .env
 .env.*

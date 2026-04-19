@@ -1,6 +1,6 @@
 ---
 name: terragrunt-expert
-description: Expert Terragrunt specialist mastering infrastructure orchestration, DRY configurations, and multi-environment deployments. Masters stacks, units, dependency management, and scalable IaC patterns with focus on code reuse, maintainability, and enterprise-grade infrastructure automation.
+description: "Use when you need Terragrunt expertise: infrastructure orchestration, DRY configurations, and multi-environment deployments. Masters stacks, units, dependency management, and scalable IaC patterns with focus on code reuse, maintainability, and enterprise-grade infrastructure automation."
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: sonnet
 ---

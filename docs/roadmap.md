@@ -58,6 +58,8 @@ Phases below can overlap in implementation, but **protocol and state correctness
 
 **Exit criteria:** Default routing is data-driven; catalog changes are mechanically guarded.
 
+**In-repo progress:** **`catalog-lint`** (structure, duplicate names/descriptions, purpose overlap Jaccard, invocation cues, required **`tools`**) in **`npm run verify`**; **`catalog-route`** with **`--mode auto|lexical|semantic`** (semantic uses **`catalog-index`** → **`.agentic-swe/catalog-embeddings.json`**, test/Ollama/OpenAI backends via shared **`embeddings-backend`**); **`config/model-routing.default.json`** + merge **`.agentic-swe/model-routing.json`**; **`session-model-tier-hint`** injected from **`hooks/session-start`** (opt out **`AGENTIC_SWE_MODEL_TIER_HINT=0`**). See **`config/catalog.default.json`**, **`npm run catalog:index`**.
+
 ---
 
 ## Phase 4 — Sandboxing, verification, and regression gates

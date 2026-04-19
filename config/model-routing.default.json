@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "description": "Default model tier hints by pipeline phase and task class. Merge with .agentic-swe/model-routing.json in the target repo. Tiers: fast (cheap/shallow), balanced, heavy (architecture/security/deep debugging).",
+  "phase_tiers": {
+    "initialized": "fast",
+    "feasibility": "fast",
+    "lean-track-check": "fast",
+    "design": "balanced",
+    "verification": "fast",
+    "test-strategy": "fast",
+    "implementation": "balanced",
+    "lean-track-implementation": "balanced",
+    "self-review": "balanced",
+    "validation": "fast",
+    "pr-creation": "fast",
+    "approval-wait": "fast",
+    "design-review": "heavy",
+    "code-review": "heavy",
+    "permissions-check": "balanced",
+    "ambiguity-wait": "fast"
+  },
+  "task_class_tiers": {
+    "lint": "fast",
+    "parse": "fast",
+    "shallow_edit": "fast",
+    "architecture_review": "heavy",
+    "security_review": "heavy",
+    "deep_debug": "heavy"
+  }
+}
