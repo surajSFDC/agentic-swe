@@ -1,0 +1,94 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Load a policy file, returning null if not found.
+ */
+function loadPolicy(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Merge policies with precedence: org > repo > pack default.
+ * Arrays are concatenated (deduped by key fields).
+ * Objects are shallow-merged (higher precedence wins on conflict).
+ */
+function mergePolicies(packDefault, repoPolicy, orgPolicy) {
+  const result = { ...packDefault };
+
+  for (const policy of [repoPolicy, orgPolicy].filter(Boolean)) {
+    if (policy.track_rules) {
+      result.track_rules = [...(result.track_rules || []), ...policy.track_rules];
+    }
+    if (policy.mandatory_subagents) {
+      result.mandatory_subagents = [...(result.mandatory_subagents || []), ...policy.mandatory_subagents];
+    }
+    if (policy.banned_tools) {
+      result.banned_tools = [...(result.banned_tools || []), ...policy.banned_tools];
+    }
+    if (policy.required_artifacts) {
+      result.required_artifacts = result.required_artifacts || {};
+      for (const [state, arts] of Object.entries(policy.required_artifacts)) {
+        result.required_artifacts[state] = [
+          ...(result.required_artifacts[state] || []),
+          ...arts,
+        ];
+      }
+    }
+    if (policy.budget_overrides) {
+      result.budget_overrides = { ...(result.budget_overrides || {}), ...policy.budget_overrides };
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Resolve the effective policy for a repository.
+ * Looks for:
+ *   1. Pack default: config/default-policy.json
+ *   2. Repo policy: .agentic-swe/policy.json
+ *   3. Org policy: AGENTIC_SWE_POLICY env var
+ */
+function resolvePolicy(repoRoot, packRoot) {
+  const packDefault = loadPolicy(path.join(packRoot || __dirname, '..', '..', '..', 'config', 'default-policy.json')) || {};
+  const repoPolicy = loadPolicy(path.join(repoRoot, '.agentic-swe', 'policy.json'));
+  const orgPolicyPath = process.env.AGENTIC_SWE_POLICY;
+  const orgPolicy = orgPolicyPath ? loadPolicy(orgPolicyPath) : null;
+
+  return mergePolicies(packDefault, repoPolicy, orgPolicy);
+}
+
+/**
+ * Check whether a file path triggers any track rule.
+ * Returns the highest minimum_track or null.
+ */
+function checkTrackRules(filePaths, policy) {
+  const trackOrder = { lean: 0, standard: 1, rigorous: 2 };
+  let maxTrack = null;
+  let maxOrder = -1;
+
+  for (const rule of (policy.track_rules || [])) {
+    const { minimatch } = require('minimatch');
+    for (const fp of filePaths) {
+      if (minimatch(fp, rule.pattern)) {
+        const order = trackOrder[rule.minimum_track] || 0;
+        if (order > maxOrder) {
+          maxOrder = order;
+          maxTrack = rule.minimum_track;
+        }
+      }
+    }
+  }
+
+  return maxTrack;
+}
+
+module.exports = { loadPolicy, mergePolicies, resolvePolicy, checkTrackRules };

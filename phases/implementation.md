@@ -20,6 +20,22 @@ The implementation plan inside `implementation.md` must meet the quality bar def
 
 When implementation spans **independent domains** (e.g. frontend + backend), **multiple non-overlapping slices**, or parallel advisory/review fan-out, consult `${CLAUDE_PLUGIN_ROOT}/references/parallel-dispatch.md` for when to parallelize, prompt structure (scope, goal, constraints, expected output), and post-merge integration (conflict check, full tests, sequential rework on conflicts).
 
+### Context Pack
+
+Before any delegation, produce a **Context Pack** per `${CLAUDE_PLUGIN_ROOT}/templates/context-pack.md` (validated against `${CLAUDE_PLUGIN_ROOT}/schemas/context-pack.schema.json`). Include rules summary, scope files with line ranges, patterns to follow, constraints, and verification commands. See `${CLAUDE_PLUGIN_ROOT}/references/context-engineering.md` for the five-level hierarchy and trust levels.
+
+### Source-Driven Development
+
+When the implementation introduces or relies on external library/framework APIs, apply `${CLAUDE_PLUGIN_ROOT}/references/source-driven-development.md`: mark API claims as `VERIFIED:` (with source URL) or `UNVERIFIED:` (with confidence and risk). Reviewers will flag unmarked API calls.
+
+### Deprecation and Removal
+
+When the work item **removes** code, deprecates an interface, or replaces one library with another, produce a **Removal Manifest** per `${CLAUDE_PLUGIN_ROOT}/references/deprecation-and-migration.md` inside `implementation.md`. Apply the Chesterton's Fence rule before removing code whose purpose is unclear.
+
+### Slicing Strategy
+
+Choose a slicing strategy per `${CLAUDE_PLUGIN_ROOT}/references/slicing-strategies.md` (vertical / contract-first / risk-first). Each slice must leave the system compilable and testable. The scope-creep check (`${CLAUDE_PLUGIN_ROOT}/scripts/lib/scope/diff-scope-check.cjs`) compares the actual diff against declared files — undeclared edits fail CI.
+
 ### Pre-Delegation: Tooling and Subagents
 
 Before spawning the developer agent:
@@ -59,3 +75,22 @@ Write `.worklogs/<id>/implementation.md` following `${CLAUDE_PLUGIN_ROOT}/templa
 - **## Capability gaps** (optional) — if the built-in subagent catalog did not cover required expertise, add a section using `${CLAUDE_PLUGIN_ROOT}/templates/capability-gaps-section.md`; omit if none
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "I'll add tests after the code works." | Deferred tests rarely get written, and untested code hides regressions. Writing the decisive test first surfaces design flaws before they compound. |
+| "This small addition is closely related — I'll include it now." | Scope creep during implementation bypasses the design gate. Unplanned additions lack feasibility review, risk assessment, and test strategy. |
+| "The plan is clear enough in my head — I don't need to decompose further." | An implementation plan that cannot be followed by a fresh developer is incomplete. Implicit steps become skipped steps under pressure. |
+| "The reflection log mentions this, but my approach is different enough." | If the reflection log identifies a failure pattern, the next iteration must address it explicitly. A different-looking approach that ignores the root cause will hit the same failure. |
+| "Edge cases can be handled in a follow-up." | Edge cases deferred to follow-ups are edge cases shipped to production. If the design identified them, implementation must handle or explicitly document the risk. |
+| "The existing tests cover this path already." | Existing tests cover existing behavior. New code that changes control flow, adds branches, or modifies data shapes needs new assertions, not inherited confidence. |
+
+## Red Flags
+
+- Implementation artifact lists files changed but no tests added or updated for behavioral changes.
+- Developer agent was spawned without a context pack or with a prompt that omits `reflection-log.md` findings.
+- Code changes touch files outside the scope defined in `design.md` without documenting the deviation.
+- The implementation plan has steps with no verification command or expected output.
+- Multiple subagents were spawned when budget remaining was below the skip threshold.

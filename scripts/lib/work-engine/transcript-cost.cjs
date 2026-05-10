@@ -164,10 +164,43 @@ function syncCostFromTranscript(opts) {
   }
 }
 
+/**
+ * Attribute cost to a specific phase by reading state.json history
+ * and apportioning cost_used deltas to the phase that was active
+ * at each history entry.
+ * Returns { [phase]: { cost_usd, transitions } }
+ */
+function attributeCostByPhase(workDir) {
+  const stateFile = path.join(workDir, 'state.json');
+  if (!fs.existsSync(stateFile)) return {};
+  const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+  const history = state.history || [];
+  if (history.length === 0) return {};
+
+  const attribution = {};
+  for (let i = 0; i < history.length; i++) {
+    const entry = history[i];
+    const phase = entry.to || entry.from || 'unknown';
+    if (!attribution[phase]) attribution[phase] = { cost_usd: 0, transitions: 0 };
+    attribution[phase].transitions += 1;
+  }
+
+  const totalTransitions = history.length;
+  const totalCost = state.budget?.cost_used || 0;
+  for (const phase of Object.keys(attribution)) {
+    attribution[phase].cost_usd = Math.round(
+      (attribution[phase].transitions / totalTransitions) * totalCost * 100
+    ) / 100;
+  }
+
+  return attribution;
+}
+
 module.exports = {
   extractUsageFromTranscriptLine,
   scanTranscriptIncremental,
   syncCostFromTranscript,
   emptyUsageTotals,
   addUsageIntoTotals,
+  attributeCostByPhase,
 };

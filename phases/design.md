@@ -84,6 +84,25 @@ If iterating, also write `.worklogs/<id>/design-feedback.md`.
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "Let's add an abstraction layer now so we're ready for future requirements." | Abstractions that serve no current requirement add indirection, increase cognitive load, and often get refactored away when real requirements arrive with different shapes. |
+| "The trade-offs are obvious — no need to document alternatives." | Undocumented trade-offs become invisible assumptions. When the design is questioned later, there is no record of why alternatives were rejected. |
+| "This design handles a scenario the user hasn't mentioned yet." | Designing for hypothetical requirements burns budget on speculation. If the scenario matters, it belongs in feasibility as a confirmed requirement. |
+| "A simpler design won't scale." | Premature scaling adds complexity that hinders the immediate task. Demonstrate the scaling bottleneck with evidence before adding structural weight. |
+| "The design panel will catch any issues — I'll keep moving." | The panel reviews what you present. If the design has unexamined assumptions, reviewers inherit those blind spots. Self-review before panel is not optional. |
+| "I already know the right architecture from past projects." | Prior architecture decisions were made for different constraints, codebases, and requirements. Design must be grounded in this repo's evidence, not imported from memory. |
+
+## Red Flags
+
+- Design artifact has no "alternatives rejected" section — only the chosen approach is discussed.
+- File-level change plan references modules or interfaces that do not exist in the current repo.
+- Risk register is empty or contains only generic risks ("might have edge cases") without specifics.
+- The design introduces new abstractions, interfaces, or layers not required by the acceptance criteria.
+- Self-review checklist was not run, or failures were flagged but not resolved before presenting.
+
 ## Failure Protocol
 
 - if the repository cannot support the design, say so directly

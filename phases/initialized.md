@@ -38,6 +38,22 @@ Hypervisor performing startup — methodical, no assumptions, validates prerequi
 - `progress.md` — first entry recorded
 - `audit.log` — creation entry logged
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "I'll set up `state.json` later — let me jump straight to feasibility." | Skipping initialization means no audit trail, no budget tracking, and no valid transition history from the start. |
+| "The work directory structure is obvious; I don't need to verify templates." | Template drift or missing files cause silent failures downstream — verification catches this at near-zero cost. |
+| "`CLAUDE.md` is always there; checking is redundant." | Pipeline policy can be absent in fresh clones, forks, or after accidental deletion — the check is a one-line safeguard. |
+
+## Red Flags
+
+- `state.json` not created before any transition out of `initialized` — the pipeline has no state to track.
+- `progress.md` or `audit.log` missing after initialization — downstream phases will have no history to append to.
+- Work ID generated but `.worklogs/<id>/` directory not actually created on disk.
+- `state.json` created but `current_state` is not `"initialized"` — incorrect bootstrapping.
+- Initialization skips the `CLAUDE.md` existence check and proceeds into a repo without pipeline policy.
+
 ## Next State
 
 `feasibility` — always. The initialized state transitions directly to feasibility to begin task analysis.

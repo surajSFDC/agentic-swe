@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agentic-swe.github.io/schemas/owai/state.schema.json",
+  "title": "OWAI Work Item State",
+  "description": "Schema for the state.json file in an OWAI-conformant work directory.",
+  "type": "object",
+  "required": ["schema_version", "work_id", "task", "current_state", "created_at", "updated_at", "budget", "counters", "pipeline", "history"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "work_id": { "type": "string", "minLength": 1 },
+    "task": { "type": "string", "minLength": 1 },
+    "current_state": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "updated_at": { "type": "string", "minLength": 1 },
+    "budget": {
+      "type": "object",
+      "required": ["iteration_budget", "budget_remaining"],
+      "properties": {
+        "iteration_budget": { "type": "integer", "minimum": 0 },
+        "budget_remaining": { "type": "integer", "minimum": 0 },
+        "cost_budget_usd": { "type": "number", "minimum": 0 },
+        "cost_used": { "type": "number", "minimum": 0 }
+      }
+    },
+    "counters": { "type": "object" },
+    "pipeline": {
+      "type": "object",
+      "properties": {
+        "track": { "type": ["string", "null"], "enum": ["lean", "standard", "rigorous", null] }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "from", "to"],
+        "properties": {
+          "timestamp": { "type": "string" },
+          "actor": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "reason": { "type": "string" },
+          "evidence_summary": { "type": "string" },
+          "artifact_hashes": { "type": "object" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
