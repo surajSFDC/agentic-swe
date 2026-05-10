@@ -26,6 +26,8 @@ Listing in Anthropic’s directory is separate from the Git marketplace. Follow 
 
 ## npm — `@agentic-swe/agentic-swe`
 
+**New maintainers — read this first:** [First time on npm: create the scope](#first-time-on-npm-create-the-scope). The **`@agentic-swe`** org must exist on [npmjs.com](https://www.npmjs.com/) before the first **`npm publish`**; otherwise you get **`404 Scope not found`**.
+
 The **unscoped** name **`agentic-swe`** on the public npm registry is **not** this project (different publisher). This pack publishes as:
 
 ```bash
@@ -40,6 +42,24 @@ npm publish --registry=https://registry.npmjs.org/
 ```
 
 **`prepublishOnly`** runs **`version:check`** + **`verify`** (does not run the full **`npm test`** suite — run **`npm test`** locally before publishing).
+
+### First time on npm: create the scope
+
+A **scope** like **`@agentic-swe`** is backed by an **npm org** (or a user scope). Pushing a scoped package only works if that scope **already exists** and your account may **publish** to it.
+
+1. Log in: [npmjs.com](https://www.npmjs.com/) (same account as **`npm whoami`**).
+2. **Create an organization** named **`agentic-swe`** (or use [npm’s org docs](https://docs.npmjs.com/creating-an-organization) if the name is taken — then you would need a different scope and a package rename; see below).
+3. Under the org **Members** / **Teams**, grant your user **publish** access (or publish with an automation token scoped to that org, per npm settings).
+
+Until step 2 succeeds, **`npm publish`** fails with:
+
+```text
+404 Scope not found — PUT ... /@agentic-swe%2fagentic-swe
+```
+
+That is **not** a bug in this repo; the registry had no **`@agentic-swe`** scope yet. After the org exists and your user can publish, **`npm publish`** succeeds.
+
+**If you cannot get the `agentic-swe` org name on npm:** choose another available scope (e.g. tied to your npm username), bump **`package.json`** **`name`** to **`@your-scope/agentic-swe`**, run **`scripts/bump-version.sh`** only if needed (name change does not affect version files), update **`README`** / **`docs/PUBLISHING.md`** install lines, and publish under that scope.
 
 The packed tarball **excludes** **`agents/plugin-runtime/brainstorm-server/node_modules`** (see **`package.json`** **`files`**). Install brainstorm deps when needed: **`npm ci --prefix agents/plugin-runtime/brainstorm-server`**.
 

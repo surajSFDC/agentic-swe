@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- **`docs/PUBLISHING.md`:** prominent callout for **First time on npm: create the scope** (create **`@agentic-swe`** org on npm before first **`npm publish`**; explains **`404 Scope not found`**). **`README`** links to that section.
+- **`bench/README.md`:** align AGENTIC_SWE_BENCH with OWAI, **`docs/capabilities-overview.md`**, and #1 Moves themes (cross-model, gates, DDV/policy pressure); add references table.
+
 ## [3.2.0] - 2026-05-10
 
 ### Added
