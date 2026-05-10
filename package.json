@@ -18,6 +18,8 @@
   },
   "private": true,
   "files": [
+    "README.md",
+    "assets",
     "CHANGELOG.md",
     "scripts",
     "CLAUDE.md",
