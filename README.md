@@ -22,22 +22,37 @@
 After **feasibility**, **`lean-track-check`** sets **`pipeline.track`** in **`state.json`**. Tracks merge into **PR creation** → **`approval-wait`** → **completed**.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif', 'fontSize': '15px', 'primaryColor': '#1d4ed8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'secondaryColor': '#f1f5f9', 'secondaryTextColor': '#0f172a', 'secondaryBorderColor': '#64748b', 'tertiaryColor': '#fef3c7', 'tertiaryTextColor': '#422006', 'tertiaryBorderColor': '#b45309', 'lineColor': '#334155', 'textColor': '#0f172a', 'mainBkg': '#ffffff', 'clusterBkg': '#f8fafc', 'clusterBorder': '#94a3b8', 'titleColor': '#0f172a', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
 flowchart TD
     start(["/work — start or resume"])
-    start --> feasibility["feasibility"]
+    feasibility["feasibility"]
+    check{"lean-track-check<br/>sets pipeline.track"}
+    lean["Lean track<br/>lean-track-implementation<br/>validation · pr-creation"]
+    std["Standard track<br/>design → verification → test-strategy<br/>implementation → self-review<br/>validation · pr-creation"]
+    rig["Rigorous track<br/>design → design-review<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validation · pr-creation"]
+    gate{{"approval-wait<br/>human gate"}}
+    done(["completed"])
 
-    feasibility --> check{"lean-track-check<br/>sets pipeline.track"}
-
-    check -->|"lean"| lean["Lean track<br/>────────────<br/>lean-track-implementation<br/>validation<br/>pr-creation"]
-    check -->|"standard"| std["Standard track<br/>────────────<br/>design → verification<br/>test-strategy → implementation<br/>self-review → validation<br/>pr-creation"]
-    check -->|"rigorous"| rig["Rigorous track<br/>────────────<br/>design → design-review<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validation → pr-creation"]
-
-    lean --> gate{{"approval-wait<br/>human gate"}}
+    start --> feasibility --> check
+    check -->|lean| lean
+    check -->|standard| std
+    check -->|rigorous| rig
+    lean --> gate
     std --> gate
     rig --> gate
+    gate --> done
 
-    gate --> done(["completed"])
+    classDef accent fill:#1f6feb,stroke:#58a6ff,color:#ffffff,stroke-width:2px
+    classDef step fill:#21262d,stroke:#30363d,color:#e6edf3,stroke-width:1px
+    classDef branch fill:#21262d,stroke:#388bfd,color:#c9d1d9,stroke-width:2px
+    classDef decide fill:#21262d,stroke:#d29922,color:#ffdfb8,stroke-width:2px
+    classDef gateNode fill:#21262d,stroke:#a371f7,color:#e6edf3,stroke-width:2px
+
+    class start,done accent
+    class feasibility step
+    class check decide
+    class lean,std,rig branch
+    class gate gateNode
 ```
 
 Canonical transitions: **`state-machine.json`** and the fenced graph in **`CLAUDE.md`** (checked in CI).
@@ -136,10 +151,9 @@ Under **`agents/subagents/`**. **Auto-selected** from **`feasibility.md`** signa
 **`.worklogs/<id>/`** holds **`state.json`** (source of truth), **`progress.md`**, **`audit.log`**, and phase markdown files.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif', 'fontSize': '15px', 'primaryColor': '#1d4ed8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'secondaryColor': '#f1f5f9', 'secondaryTextColor': '#0f172a', 'secondaryBorderColor': '#64748b', 'lineColor': '#334155', 'textColor': '#0f172a', 'mainBkg': '#ffffff', 'clusterBkg': '#f8fafc', 'clusterBorder': '#94a3b8', 'titleColor': '#0f172a', 'edgeLabelBackground': '#ffffff'}}}%%
-flowchart TB
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
+flowchart LR
     subgraph wl[".worklogs / &lt;id&gt; /"]
-        direction LR
         subgraph core["Core files"]
             direction TB
             s["state.json<br/>current_state · track · budgets"]
@@ -153,9 +167,16 @@ flowchart TB
             f3["validation-results.md"]
             f4["pr-link.txt"]
         end
+        core --- art
     end
 
-    core --- art
+    classDef file fill:#21262d,stroke:#58a6ff,color:#e6edf3,stroke-width:1px
+
+    class s,p,a,f1,f2,f3,f4 file
+
+    style wl fill:#0d1117,stroke:#30363d,color:#58a6ff
+    style core fill:#161b22,stroke:#388bfd,color:#8b949e
+    style art fill:#161b22,stroke:#388bfd,color:#8b949e
 ```
 
 - **State over chat** — resume from files, not from thread memory alone.
@@ -182,24 +203,24 @@ agentic-swe/
 ## Architecture
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif', 'fontSize': '15px', 'primaryColor': '#1d4ed8', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'secondaryColor': '#f1f5f9', 'secondaryTextColor': '#0f172a', 'secondaryBorderColor': '#64748b', 'tertiaryColor': '#ecfdf5', 'tertiaryTextColor': '#064e3b', 'tertiaryBorderColor': '#047857', 'lineColor': '#334155', 'textColor': '#0f172a', 'mainBkg': '#ffffff', 'clusterBkg': '#f8fafc', 'clusterBorder': '#94a3b8', 'titleColor': '#0f172a', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
 flowchart TB
     subgraph hv["Hypervisor session"]
         pol["CLAUDE.md<br/>state machine · gates · delegation"]
     end
 
     subgraph core["Core agents"]
-        direction LR
+        direction TB
         d["developer-agent"]
         g["git-operations-agent"]
         m["pr-manager-agent"]
     end
 
     subgraph panel["Design panel · rigorous track"]
-        direction LR
-        ar["architect"]
-        sr["security"]
-        adv["adversarial"]
+        direction TB
+        ar["architect-reviewer"]
+        sr["security-reviewer"]
+        adv["adversarial-reviewer"]
     end
 
     subgraph cat["Specialists"]
@@ -210,6 +231,21 @@ flowchart TB
     hv --> panel
     core -.->|consult| catalog
     panel -.->|consult| catalog
+
+    classDef hyper fill:#1f6feb,stroke:#58a6ff,color:#ffffff,stroke-width:2px
+    classDef agent fill:#21262d,stroke:#3fb950,color:#aff5b4,stroke-width:1px
+    classDef panelN fill:#21262d,stroke:#d29922,color:#ffdfb8,stroke-width:1px
+    classDef catalogN fill:#21262d,stroke:#a371f7,color:#dbb7ff,stroke-width:2px
+
+    class pol hyper
+    class d,g,m agent
+    class ar,sr,adv panelN
+    class catalog catalogN
+
+    style hv fill:#0d1117,stroke:#30363d,color:#58a6ff
+    style core fill:#161b22,stroke:#238636,color:#8b949e
+    style panel fill:#161b22,stroke:#d29922,color:#8b949e
+    style cat fill:#161b22,stroke:#a371f7,color:#8b949e
 ```
 
 ---
