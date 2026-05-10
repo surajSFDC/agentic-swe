@@ -1,13 +1,21 @@
-# Agentic SWE
+<p align="center">
+  <img src="assets/hero-banner.png" alt="Agentic SWE — Autonomous Software Engineering Pipeline" width="100%" />
+</p>
 
-[![CI](https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
-[![Version](https://img.shields.io/badge/version-3.1.1-orange.svg)](CHANGELOG.md)
-[![Agents](https://img.shields.io/badge/subagents-135%2B-purple.svg)](#subagent-catalog)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-informational.svg)](https://agentic-swe.github.io/agentic-swe-site/)
+<h1 align="center">Agentic SWE</h1>
 
-An autonomous software engineering pipeline — 135+ specialized agents, governed by a state machine, running inside your AI coding IDE.
+<p align="center">
+  <a href="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml"><img src="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg" alt="Node" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.1.1-orange.svg" alt="Version" /></a>
+  <a href="#subagent-catalog"><img src="https://img.shields.io/badge/subagents-135%2B-purple.svg" alt="Agents" /></a>
+  <a href="https://agentic-swe.github.io/agentic-swe-site/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-informational.svg" alt="Docs" /></a>
+</p>
+
+<p align="center">
+  An autonomous software engineering pipeline — 135+ specialized agents, governed by a state machine, running inside your AI coding IDE.
+</p>
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#3730a3', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fef3c7', 'lineColor': '#6366f1', 'textColor': '#1e293b', 'fontSize': '14px' }}}%%
@@ -261,45 +269,11 @@ agentic-swe/
 
 ## Architecture
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#3730a3', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fef3c7', 'lineColor': '#6366f1', 'textColor': '#1e293b', 'fontSize': '14px' }}}%%
+<p align="center">
+  <img src="assets/architecture-overview.png" alt="Agentic SWE architecture — Hypervisor delegates to core agents, design panel, and 135+ subagent catalog" width="700" />
+</p>
 
-flowchart TB
-    subgraph hypervisor ["🧠 Hypervisor · CLAUDE.md policy"]
-        direction TB
-        stateMachine["State Machine<br/>transitions · gates · budgets"]
-        opLoop["Operating Loop<br/>/check budget → phase → /check artifacts → transition"]
-        stateMachine --- opLoop
-    end
-
-    subgraph coreAgents ["⚙️ Core Agents"]
-        direction LR
-        dev["developer-agent<br/>implementation"]
-        gitOps["git-operations-agent<br/>branches · sync"]
-        prMgr["pr-manager-agent<br/>PR lifecycle"]
-    end
-
-    subgraph designPanel ["🔎 Design Panel · parallel review"]
-        direction LR
-        arch["architect<br/>reviewer"]
-        sec["security<br/>reviewer"]
-        adv["adversarial<br/>reviewer"]
-    end
-
-    subgraph catalog ["📦 Subagent Catalog · 135+ specialists"]
-        direction LR
-        langSpec["Language<br/>Specialists · 29"]
-        infraSpec["Infrastructure<br/>· 16"]
-        qaSpec["Quality &<br/>Security · 14"]
-        dataSpec["Data &<br/>AI · 13"]
-        moreSpec["+ 6 more<br/>categories"]
-    end
-
-    hypervisor ==> coreAgents
-    hypervisor ==> designPanel
-    coreAgents -.->|"auto-select"| catalog
-    designPanel -.->|"consult"| catalog
-```
+The **Hypervisor** (your IDE session + `CLAUDE.md` policy) owns all state transitions, gates, and synthesis. It delegates bounded work to **core agents** (developer, git-ops, PR manager) and spawns the **design panel** in parallel for rigorous-track reviews. Both core agents and panel reviewers can auto-select from the **135+ subagent catalog** when domain-specific expertise is needed.
 
 ---
 
