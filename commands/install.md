@@ -47,7 +47,8 @@ Optional: create **`.worklogs/.gitkeep`** only if the user wants an empty tracke
 
 ### 4. What not to do
 
-- Do **not** tell users to run **`npx agentic-swe`** or a global **`agentic-swe`** CLI (removed; install is plugin/marketplace + optional `CLAUDE.md` merge only).
+- Do **not** tell users to run **`npx`** against the wrong package: the **unscoped** npm name **`agentic-swe`** points at a **different** project. For this pack, consumers install **`@agentic-swe/agentic-swe`** from the public registry (or Git clone / marketplace only).
+- The **`agentic-swe`** CLI from **`npm install -g @agentic-swe/agentic-swe`** only prints **`path`** / **`version`** — it is **not** a hosted runner. Use it to resolve **`claude --plugin-dir "$(agentic-swe path)"`** or **`AGENTIC_SWE_PACK_ROOT`** for Cursor — see **`README.md`** and **`docs/PUBLISHING.md`**.
 - Do **not** bulk-copy **`commands/`**, **`phases/`**, **`agents/`**, etc. into **`target/.claude/`** unless the user explicitly asks for a **legacy/vendored** layout (out of scope for default onboarding).
 
 ### 5. Verification
@@ -58,6 +59,8 @@ Confirm the user can run slash commands such as **`/work`** and **`/check transi
 
 ## Maintainer: republish on Claude Code
 
+See **`docs/PUBLISHING.md`** for npm, tags, and Cursor. Summary:
+
 **Custom marketplace (this repo):** Consumers point at **`https://github.com/agentic-swe/agentic-swe`**, which hosts **`.claude-plugin/marketplace.json`** (catalog **`agentic-swe-catalog`**) and **`.claude-plugin/plugin.json`**. To ship a new version:
 
 1. Bump **`package.json`** / manifests together: **`bash scripts/bump-version.sh bump <semver>`** (see **`.version-bump.json`**).
@@ -66,5 +69,7 @@ Confirm the user can run slash commands such as **`/work`** and **`/check transi
 4. Tell users to refresh the catalog, then reinstall the plugin version they want, for example:
    - **`/plugin marketplace add agentic-swe/agentic-swe`** (once per profile)
    - **`/plugin install agentic-swe@agentic-swe-catalog`** (or **`agentic-swe@<version>`** if your clients pin versions)
+
+**npm:** publish **`@agentic-swe/agentic-swe`** per **`docs/PUBLISHING.md`** (scoped package; unscoped **`agentic-swe`** on npm is unrelated).
 
 **Official Anthropic listings:** if the plugin is or will be in Anthropic’s public directory, follow their current publish/update process (see [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) and linked submission guidance). A Git push to your own repo is enough for **custom** marketplaces only.

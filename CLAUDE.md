@@ -401,6 +401,7 @@ The pipeline synthesizes ideas from autonomous SWE and agentic coding literature
 | Goal | Action |
 |------|--------|
 | Install for Claude Code | **Plugin marketplace** + **`/plugin install`**, or **`claude --plugin-dir <repo-root>`** (dev) |
+| Pack root via npm | **`npm install -g @agentic-swe/agentic-swe`**, then **`claude --plugin-dir "$(agentic-swe path)"`** — see **`docs/PUBLISHING.md`** |
 | Start work | **`/work`** + task description |
 | Resume | **`/work <id>`** |
 | Plan only | **`/plan-only`** |

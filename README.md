@@ -6,7 +6,7 @@
   <a href="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml"><img src="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg" alt="Node" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.1.1-orange.svg" alt="Version" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.2.0-orange.svg" alt="Version" /></a>
   <a href="#subagents"><img src="https://img.shields.io/badge/subagents-135%2B-purple.svg" alt="Agents" /></a>
   <a href="https://agentic-swe.github.io/agentic-swe-site/"><img src="https://img.shields.io/badge/docs-site-informational.svg" alt="Docs site" /></a>
 </p>
@@ -82,9 +82,36 @@ Use **`/install`** once to merge **`CLAUDE.md`** and optional **`.gitignore`** f
 </details>
 
 <details>
+<summary><strong>npm (pack path for any host)</strong></summary>
+
+Install the published tarball globally (scoped package — the unscoped **`agentic-swe`** name on npm is a different project):
+
+```bash
+npm install -g @agentic-swe/agentic-swe --registry=https://registry.npmjs.org/
+```
+
+Print the pack root, then point Claude Code or scripts at it:
+
+```bash
+agentic-swe path
+# claude --plugin-dir "$(agentic-swe path)"
+```
+
+Maintainers: **`docs/PUBLISHING.md`**.
+
+</details>
+
+<details>
 <summary><strong>Cursor</strong></summary>
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
+```
+
+From an **npm** global install, symlink the pack into Cursor’s local plugins dir:
+
+```bash
+export AGENTIC_SWE_PACK_ROOT="$(agentic-swe path)"
 curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
 ```
 
