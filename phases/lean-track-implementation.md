@@ -17,6 +17,10 @@ When `state.json.pipeline.tdd_mode` is `true`, the developer agent must follow r
 
 The implementation plan must meet `${CLAUDE_PLUGIN_ROOT}/references/plan-quality-bar.md` — exact file paths, complete code, verification commands with expected output. Decompose using `${CLAUDE_PLUGIN_ROOT}/references/task-decomposition-guide.md`. The lean track means fewer steps, not lower quality per step.
 
+## Context Pack
+
+Before delegation, produce a Context Pack per `${CLAUDE_PLUGIN_ROOT}/templates/context-pack.md`. Even on the lean track, the delegate must receive scoped context — not the full repo. See `${CLAUDE_PLUGIN_ROOT}/references/context-engineering.md`.
+
 ## Delegation
 
 Follow the same delegation model as `${CLAUDE_PLUGIN_ROOT}/phases/implementation.md`, with additional subagent auto-selection for the lean track:
@@ -67,3 +71,20 @@ Write to `.worklogs/<id>/`:
 If the background language specialist returns after implementation.md is written, append its findings. If it hasn't returned, proceed — do not wait.
 
 Follow `${CLAUDE_PLUGIN_ROOT}/templates/artifact-format.md` for structure. Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
+
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "This change is simple enough to skip self-review." | The embedded self-review rubric exists because even small changes can break invariants; simplicity is not a waiver. |
+| "One more iteration will fix it — no need to escalate yet." | The 2-iteration cap is a hard budget. Exceeding it on the lean track means the change was mis-classified as simple. |
+| "Tests pass, so the implementation is correct." | Passing tests prove the happy path; self-review catches design conformance, edge cases, and complexity that tests may not cover. |
+| "The subagent hasn't returned yet, so I'll wait." | Lean-track policy is explicit: proceed without waiting. Blocking on a background advisory defeats the lean budget. |
+
+## Red Flags
+
+- Second review iteration addresses the same root cause as the first — the loop is not converging; escalate immediately.
+- `lean_iter` counter incremented but `implementation.md` shows no substantive artifact change between iterations.
+- Self-review scores omitted from `implementation.md` before producing review artifacts.
+- Test evidence section says "tests pass" with no command output or exit code captured.
+- Change touches more files or modules than `lean-track-check.md` anticipated — may need reclassification to standard or rigorous.

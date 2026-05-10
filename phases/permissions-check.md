@@ -37,6 +37,23 @@ Write `.worklogs/<id>/permissions-changes.md` following `${CLAUDE_PLUGIN_ROOT}/t
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "The code works in tests — permissions must be fine." | Tests typically run with elevated or mocked permissions. Production environments enforce access control, feature flags, and configuration gates that tests bypass. |
+| "We didn't change any config files, so there's nothing to check." | New code paths may require new exports, route registrations, feature flag entries, or deployment descriptor updates even when no config file was directly edited. |
+| "Security scan is overkill for this change." | Security scans catch secrets in code, dangerous dependency patterns, and configuration exposures that manual review consistently misses — especially in seemingly low-risk changes. |
+| "The existing deployment pipeline handles this automatically." | Deployment pipelines handle what they are configured for. New operational surfaces (endpoints, environment variables, access patterns) require explicit registration. |
+
+## Red Flags
+
+- Permissions artifact lists "no changes required" but the implementation added new API endpoints, environment variables, or external service calls.
+- `/security-scan` was not invoked despite the implementation touching authentication, authorization, or secrets-adjacent code.
+- The artifact does not mention feature flags or access-control rules when the change introduces user-facing behavior.
+- Deployment descriptors are unchanged despite new runtime dependencies or configuration requirements.
+- The artifact contains no evidence citations — only assertions that operational surfaces are unaffected.
+
 ## Failure Protocol
 
 - if the feature is correct in code but unavailable operationally, treat that as a real blocker

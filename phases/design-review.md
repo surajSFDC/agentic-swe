@@ -60,6 +60,35 @@ Following `${CLAUDE_PLUGIN_ROOT}/templates/artifact-format.md`, include:
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Doubt Cycle (Optional)
+
+Before finalizing the verdict on any **non-trivial** design decision (crosses boundaries, irreversible, asserts unverifiable properties), invoke a Doubt-Driven Verification cycle per `${CLAUDE_PLUGIN_ROOT}/references/doubt-driven-verification.md`:
+
+1. Name the CLAIM (the design assertion under scrutiny).
+2. EXTRACT the smallest reviewable artifact + contract.
+3. DOUBT — spawn a fresh-context adversarial reviewer using `${CLAUDE_PLUGIN_ROOT}/agents/prompts/adversarial-reviewer-prompt.md`. Do NOT pass the CLAIM.
+4. RECONCILE findings (contract-misread / actionable / trade-off / noise).
+5. STOP after trivial findings, 3 cycles, or user override.
+
+Increment `state.json.counters.doubt_cycles` for each cycle. If 3 cycles still surface substantive issues, escalate to the user before approving.
+
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "The design is clear enough — no need to score every dimension." | Skipping rubric dimensions hides weak areas and produces unfounded approval. |
+| "I'll soften the verdict so the designer isn't discouraged." | A soft verdict on a hard problem delays rework to code review where it costs more. |
+| "All five dimensions look fine" (without evidence). | Rubber-stamping is the most common review failure; every score needs a cited artifact or file reference. |
+| "The panel already reviewed this, so I can fast-track." | Panel input is advisory — this phase owns the binding verdict and must independently verify. |
+
+## Red Flags
+
+- All five dimensions scored 3 with no blocking issues identified on a complex or multi-file design.
+- Rubric scores present but evidence column is empty or contains only "looks good."
+- No blocking issues recorded for a design that crosses module boundaries or introduces new dependencies.
+- Verdict is `approved` but the traceability to acceptance criteria is missing or hand-waved.
+- Review artifact is shorter than the design it reviews.
+
 ## Failure Protocol
 
 - if the design is not implementation-ready, do not soften the verdict

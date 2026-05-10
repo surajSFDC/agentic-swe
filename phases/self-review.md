@@ -46,6 +46,23 @@ Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
 `self_review_iter` maximum 1. This phase returns to implementation at most once. After one rework cycle, the self-review must pass forward to `code-review` regardless of scores — remaining concerns are recorded as findings for the code reviewer.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "Self-review is just a formality before real code review." | Self-review exists to catch deficiencies cheaply; treating it as ceremonial pushes avoidable rework to the code reviewer. |
+| "Tests pass, so all dimensions are at least 2." | Passing tests prove test-covered behavior only; correctness, safety, design conformance, and complexity are independent dimensions. |
+| "I wrote the code, so I know it's correct." | Author familiarity breeds blind spots — the inner-critic persona exists precisely to counteract this bias. |
+| "The traceability matrix is overkill for this size change." | Untraced acceptance criteria are unverified acceptance criteria, regardless of change size. |
+
+## Red Flags
+
+- Rubric scores present but no concrete evidence (file paths, test names, command output) cited for any dimension.
+- All dimensions scored 2+ yet the traceability matrix has gaps or missing entries.
+- Self-review artifact is written in under a minute with no `reflection-log.md` consultation when one exists.
+- Verdict is `pass` but findings section is empty — a meaningful self-review almost always surfaces at least one non-blocking observation.
+- Prior `reflection-log.md` entries exist but are not addressed or referenced in the review.
+
 ## Failure Protocol
 
 - do not award 2+ on a dimension without citing specific evidence

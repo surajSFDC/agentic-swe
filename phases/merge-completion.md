@@ -73,6 +73,23 @@ Remove the empty parent directory (`.worktrees/` or `worktrees/`) if no other wo
 
 For option 2, worktree cleanup happens after the PR is created and CI is confirmed green — not before.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "CI is green, so post-merge validation is unnecessary." | Pre-merge CI and post-merge state can diverge — the base branch may have changed between approval and merge. |
+| "Branch cleanup can happen later." | Dangling branches accumulate, confuse future work, and risk accidental rebases or cherry-picks from stale refs. |
+| "The merge succeeded, so worktree cleanup is optional." | Leftover worktrees consume disk and can cause git lock conflicts on subsequent work items. |
+| "Skipping the final `gh pr view` check — the merge command returned success." | Command success and GitHub state can disagree (network issues, branch protection race); explicit verification is required. |
+
+## Red Flags
+
+- Worktree path is set in `state.json` but not removed after merge — cleanup was skipped.
+- Topic branch still exists on remote after a confirmed merge.
+- `cicd.md` updated with merge SHA but no post-merge validation commands or results recorded.
+- Merge strategy chosen without checking repo convention — defaults applied blindly.
+- `merge_iter` counter incremented but no conflict evidence or resolution recorded.
+
 ## Failure Protocol
 
 - If merge fails (branch protection, CI checks), do NOT force. Record blocker, stay in `approval-wait`.

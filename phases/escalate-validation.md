@@ -32,6 +32,23 @@ Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
 Per `${CLAUDE_PLUGIN_ROOT}/references/debugging-playbook.md`: if 3 fix attempts fail on the same root cause (same symptom, same area, three different patches that do not resolve it), the mental model is wrong. Stop fixing and escalate to human with evidence of all three attempts, what each tried, and why each failed. Do not consume additional budget on a fourth attempt.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "Let me retry one more time — it might be a flake." | The Three-Strike Rule exists for this: three attempts on the same root cause means the mental model is wrong, not the luck. |
+| "Escalation will slow the whole pipeline down." | A broken validation that loops indefinitely costs more than a clean escalation with evidence. |
+| "The test failure is in infrastructure, not my code." | Environment vs. code distinction is exactly what this phase must document — escalate with that classification, don't suppress it. |
+| "I'll mark it as a known issue and proceed." | Proceeding past a failing validation without escalation violates the gate — known issues must still be surfaced to the human. |
+
+## Red Flags
+
+- Same test failure appears across 3+ consecutive attempts with no change in approach or evidence of a different hypothesis.
+- Escalation triggered but `validation-results.md` contains no command output or exit codes — only narrative descriptions.
+- Iteration counts in `state.json` do not match the number of attempts documented in artifacts.
+- Escalation entry omits classification of the failure (code defect vs. test defect vs. environment defect).
+- Budget consumed on retries exceeds the cost of the original implementation phase.
+
 ## Failure Protocol
 
 - If `validation-results.md` is missing, record that fact and still escalate.

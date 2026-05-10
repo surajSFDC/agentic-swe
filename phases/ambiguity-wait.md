@@ -36,6 +36,20 @@ Disciplined Hypervisor — refuses to proceed under uncertainty, presents questi
 - Updated `ambiguity-report.md` with human answers recorded
 - Updated `feasibility.md` reflecting resolved constraints
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "I can infer the answer from context." | Inference is guessing with extra steps. If the requirement is ambiguous, ask — wrong assumptions compound through every downstream phase. |
+| "Asking will slow things down." | A wrong implementation that must be reworked costs more time than one clarification round. |
+| "The user probably means X." | "Probably" is a hedging word banned by the verification standard. If you cannot confirm, you do not know. |
+
+## Red Flags
+
+- Proceeding to feasibility without recording answers in `ambiguity-report.md`.
+- Ambiguity "resolved" by the agent choosing an interpretation without human input.
+- Human answers recorded but `feasibility.md` not updated to reflect them.
+
 ## Next State
 
 - `feasibility` — re-run feasibility with the new information (most common)

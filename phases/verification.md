@@ -39,6 +39,23 @@ Write `.worklogs/<id>/verification-results.md` following `${CLAUDE_PLUGIN_ROOT}/
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "The design looks correct on paper — no need to run commands." | Paper verification misses file-existence checks, schema drift, and stale references that only execution reveals. |
+| "Feasibility already validated this; verification is redundant." | Feasibility assesses viability; verification confirms the design artifacts are internally consistent and implementation-ready. |
+| "All seven checks are obviously passing." | Obvious checks still need recorded evidence; unrecorded passes are indistinguishable from skipped checks. |
+| "Minor inconsistencies can be fixed during implementation." | Planning debt compounds — an unresolved inconsistency in design becomes an ambiguous implementation that wastes review iterations. |
+
+## Red Flags
+
+- Verification passes all seven checks without running any commands or inspecting any repository files.
+- `verification-results.md` lists all checks as "pass" with identical one-line justifications.
+- Design references files or modules that do not exist in the repository, and verification does not flag this.
+- Acceptance criteria marked "testable" but no concrete test approach is described.
+- Verification completes in seconds on a multi-file design — insufficient depth for the scope.
+
 ## Failure Protocol
 
 - if planning artifacts are contradictory, return to design

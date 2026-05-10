@@ -53,6 +53,21 @@ When updating `state.json` for the transition out of `lean-track-check`, set `pi
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "This is clearly simple — lean track." | Familiarity with a problem space does not mean the implementation is simple. Check for hidden dependencies, test burden, and rollback difficulty. |
+| "Standard is good enough — rigorous is overkill." | If the task touches security, data migration, or public APIs, rigorous track catches issues that standard skips (design-review, code-review, permissions-check). |
+| "We can always upgrade the track later." | Track upgrades mid-pipeline waste work already done under the lighter track's assumptions. Get it right here. |
+
+## Red Flags
+
+- Verdict is "simple" but the task touches more than 3 modules or requires database schema changes.
+- No complexity score or rationale provided — just a bare verdict.
+- ATR recommendation disagrees with the heuristic and the disagreement is not documented.
+- Track set to lean for a task in a security-sensitive directory when policy rules require rigorous.
+
 ## Failure Protocol
 
 - if evidence is insufficient to decide, default to `complex` / `rigorous`

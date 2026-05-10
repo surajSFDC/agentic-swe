@@ -96,6 +96,25 @@ If ambiguity is blocking, also write `.worklogs/<id>/ambiguity-report.md` with:
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "I've seen this pattern before — no need for deep inspection." | Familiarity breeds blind spots. Prior experience with similar tasks is not evidence about this repo's constraints, conventions, or hidden coupling. |
+| "The scope is obviously small; feasibility is overhead." | Small-seeming tasks often hide migration implications, missing dependencies, or cross-cutting concerns that only surface during structured discovery. |
+| "The user already described the requirements clearly." | User descriptions convey intent, not executable requirements. Unspoken assumptions about error handling, edge cases, and integration boundaries are the norm. |
+| "We can figure out ambiguities during implementation." | Ambiguities discovered mid-implementation cause rework, scope creep, and design-level decisions made under time pressure with incomplete information. |
+| "Repo-scan is slow — I'll just look at the files I think matter." | Selective inspection confirms preconceptions. Repo-scan surfaces unexpected dependencies, test gaps, and tooling constraints that manual browsing misses. |
+
+## Red Flags
+
+- Feasibility artifact contains no evidence citations — only narrative claims about the codebase.
+- Complexity score is "low" but the task touches more than two modules or requires coordination across packages.
+- No ambiguity is identified despite vague acceptance criteria or missing error-handling requirements.
+- Subagent signals section is absent or lists "none" without justifying why the task needs no specialist input.
+- The recommended next state skips `ambiguity-wait` even though material questions remain unanswered.
+- Confidence ratings are all "high" with no rationale distinguishing evidence from assumption.
+
 ## Failure Protocol
 
 - if the task cannot be grounded in the repo, say so directly

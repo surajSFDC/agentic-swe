@@ -66,6 +66,23 @@ Record the assessment in `test-stubs.md` under an "Adequacy Assessment" section.
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "We'll add tests later once the feature stabilizes." | Deferred tests are forgotten tests; the test phase exists to define the verification surface before implementation ships. |
+| "This change is too simple to need test stubs." | Simple changes break production when untested; the stub ensures the regression path is explicit. |
+| "Existing tests already cover this area." | Existing coverage must be verified, not assumed — identify the specific tests and confirm they exercise the new behavior. |
+| "Manual testing is enough for this." | Manual checks are acceptable only when automation is infeasible; document the reason and the exact manual steps. |
+
+## Red Flags
+
+- Zero test stubs produced for a change that introduces new behavioral paths or modifies existing ones.
+- Adequacy assessment says `adequate` but no stubs reference the top-risk items from `design.md`.
+- Stubs exist but contain no assertions — they are placeholders without verification intent.
+- Phase 2 execution claims "all pass" with no captured command output or exit codes.
+- Test stubs cover only the happy path with no edge-case or error-path entries.
+
 ## Failure Protocol
 
 - if no automated test path exists, define manual checks and document why automation was not feasible

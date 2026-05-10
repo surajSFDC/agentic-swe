@@ -29,6 +29,23 @@ No new artifact — the required artifact (`review-feedback.md` or `permissions-
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "Escalation means I failed." | Escalation is a designed exit — it preserves budget and surfaces blockers that require human judgment. Suppressing it wastes iterations. |
+| "One more attempt might fix it." | If the budget is exhausted or the same root cause persists across iterations, another attempt is definitionally non-converging. |
+| "I'll escalate but skip the evidence summary." | An escalation without concrete evidence (exact finding, file, iteration history) forces the human to re-diagnose from scratch. |
+| "The issue is obvious, so I don't need to document what was tried." | Future sessions and other agents cannot learn from undocumented attempts — the audit trail is for them, not just for now. |
+
+## Red Flags
+
+- Escalation triggered but no concrete evidence of what blocked progress — only vague statements like "could not resolve."
+- `review-feedback.md` or `permissions-changes.md` missing at escalation time despite being required from the preceding state.
+- Loop counters show budget remaining but escalation was triggered anyway — over-eager escalation skips valid rework.
+- Escalation entry in `audit.log` lacks iteration counts or artifact references.
+- Same escalation pattern repeated across multiple work items without a playbook entry or systemic fix.
+
 ## Failure Protocol
 
 - If the triggering artifact is missing, record that fact and still escalate with whatever evidence is available.

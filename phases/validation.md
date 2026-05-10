@@ -55,6 +55,37 @@ Write `.worklogs/<id>/validation-results.md` following `${CLAUDE_PLUGIN_ROOT}/te
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Doubt Cycle (Optional)
+
+When a validation claim **cannot be trivially verified** by test output alone (e.g. "this is safe under concurrent access", "performance meets SLA"), invoke a Doubt-Driven Verification cycle per `${CLAUDE_PLUGIN_ROOT}/references/doubt-driven-verification.md`:
+
+1. Name the CLAIM (the validation assertion under scrutiny).
+2. EXTRACT the claim + evidence artifact + contract.
+3. DOUBT — spawn a fresh-context adversarial reviewer using `${CLAUDE_PLUGIN_ROOT}/agents/prompts/adversarial-reviewer-prompt.md`. Do NOT pass the CLAIM.
+4. RECONCILE findings (contract-misread / actionable / trade-off / noise).
+5. STOP after trivial findings, 3 cycles, or user override.
+
+Increment `state.json.counters.doubt_cycles` for each cycle.
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "All the logic looks correct — validation is a formality." | Validation exists because narrative confidence is unreliable. Code that "looks correct" fails in production when assumptions about state, input, or environment are wrong. |
+| "That test failure is flaky — I've seen it before." | Flaky tests require investigation, not dismissal. A failure classified as flaky without evidence of the flake mechanism is an uninvestigated failure. |
+| "The build passed, so the change is safe to ship." | Build success proves compilation, not correctness. Type checks and lint passes do not exercise runtime behavior, integration boundaries, or data-dependent paths. |
+| "We already tested this during implementation." | Implementation-time tests run in a developer context. Validation re-runs in an integrated context to catch environment assumptions, missing configuration, and interaction effects. |
+| "The lint warnings are pre-existing — not our problem." | Pre-existing warnings mixed with new changes obscure signal. If the change touches a file with warnings, determine whether the change worsened them. |
+
+## Red Flags
+
+- Validation artifact classifies result as "approved" but lists commands that were not actually run.
+- Test failures are classified as "flaky" without citing prior flake evidence or reproduction attempts.
+- The validation ran only a subset of the test suite without justifying why unrelated suites were excluded.
+- No build or typecheck command appears in the validation evidence despite code changes.
+- Classification is "blocked" but no specific blocker (secret, environment, infrastructure) is identified.
+- Capability gaps from `implementation.md` are not mentioned in the validation assessment.
+
 ## Failure Protocol
 
 - if execution evidence is weak, say so

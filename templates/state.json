@@ -30,7 +30,8 @@
     "approval_iter": 0,
     "self_review_iter": 0,
     "test_adequacy_iter": 0,
-    "subagent_spawns": 0
+    "subagent_spawns": 0,
+    "doubt_cycles": 0
   },
   "ambiguity": {
     "detected": false,
@@ -101,8 +102,11 @@
     "subagent_mode": null,
     "subagent_selections": [],
     "tdd_mode": false,
-    "worktree_path": null
+    "worktree_path": null,
+    "pair_mode": false,
+    "track_recommendation": null
   },
+  "linked_repos": [],
   "convergence": {
     "last_failure_category": null,
     "consecutive_same_category": 0

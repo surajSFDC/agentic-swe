@@ -48,6 +48,23 @@ Patient Hypervisor — presents the work clearly, waits for explicit human decis
 - `approval-feedback.md` — human feedback recorded (when changes requested)
 - Updated `state.json` approval fields
 
+## Common Rationalizations
+
+| Rationalization | Why it's wrong |
+|---|---|
+| "Approved means ship it — no need to read the feedback closely." | Approvals often include non-blocking suggestions; ignoring them degrades quality and erodes reviewer trust. |
+| "The reviewer didn't specify exact changes, so I'll interpret loosely." | Ambiguous feedback must be clarified, not guessed at — record your interpretation in `approval-feedback.md` and confirm. |
+| "This is the third iteration; I'll just push something to move on." | Iteration pressure does not waive quality — if iteration 3 still has issues, escalate rather than shipping known defects. |
+| "Changes requested are minor — I'll fix and skip re-review." | Every rework cycle must go through the Review Response Protocol; skipping re-review breaks the audit trail. |
+
+## Red Flags
+
+- `changes_requested` is true in `state.json` but no `approval-feedback.md` was produced.
+- Rework committed without verifying each requested change against codebase and tests per the Review Response Protocol.
+- `approval_iter` exceeds 3 without escalation.
+- PR approved but CI status in `cicd.md` shows failures or is not re-checked after the latest push.
+- Human feedback recorded but no corresponding changes visible in the implementation diff.
+
 ## Next State
 
 - `completed` — PR approved, proceed to merge

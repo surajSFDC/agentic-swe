@@ -43,6 +43,24 @@ Update `state.json.git.pr_url` with the real URL.
 
 Follow `${CLAUDE_PLUGIN_ROOT}/templates/artifact-format.md` for structure. Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "CI will catch anything we missed — let's merge quickly." | CI is a safety net, not a substitute for review. Merging before CI completes defeats the purpose of the pipeline gate. |
+| "The PR description doesn't need detail — reviewers can read the code." | Reviewers without context waste review cycles re-deriving intent. A clear description with scope, motivation, and test evidence reduces review latency and error. |
+| "We already rebased recently — no need to sync again before PR." | Stale branches create merge conflicts and CI failures that delay the review cycle. Sync immediately before PR creation. |
+| "Draft PR is unnecessary overhead — the work is ready." | Draft PRs signal visibility without merge pressure. Skipping draft when work needs discussion leads to premature approval requests. |
+| "The validation passed, so the PR is straightforward." | Validation confirms local correctness. PR creation must also confirm branch sync, CI pipeline state, and that the PR body accurately reflects what changed. |
+
+## Red Flags
+
+- PR was created without invoking `/ci-status` afterward to confirm pipeline state.
+- `pr-link.txt` contains a URL but no CI evidence exists in `cicd.md`.
+- The PR body is a copy of the commit message with no additional context, scope summary, or test evidence.
+- The branch was not rebased onto the base branch before PR creation.
+- PR targets an incorrect base branch that does not match the workflow rules.
+
 ## Failure Protocol
 
 - if PR creation fails after push, preserve the pushed branch and record the exact manual next step

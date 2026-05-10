@@ -81,10 +81,41 @@ Following `${CLAUDE_PLUGIN_ROOT}/templates/artifact-format.md`, include:
 
 Apply `${CLAUDE_PLUGIN_ROOT}/templates/evidence-standard.md` throughout.
 
+## Doubt Cycle (Optional)
+
+Before approving code that **crosses module boundaries**, has **irreversible effects**, or **asserts properties the type system cannot verify**, invoke a Doubt-Driven Verification cycle per `${CLAUDE_PLUGIN_ROOT}/references/doubt-driven-verification.md`:
+
+1. Name the CLAIM (the correctness assertion under scrutiny).
+2. EXTRACT the diff or function + the design-spec contract.
+3. DOUBT — spawn a fresh-context adversarial reviewer using `${CLAUDE_PLUGIN_ROOT}/agents/prompts/adversarial-reviewer-prompt.md`. Do NOT pass the CLAIM.
+4. RECONCILE findings (contract-misread / actionable / trade-off / noise).
+5. STOP after trivial findings, 3 cycles, or user override.
+
+Increment `state.json.counters.doubt_cycles` for each cycle. Anti-doubt-theater: if 2+ cycles produce substantive findings but zero classified actionable, stop and escalate.
+
 ## Failure Protocol
 
 - do not hide weak evidence behind "looks good"
 - if a finding depends on a specific input or state, describe it concretely
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "The author clearly thought about this — I'll trust their judgment." | Deference is not review. The reviewer's job is to verify claims against evidence, not to assume the author's reasoning was complete. |
+| "It's a small change — no need to check edge cases." | Small changes in critical paths cause disproportionate damage. Size does not correlate with risk; blast radius does. |
+| "The tests pass, so the code is correct." | Passing tests prove the tested paths work. They say nothing about untested branches, error handling, or invariants the test suite does not exercise. |
+| "I'll note this as non-blocking — it can be fixed later." | Non-blocking findings that affect correctness or safety rarely get fixed post-merge. If it matters enough to note, classify its severity honestly. |
+| "The self-review already caught the major issues." | Self-review operates with the author's mental model. Independent review exists precisely to find what the author's perspective cannot. |
+
+## Red Flags
+
+- Review artifact scores all dimensions 2+ but provides no evidence citations for any score.
+- Rubric scores and verdict were decided before `/diff-review` was invoked.
+- Specialist reviewers returned high-severity findings that are acknowledged but not reflected in the verdict rationale.
+- The review approves code that deviates from `design.md` without documenting why the deviation is acceptable.
+- Reflection log shows the same root-cause category in consecutive entries, but the review does not flag the pattern.
+- Review feedback consists entirely of style or formatting suggestions with no correctness or safety analysis.
 
 ## Review Response Protocol
 
