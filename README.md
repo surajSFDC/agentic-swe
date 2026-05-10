@@ -1,44 +1,30 @@
 # Agentic SWE
 
+[![CI](https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![Version](https://img.shields.io/badge/version-3.1.1-orange.svg)](CHANGELOG.md)
+[![Agents](https://img.shields.io/badge/subagents-135%2B-purple.svg)](#subagent-catalog)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-informational.svg)](https://agentic-swe.github.io/agentic-swe-site/)
+
 An autonomous software engineering pipeline — 135+ specialized agents, governed by a state machine, running inside your AI coding IDE.
 
-```
-    ┌───────────────────────────────────────────────────────────────────────────────┐
-    │                          /work "your task here"                                │
-    └───────────────────────────────────────┬───────────────────────────────────────┘
-                                            │
-                                            ▼
-                                    ┌──────────────┐
-                                    │  feasibility │
-                                    └──────┬───────┘
-                                           │
-                                    ┌──────▼───────┐
-                                    │  track check │
-                                    └──┬───┬───┬───┘
-                                       │   │   │
-              ┌────────────────────────┘   │   └────────────────────────┐
-              ▼                            ▼                            ▼
-    ╔═══════════════════╗      ╔════════════════════╗      ╔═════════════════════════╗
-    ║    LEAN TRACK     ║      ║   STANDARD TRACK   ║      ║     RIGOROUS TRACK      ║
-    ║  (simple tasks)   ║      ║  (medium effort)   ║      ║  (complex / high-risk)  ║
-    ╠═══════════════════╣      ╠════════════════════╣      ╠═════════════════════════╣
-    ║ implement + review║      ║ design             ║      ║ design                  ║
-    ║ validate           ║      ║ verification       ║      ║ design-review (panel)   ║
-    ║ PR                ║      ║ test-strategy      ║      ║ verification            ║
-    ╚════════╤══════════╝      ║ implementation     ║      ║ test-strategy           ║
-             │                 ║ self-review        ║      ║ implementation          ║
-             │                 ║ validate → PR      ║      ║ self-review             ║
-             │                 ╚═════════╤══════════╝      ║ code-review             ║
-             │                           │                 ║ permissions-check       ║
-             │                           │                 ║ validate → PR           ║
-             │                           │                 ╚═══════════╤═════════════╝
-             └───────────────────────────┼─────────────────────────────┘
-                                         ▼
-                                 ┌───────────────┐
-                                 │ approval-wait │  ← human gate
-                                 └───────┬───────┘
-                                         ▼
-                                    completed ✓
+```mermaid
+flowchart TD
+    start["/work &#34;your task&#34;"] --> feasibility["Feasibility Analysis"]
+    feasibility --> trackCheck{"Track Check"}
+
+    trackCheck -- "simple" --> lean["<b>LEAN TRACK</b><br/>implement + review<br/>validate<br/>PR"]
+    trackCheck -- "medium" --> standard["<b>STANDARD TRACK</b><br/>design → verification<br/>test-strategy → implementation<br/>self-review → validate → PR"]
+    trackCheck -- "complex" --> rigorous["<b>RIGOROUS TRACK</b><br/>design → design-review (panel)<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validate → PR"]
+
+    lean --> approval
+    standard --> approval
+    rigorous --> approval
+
+    approval{{"🛑 approval-wait<br/>(human gate)"}}
+    approval -- "approved" --> done(["completed ✓"])
+    approval -- "changes requested" --> rework["Back to implementation"]
 ```
 
 ---
@@ -139,6 +125,20 @@ Uses `gemini-extension.json` for native extension loading. Context provided via 
 
 135+ agents across 10 categories — auto-selected during pipeline execution based on detected languages, frameworks, and domains. Agents delegate to other agents when they need deeper expertise.
 
+```mermaid
+pie title Subagent Distribution
+    "Language Specialists" : 29
+    "Infrastructure" : 16
+    "Quality & Security" : 14
+    "Data & AI" : 13
+    "Developer Experience" : 13
+    "Specialized Domains" : 12
+    "Business & Product" : 11
+    "Core Development" : 10
+    "Meta & Orchestration" : 10
+    "Research & Analysis" : 7
+```
+
 | Category | Agents | Typical use |
 |----------|--------|-------------|
 | **Core Development** | `api-designer` · `backend-developer` · `fullstack-developer` + 7 more | Feature architecture and cross-layer implementation |
@@ -166,27 +166,33 @@ Manual invocation:
 
 The pipeline is a **governed state machine** — not free-form prompting. Every task moves through explicit phases with evidence gates, budget controls, and human checkpoints.
 
+```mermaid
+block-beta
+    columns 1
+    block:worklogs["📂 .worklogs/&lt;id&gt;/"]
+        columns 3
+        stateJson["state.json<br/>current_state · track · budgets"]
+        progressMd["progress.md<br/>human-readable timeline"]
+        auditLog["audit.log<br/>append-only trail"]
+        feasibilityMd["feasibility.md"]
+        designMd["design.md"]
+        implMd["implementation.md"]
+        validationMd["validation-results.md"]
+        reviewMd["review-pass.md"]
+        prLink["pr-link.txt"]
+    end
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  .worklogs/<id>/                                             │
-│                                                              │
-│  state.json        ← current_state, pipeline.track, budgets │
-│  progress.md       ← human-readable timeline                │
-│  audit.log         ← append-only, actor-attributed trail    │
-│  feasibility.md    ← phase artifact (one per state)         │
-│  design.md         │                                        │
-│  implementation.md │                                        │
-│  validation-results.md                                      │
-│  ...                                                        │
-└──────────────────────────────────────────────────────────────┘
-```
+
+> Every phase writes artifacts here. `state.json` is the single source of truth — the pipeline never infers progress from chat history.
 
 **Design principles:**
 
-1. **State over memory** — The pipeline never infers progress from chat history. `state.json` is the single source of truth for what happened and what comes next.
-2. **Evidence over narrative** — Every phase produces artifacts with citations to repo output, commands, or files. "Seems right" is never sufficient.
-3. **Budget-aware execution** — Iteration caps, cost tracking, and stall detection prevent runaway loops. The optional work engine (`scripts/work-engine.cjs`) enforces the same rules in CI.
-4. **Human gates at high-stakes moments** — Ambiguity stops work (`ambiguity-wait`); PRs require explicit approval (`approval-wait`); failures escalate rather than retry silently.
+| Principle | What it means |
+|-----------|---------------|
+| **State over memory** | `state.json` tracks progress, not chat context. Resume anytime, from any session. |
+| **Evidence over narrative** | Phase artifacts cite repo output, commands, and files. "Seems right" is never sufficient. |
+| **Budget-aware execution** | Iteration caps, cost tracking, and stall detection prevent runaway loops. The work engine enforces the same rules in CI. |
+| **Human gates at high-stakes moments** | Ambiguity stops work; PRs require explicit approval; failures escalate rather than retry silently. |
 
 ---
 
@@ -213,6 +219,45 @@ agentic-swe/
 ├── AGENTS.md           # Codex/platform compatibility shim
 ├── GEMINI.md           # Gemini CLI context
 └── test/               # Unit, integration, smoke, and LLM test harness
+```
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph hypervisor ["Hypervisor (CLAUDE.md policy)"]
+        direction TB
+        stateMachine["State Machine<br/>transitions · gates · budgets"]
+        opLoop["Operating Loop<br/>/check budget → phase → /check artifacts → transition"]
+    end
+
+    subgraph coreAgents ["Core Agents"]
+        dev["developer-agent"]
+        gitOps["git-operations-agent"]
+        prMgr["pr-manager-agent"]
+    end
+
+    subgraph designPanel ["Design Panel (parallel)"]
+        arch["architect-reviewer"]
+        sec["security-reviewer"]
+        adv["adversarial-reviewer"]
+    end
+
+    subgraph catalog ["Subagent Catalog (135+)"]
+        direction LR
+        langSpec["Language<br/>Specialists"]
+        infraSpec["Infrastructure"]
+        qaSpec["Quality &<br/>Security"]
+        dataSpec["Data & AI"]
+        moreSpec["... 6 more<br/>categories"]
+    end
+
+    hypervisor --> coreAgents
+    hypervisor --> designPanel
+    coreAgents -.-> catalog
+    designPanel -.-> catalog
 ```
 
 ---
