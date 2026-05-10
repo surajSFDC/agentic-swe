@@ -10,21 +10,44 @@
 An autonomous software engineering pipeline — 135+ specialized agents, governed by a state machine, running inside your AI coding IDE.
 
 ```mermaid
-flowchart TD
-    start["/work &#34;your task&#34;"] --> feasibility["Feasibility Analysis"]
-    feasibility --> trackCheck{"Track Check"}
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#3730a3', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fef3c7', 'lineColor': '#6366f1', 'textColor': '#1e293b', 'fontSize': '14px' }}}%%
 
-    trackCheck -- "simple" --> lean["<b>LEAN TRACK</b><br/>implement + review<br/>validate<br/>PR"]
-    trackCheck -- "medium" --> standard["<b>STANDARD TRACK</b><br/>design → verification<br/>test-strategy → implementation<br/>self-review → validate → PR"]
-    trackCheck -- "complex" --> rigorous["<b>RIGOROUS TRACK</b><br/>design → design-review (panel)<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validate → PR"]
+flowchart TD
+    start(["/work 'your task here'"])
+    start --> feasibility
+
+    feasibility["🔍 Feasibility Analysis"]
+    feasibility --> trackCheck
+
+    trackCheck{"🔀 Track Check<br/>complexity · risk · scope"}
+
+    trackCheck -- "simple" ----> lean
+    trackCheck -- "medium" ----> standard
+    trackCheck -- "complex" ----> rigorous
+
+    subgraph leanGroup [" "]
+        lean["🟢 <b>LEAN TRACK</b><br/><br/>implement + review<br/>validate<br/>PR"]
+    end
+
+    subgraph standardGroup [" "]
+        standard["🟡 <b>STANDARD TRACK</b><br/><br/>design → verification<br/>test-strategy → implementation<br/>self-review → validate → PR"]
+    end
+
+    subgraph rigorousGroup [" "]
+        rigorous["🔴 <b>RIGOROUS TRACK</b><br/><br/>design → design-review · panel<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validate → PR"]
+    end
 
     lean --> approval
     standard --> approval
     rigorous --> approval
 
-    approval{{"🛑 approval-wait<br/>(human gate)"}}
-    approval -- "approved" --> done(["completed ✓"])
-    approval -- "changes requested" --> rework["Back to implementation"]
+    approval{{"⏸️ approval-wait · human gate"}}
+
+    approval -- "✅ approved" --> done
+    approval -- "🔄 changes requested" --> rework
+
+    done(["✓ completed"])
+    rework["↩ back to implementation"]
 ```
 
 ---
@@ -126,17 +149,19 @@ Uses `gemini-extension.json` for native extension loading. Context provided via 
 135+ agents across 10 categories — auto-selected during pipeline execution based on detected languages, frameworks, and domains. Agents delegate to other agents when they need deeper expertise.
 
 ```mermaid
-pie title Subagent Distribution
-    "Language Specialists" : 29
-    "Infrastructure" : 16
-    "Quality & Security" : 14
-    "Data & AI" : 13
-    "Developer Experience" : 13
-    "Specialized Domains" : 12
-    "Business & Product" : 11
-    "Core Development" : 10
-    "Meta & Orchestration" : 10
-    "Research & Analysis" : 7
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'pieStrokeColor': '#ffffff', 'pieStrokeWidth': '2px', 'pieSectionTextColor': '#ffffff', 'pieLegendTextColor': '#1e293b', 'pieLegendTextSize': '14px', 'pie1': '#4f46e5', 'pie2': '#7c3aed', 'pie3': '#2563eb', 'pie4': '#0891b2', 'pie5': '#059669', 'pie6': '#65a30d', 'pie7': '#ca8a04', 'pie8': '#ea580c', 'pie9': '#dc2626', 'pie10': '#db2777' }}}%%
+
+pie showData title Subagent Distribution (135+)
+    "Language Specialists"  : 29
+    "Infrastructure"        : 16
+    "Quality & Security"    : 14
+    "Data & AI"             : 13
+    "Developer Experience"  : 13
+    "Specialized Domains"   : 12
+    "Business & Product"    : 11
+    "Core Development"      : 10
+    "Meta & Orchestration"  : 10
+    "Research & Analysis"   : 7
 ```
 
 | Category | Agents | Typical use |
@@ -167,19 +192,30 @@ Manual invocation:
 The pipeline is a **governed state machine** — not free-form prompting. Every task moves through explicit phases with evidence gates, budget controls, and human checkpoints.
 
 ```mermaid
-block-beta
-    columns 1
-    block:worklogs["📂 .worklogs/&lt;id&gt;/"]
-        columns 3
-        stateJson["state.json<br/>current_state · track · budgets"]
-        progressMd["progress.md<br/>human-readable timeline"]
-        auditLog["audit.log<br/>append-only trail"]
-        feasibilityMd["feasibility.md"]
-        designMd["design.md"]
-        implMd["implementation.md"]
-        validationMd["validation-results.md"]
-        reviewMd["review-pass.md"]
-        prLink["pr-link.txt"]
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#3730a3', 'secondaryColor': '#ede9fe', 'lineColor': '#6366f1', 'textColor': '#1e293b', 'fontSize': '13px' }}}%%
+
+flowchart LR
+    subgraph worklogsDir ["📂 .worklogs / work-id /"]
+        direction TB
+
+        subgraph coreState ["Core State"]
+            direction LR
+            sj["📋 state.json<br/>current_state · track · budgets"]
+            pm["📝 progress.md<br/>human-readable timeline"]
+            al["📜 audit.log<br/>append-only trail"]
+        end
+
+        subgraph artifacts ["Phase Artifacts"]
+            direction LR
+            f["feasibility.md"]
+            d["design.md"]
+            i["implementation.md"]
+            v["validation-results.md"]
+            r["review-pass.md"]
+            p["pr-link.txt"]
+        end
+
+        coreState ~~~ artifacts
     end
 ```
 
@@ -226,38 +262,43 @@ agentic-swe/
 ## Architecture
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#3730a3', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fef3c7', 'lineColor': '#6366f1', 'textColor': '#1e293b', 'fontSize': '14px' }}}%%
+
 flowchart TB
-    subgraph hypervisor ["Hypervisor (CLAUDE.md policy)"]
+    subgraph hypervisor ["🧠 Hypervisor · CLAUDE.md policy"]
         direction TB
         stateMachine["State Machine<br/>transitions · gates · budgets"]
         opLoop["Operating Loop<br/>/check budget → phase → /check artifacts → transition"]
+        stateMachine --- opLoop
     end
 
-    subgraph coreAgents ["Core Agents"]
-        dev["developer-agent"]
-        gitOps["git-operations-agent"]
-        prMgr["pr-manager-agent"]
-    end
-
-    subgraph designPanel ["Design Panel (parallel)"]
-        arch["architect-reviewer"]
-        sec["security-reviewer"]
-        adv["adversarial-reviewer"]
-    end
-
-    subgraph catalog ["Subagent Catalog (135+)"]
+    subgraph coreAgents ["⚙️ Core Agents"]
         direction LR
-        langSpec["Language<br/>Specialists"]
-        infraSpec["Infrastructure"]
-        qaSpec["Quality &<br/>Security"]
-        dataSpec["Data & AI"]
-        moreSpec["... 6 more<br/>categories"]
+        dev["developer-agent<br/>implementation"]
+        gitOps["git-operations-agent<br/>branches · sync"]
+        prMgr["pr-manager-agent<br/>PR lifecycle"]
     end
 
-    hypervisor --> coreAgents
-    hypervisor --> designPanel
-    coreAgents -.-> catalog
-    designPanel -.-> catalog
+    subgraph designPanel ["🔎 Design Panel · parallel review"]
+        direction LR
+        arch["architect<br/>reviewer"]
+        sec["security<br/>reviewer"]
+        adv["adversarial<br/>reviewer"]
+    end
+
+    subgraph catalog ["📦 Subagent Catalog · 135+ specialists"]
+        direction LR
+        langSpec["Language<br/>Specialists · 29"]
+        infraSpec["Infrastructure<br/>· 16"]
+        qaSpec["Quality &<br/>Security · 14"]
+        dataSpec["Data &<br/>AI · 13"]
+        moreSpec["+ 6 more<br/>categories"]
+    end
+
+    hypervisor ==> coreAgents
+    hypervisor ==> designPanel
+    coreAgents -.->|"auto-select"| catalog
+    designPanel -.->|"consult"| catalog
 ```
 
 ---
