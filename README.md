@@ -97,7 +97,7 @@ agentic-swe path
 # claude --plugin-dir "$(agentic-swe path)"
 ```
 
-Maintainers: **`docs/PUBLISHING.md`**.
+Maintainers: **`docs/PUBLISHING.md`** — **First time on npm:** create the **`@agentic-swe`** organization on the registry before **`npm publish`** ([details](docs/PUBLISHING.md#first-time-on-npm-create-the-scope)).
 
 </details>
 

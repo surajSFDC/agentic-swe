@@ -4,20 +4,22 @@ Pipeline-aware benchmark for autonomous software engineering agents.
 
 ## Overview
 
-Unlike SWE-bench (which measures one-shot code generation), AGENTIC_SWE_BENCH scores the **full engineering pipeline**: feasibility, design, implementation, review, validation, and governance. Submissions are conformant OWAI worklogs.
+Unlike SWE-bench (which measures one-shot code generation), AGENTIC_SWE_BENCH scores the **full engineering pipeline**: feasibility, design, implementation, review, validation, and governance. Submissions are conformant **OWAI** (Open Work-item Interchange) worklogs — see **`docs/specs/owai-1.0.md`** and **`scripts/owai-conformance.cjs`** for L1/L2/L3 levels; the bench runner targets validation consistent with **L3**-style completeness where implemented.
+
+This scaffold sits alongside the broader **#1 Moves** capabilities (Doubt-Driven Verification, cross-model panel, Policy-as-Code, replayable snapshots, adaptive track routing, etc.). See **`docs/capabilities-overview.md`** for the full tier map. Bench scoring dimensions below are chosen so runs stress **gate discipline**, **budget honesty**, and **multi-model review** — the same pressures the production pipeline encodes.
 
 ## Scoring Dimensions
 
 | Dimension | Weight | What's Measured |
-|---|---|---|
+|-----------|-------:|-----------------|
 | Task pass rate | 40% | Does the submitted code pass the task's acceptance tests? |
-| Cost efficiency | 20% | Total API cost (from `state.json.budget.cost_used`) |
-| Cross-model agreement | 20% | Did cross-model review surface issues that single-model missed? |
-| Gate-respect score | 20% | Were human gates respected? Were budgets honored? Were transitions valid? |
+| Cost efficiency | 20% | Total API cost (from **`state.json`** **`budget.cost_used`**) |
+| Cross-model agreement | 20% | Did cross-model review surface issues that a single model missed? (Aligns with **`agents/panel/cross-model-reviewer.md`** and **`references/cross-model-escalation.md`**.) |
+| Gate-respect score | 20% | Human gates respected? Budgets honored? Transitions valid? (Aligns with **`/check`** semantics, Policy-as-Code where present, and DDV/review loops.) |
 
 ## Task Format
 
-Each task in `bench/tasks/` is a directory:
+Each task in **`bench/tasks/`** is a directory:
 
 ```
 tasks/<task-id>/
@@ -34,17 +36,28 @@ node scripts/bench/run.cjs [--task <id>] [--all] [--output <path>]
 ```
 
 The runner:
+
 1. Copies the task's repo to a temp directory
 2. Initializes a work item via the pipeline
 3. Executes the pipeline (requires an LLM API key)
-4. Validates the resulting worklog against OWAI L3
+4. Validates the resulting worklog against OWAI expectations (see **`schemas/owai/`**)
 5. Runs acceptance tests
 6. Scores across all dimensions
 7. Outputs a scorecard JSON
 
 ## Contributing Tasks
 
-See `bench/tasks/TEMPLATE.md` for the task format. Tasks should be:
-- Self-contained (no external dependencies)
+See **`bench/tasks/TEMPLATE.md`** for the task format. Tasks should be:
+
+- Self-contained (no undeclared external dependencies)
 - Deterministically scorable
 - Representative of real engineering work
+
+## References
+
+| Topic | Location |
+|-------|----------|
+| OWAI spec | **`docs/specs/owai-1.0.md`** |
+| Conformance runner | **`scripts/owai-conformance.cjs`** |
+| Capability tiers (#1 Moves) | **`docs/capabilities-overview.md`** |
+| Bench entrypoint | **`scripts/bench/run.cjs`** |
