@@ -1,227 +1,260 @@
-# Agentic SWE
+<h1 align="center">Agentic SWE</h1>
 
-Autonomous software engineering pipeline for Claude Code with 135+ specialized subagents.
+<p align="center"><strong>Hypervisor policy · Pure markdown · No cloud runtime</strong></p>
 
-Claude Code becomes a full SWE pipeline—from task analysis through implementation, review, and PR creation—driven primarily by **markdown** (policies, phase prompts, agent definitions, templates). The pack also ships an **optional Node work engine** (`scripts/work-engine.cjs`) so **CI** can enforce the same budgets, transitions, and artifact rules as **`/check`** without relying on chat alone.
+<p align="center">
+  <a href="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml"><img src="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg" alt="Node" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.1.1-orange.svg" alt="Version" /></a>
+  <a href="#subagents"><img src="https://img.shields.io/badge/subagents-135%2B-purple.svg" alt="Agents" /></a>
+  <a href="https://agentic-swe.github.io/agentic-swe-site/"><img src="https://img.shields.io/badge/docs-site-informational.svg" alt="Docs site" /></a>
+</p>
 
-## Quick Start
+**Policy-driven autonomous engineering:** a **state-machine pipeline** (lean / standard / rigorous), **human gates**, **evidence-backed artifacts** in **`.worklogs/<id>/`**, and **135+ specialists** chosen from repo signals. Everything is **markdown in your repo** — not a hosted runner.
 
-**Claude Code (recommended):** add this repository as a **plugin marketplace**, install **`agentic-swe@agentic-swe-catalog`**, then open your target project in Claude Code. Pipeline commands, phases, and agents resolve from **`${CLAUDE_PLUGIN_ROOT}/`** (the plugin root). Per-work state lives under **`.worklogs/<id>/`** in your project; **`/install`** can walk you through merging root **`CLAUDE.md`** and optional **`.gitignore`** for worklogs.
+**Docs:** [agentic-swe.github.io/agentic-swe-site](https://agentic-swe.github.io/agentic-swe-site/)
+
+---
+
+## Pipeline at a glance
+
+After **feasibility**, **`lean-track-check`** sets **`pipeline.track`** in **`state.json`**. Tracks merge into **PR creation** → **`approval-wait`** → **completed**.
+
+```mermaid
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
+flowchart TD
+    start(["/work — start or resume"])
+    feasibility["feasibility"]
+    check{"lean-track-check<br/>sets pipeline.track"}
+    lean["Lean track<br/>lean-track-implementation<br/>validation · pr-creation"]
+    std["Standard track<br/>design → verification → test-strategy<br/>implementation → self-review<br/>validation · pr-creation"]
+    rig["Rigorous track<br/>design → design-review<br/>verification → test-strategy<br/>implementation → self-review<br/>code-review → permissions-check<br/>validation · pr-creation"]
+    gate{{"approval-wait<br/>human gate"}}
+    done(["completed"])
+
+    start --> feasibility --> check
+    check -->|lean| lean
+    check -->|standard| std
+    check -->|rigorous| rig
+    lean --> gate
+    std --> gate
+    rig --> gate
+    gate --> done
+
+    classDef accent fill:#1f6feb,stroke:#58a6ff,color:#ffffff,stroke-width:2px
+    classDef step fill:#21262d,stroke:#30363d,color:#e6edf3,stroke-width:1px
+    classDef branch fill:#21262d,stroke:#388bfd,color:#c9d1d9,stroke-width:2px
+    classDef decide fill:#21262d,stroke:#d29922,color:#ffdfb8,stroke-width:2px
+    classDef gateNode fill:#21262d,stroke:#a371f7,color:#e6edf3,stroke-width:2px
+
+    class start,done accent
+    class feasibility step
+    class check decide
+    class lean,std,rig branch
+    class gate gateNode
+```
+
+Canonical transitions: **`state-machine.json`** and the fenced graph in **`CLAUDE.md`** (checked in CI).
+
+---
+
+## Install & first run
+
+<details>
+<summary><strong>Claude Code</strong> (recommended)</summary>
 
 ```text
 /plugin marketplace add agentic-swe/agentic-swe
 /plugin install agentic-swe@agentic-swe-catalog
 ```
 
-**Local development** of the pack: run Claude Code with **`claude --plugin-dir /path/to/this/repo`** from your target project (or enable the plugin from that directory).
-
-Then start a task:
+Local pack: `claude --plugin-dir /path/to/agentic-swe`
 
 ```text
 /work Add retry logic to the API client
 ```
 
-See the [installation guide](https://agentic-swe.github.io/agentic-swe-site/docs/installation) and the [Claude Code plugin](https://agentic-swe.github.io/agentic-swe-site/docs/claude-code-plugin) for details, upgrades, and **optional org knowledge files** (`AGENTS.md`, `docs/agentic-swe/`).
+Use **`/install`** once to merge **`CLAUDE.md`** and optional **`.gitignore`** for `.worklogs/`.
 
-**First success in ~15 minutes:** follow the [Golden path](https://agentic-swe.github.io/agentic-swe-site/docs/golden-path) (install → `/work` → `.worklogs/` → approval gate). **Socialize / pitch:** [Who this is for](https://agentic-swe.github.io/agentic-swe-site/docs/adoption-one-pager) and [Host support tiers](https://agentic-swe.github.io/agentic-swe-site/docs/host-support-tiers) (OpenCode + Antigravity Tier B vs Claude Code reference). **Tiny demo repo:** [`examples/golden-path-demo/`](examples/golden-path-demo/) (scratch target + `DEMO_SCRIPT.md`).
+→ [Installation](https://agentic-swe.github.io/agentic-swe-site/docs/installation) · [Claude Code plugin](https://agentic-swe.github.io/agentic-swe-site/docs/claude-code-plugin)
 
-**What this is:** a **markdown workflow pack** that runs inside **Claude Code** on your repo (phases, gates, evidence). It is **not** a hosted async coding agent or cloud sandbox—that is a different class of product (e.g. remote harnesses with triggers and isolated runners).
+</details>
 
-## Product
+<details>
+<summary><strong>Cursor</strong></summary>
 
-Agentic SWE is a **workflow pack for Claude Code** (markdown policies, phases, and agents)—not a hosted cloud runtime. More on the product and licensing:
-
-**Public site:** **[GitHub Pages](https://agentic-swe.github.io/agentic-swe-site/)**
-
-| Topic | Docs |
-|-------|------|
-| First run (~15 min) | [Golden path](https://agentic-swe.github.io/agentic-swe-site/docs/golden-path) |
-| Who it is for (short matrix) | [Adoption one-pager](https://agentic-swe.github.io/agentic-swe-site/docs/adoption-one-pager) |
-| Multi-IDE scope (Tier A–D) | [Host support tiers](https://agentic-swe.github.io/agentic-swe-site/docs/host-support-tiers) |
-| Who it is for and hero messaging | [Product positioning](https://agentic-swe.github.io/agentic-swe-site/docs/product-positioning) |
-| MIT and commercial strategy | [Licensing](https://agentic-swe.github.io/agentic-swe-site/docs/licensing) |
-| Distribution and hosting | [Distribution](https://agentic-swe.github.io/agentic-swe-site/docs/distribution) |
-| Troubleshooting | [Troubleshooting](https://agentic-swe.github.io/agentic-swe-site/docs/troubleshooting) |
-| `/check` quick reference | [Check commands](https://agentic-swe.github.io/agentic-swe-site/docs/check-commands) |
-| Catalog lint / router / CI | [Catalog routing](https://agentic-swe.github.io/agentic-swe-site/docs/catalog-routing) |
-
-**Marketing site (source):** the Vite + React app lives in **[`agentic-swe/agentic-swe-site`](https://github.com/agentic-swe/agentic-swe-site)** (sibling repository). Long-form docs are **`src/content/docs/*.md`** there (rendered at **`/docs/*`** on Pages). Pushes to **`main`** in that repo run **GitHub Actions** ([`pages.yml`](https://github.com/agentic-swe/agentic-swe-site/blob/main/.github/workflows/pages.yml)) → **`https://agentic-swe.github.io/agentic-swe-site/`**.
-
-## How It Works
-
-The pipeline runs a **state machine** that routes tasks through analysis, design, implementation, review, and PR creation. At each phase, it **automatically selects** specialized subagents based on the languages, frameworks, and domains detected in your codebase — agents can also call other agents in the background when they need domain-specific expertise.
-
-```
-              lean track (simple tasks)
-             ┌─────────────────────────────────────────────────────┐
-initialized -> feasibility -> lean-track-check -> lean-track-implementation -> validation -> pr-creation -> completed
-                                    |
-                    ┌───────────────┴────────────────┐
-                    v                                v
-         standard track (medium)          rigorous track (complex)
-    design -> verification -> test ->     design -> design-review -> verification ->
-    implementation -> self-review ->      test-strategy -> implementation -> self-review ->
-    validation -> pr-creation -> ...      code-review -> permissions-check -> validation -> ...
+```bash
+curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
 ```
 
-**Standard track** skips the design panel, `design-review`, `code-review`, and `permissions-check` (see `CLAUDE.md` for exact allowed transitions and `pipeline.track`).
+Optional: `AGENTIC_SWE_TARGET_REPO=/path/to/app` on the same line (needs **Node**) to merge **`CLAUDE.md`**.
 
-Human gates stop the pipeline at `ambiguity-wait`, `approval-wait`, and escalation states.
+→ [Cursor plugin](https://agentic-swe.github.io/agentic-swe-site/docs/cursor-plugin)
 
-## Quick Start Walkthrough
+</details>
 
-Example tasks and the routes they follow (see the **state machine** diagram above).
+<details>
+<summary><strong>Codex · OpenCode · Gemini CLI</strong></summary>
 
-**Lean track** (small bug fix):
+| Host | Pointer |
+|------|---------|
+| **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) · [Codex doc (site repo)](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.codex.md) |
+| **OpenCode** | [`.opencode/`](.opencode/) · [OpenCode doc (site repo)](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.opencode.md) |
+| **Gemini CLI** | `gemini-extension.json` · **`GEMINI.md`** |
 
-```
-/work "Fix the off-by-one error in calculateTotal"
-```
+</details>
 
-→ feasibility → lean-track-check (low risk) → lean-track-implementation → validation → pr-creation → approval-wait → completed
+**~15 minutes:** [Golden path](https://agentic-swe.github.io/agentic-swe-site/docs/golden-path)
 
-**Rigorous track** (new feature):
+---
 
-```
-/work "Add user authentication with JWT tokens"
-```
+## Commands
 
-→ feasibility → lean-track-check (high risk) → design → design-review → verification → test-strategy → implementation → self-review → code-review → permissions-check → validation → pr-creation → approval-wait → completed
+| Command | Role |
+|---------|------|
+| `/work` | Start or resume a work item |
+| `/plan-only` | Feasibility / design without implementation |
+| `/brainstorm` | Design-first exploration (optional UI server) |
+| `/write-plan` · `/execute-plan` | Plan bar then execution |
+| `/check budget` · `/check transition` · `/check artifacts` | Enforcement before phases / transitions |
+| `/subagent` | Browse / invoke specialists |
+| `/repo-scan` · `/test-runner` · `/lint` | Evidence helpers |
 
-## Key Commands
+**Full list:** [Usage](https://agentic-swe.github.io/agentic-swe-site/docs/usage) · **`commands/`**
 
-| Command | What it does |
-|---------|-------------|
-| `/work <task>` | Start a new task (auto-routes lean, standard, or rigorous track) |
-| `/work <id>` | Resume paused work |
-| `/plan-only <task>` | Analyze and design without implementing |
-| `/brainstorm` | Design-first exploration (design phase + optional visual server) |
-| `/write-plan [id]` | Refine `implementation.md` plan to plan-quality bar (no coding) |
-| `/execute-plan [id]` | Run the plan via implementation / lean-track-implementation |
-| `/author-pipeline` | Checklist to extend phases, commands, agents safely |
-| `/subagent` | Browse 135+ specialized subagents |
-| `/subagent search <query>` | Find subagents by keyword |
-| `/subagent invoke <name> <task>` | Spawn a specialist for a task |
-| `/evaluate-work <id>` | Check work item health and status |
-| `/repo-scan` | Structured codebase snapshot |
-| `/check budget` | Verify iteration budgets |
+---
 
-See the [usage reference](https://agentic-swe.github.io/agentic-swe-site/docs/usage) for the full commands list.
+## Subagents
 
-## Specialized Subagents
+Under **`agents/subagents/`**. **Auto-selected** from **`feasibility.md`** signals; manual **`/subagent invoke`** anytime.
 
-135+ agents across 10 categories. **Automatically selected** during pipeline execution based on detected languages, frameworks, and domain signals — no manual invocation needed. Agents can also call other agents to get domain-specific work done.
+| Category | Count |
+|----------|------:|
+| Language Specialists | 29 |
+| Infrastructure | 16 |
+| Quality & Security | 14 |
+| Data & AI | 13 |
+| Developer Experience | 13 |
+| Specialized Domains | 12 |
+| Business & Product | 11 |
+| Core Development | 10 |
+| Meta & Orchestration | 10 |
+| Research & Analysis | 7 |
 
-| Category | Count | Examples |
-|----------|-------|---------|
-| **Core Development** | 10 | `backend-developer`, `fullstack-developer`, `api-designer` |
-| **Language Specialists** | 29 | `python-pro`, `typescript-pro`, `rust-engineer`, `golang-pro` |
-| **Infrastructure** | 16 | `kubernetes-specialist`, `terraform-engineer`, `docker-expert` |
-| **Quality & Security** | 14 | `code-reviewer`, `security-auditor`, `penetration-tester` |
-| **Data & AI** | 13 | `llm-architect`, `ml-engineer`, `data-engineer` |
-| **Developer Experience** | 13 | `refactoring-specialist`, `mcp-developer`, `cli-developer` |
-| **Specialized Domains** | 12 | `fintech-engineer`, `blockchain-developer`, `iot-engineer` |
-| **Business & Product** | 11 | `product-manager`, `technical-writer`, `ux-researcher` |
-| **Meta & Orchestration** | 10 | `multi-agent-coordinator`, `workflow-orchestrator` |
-| **Research & Analysis** | 7 | `competitive-analyst`, `trend-analyst`, `research-analyst` |
+**Details:** [Subagent catalog](https://agentic-swe.github.io/agentic-swe-site/docs/subagent-catalog) · [Catalog routing](https://agentic-swe.github.io/agentic-swe-site/docs/catalog-routing)
 
-See the [subagent catalog](https://agentic-swe.github.io/agentic-swe-site/docs/subagent-catalog) for the full catalog with models and descriptions.
+---
 
-## Examples
+## Work state & principles
 
-**Simple bug fix** (lean track, ~3-5 min):
-```
-/work Fix the off-by-one error in pagination logic in src/api/list.py
-```
+**`.worklogs/<id>/`** holds **`state.json`** (source of truth), **`progress.md`**, **`audit.log`**, and phase markdown files.
 
-**Complex feature** (rigorous track with design review, ~10-30 min):
-```
-/work Add rate limiting middleware to the Express API with Redis backing
-```
+```mermaid
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
+flowchart LR
+    subgraph wl[".worklogs / &lt;id&gt; /"]
+        subgraph core["Core files"]
+            direction TB
+            s["state.json<br/>current_state · track · budgets"]
+            p["progress.md<br/>timeline"]
+            a["audit.log<br/>append-only"]
+        end
+        subgraph art["Examples of phase artifacts"]
+            direction TB
+            f1["feasibility.md"]
+            f2["implementation.md"]
+            f3["validation-results.md"]
+            f4["pr-link.txt"]
+        end
+        core --- art
+    end
 
-**Invoke a specialist subagent**:
-```
-/subagent invoke rust-engineer Fix the lifetime issues in src/parser/mod.rs
-```
+    classDef file fill:#21262d,stroke:#58a6ff,color:#e6edf3,stroke-width:1px
 
-**Parallel security audit**:
-```
-Spawn security-auditor AND penetration-tester subagents in parallel
-to audit the payment processing module in src/payments/
-```
+    class s,p,a,f1,f2,f3,f4 file
 
-**Plan without coding**:
-```
-/plan-only Migrate the monolithic API to microservices with gRPC
-```
-
-**Workflow shortcuts** (same pipeline, familiar command names):
-
-```
-/brainstorm Design the event-sourcing layer for order history
-/write-plan
-/execute-plan
+    style wl fill:#0d1117,stroke:#30363d,color:#58a6ff
+    style core fill:#161b22,stroke:#388bfd,color:#8b949e
+    style art fill:#161b22,stroke:#388bfd,color:#8b949e
 ```
 
-See [examples](https://agentic-swe.github.io/agentic-swe-site/docs/examples) for detailed walkthroughs.
+- **State over chat** — resume from files, not from thread memory alone.
+- **Evidence** — tie claims to commands, paths, or CI (`templates/evidence-standard.md`).
+- **CI parity** — **`scripts/work-engine.cjs`** can enforce **`/check`**-style rules.
+
+---
+
+## Repository layout
+
+```
+agentic-swe/
+├── commands/ phases/ agents/ templates/ references/
+├── scripts/          # work-engine, catalog, memory, dashboard, …
+├── hooks/ config/ schemas/
+├── state-machine.json
+├── CLAUDE.md         # Hypervisor policy (canonical with state-machine.json)
+├── AGENTS.md GEMINI.md
+└── test/
+```
+
+---
 
 ## Architecture
 
+```mermaid
+%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
+flowchart TB
+    subgraph hv["Hypervisor session"]
+        pol["CLAUDE.md<br/>state machine · gates · delegation"]
+    end
+
+    subgraph core["Core agents"]
+        direction TB
+        d["developer-agent"]
+        g["git-operations-agent"]
+        m["pr-manager-agent"]
+    end
+
+    subgraph panel["Design panel · rigorous track"]
+        direction TB
+        ar["architect-reviewer"]
+        sr["security-reviewer"]
+        adv["adversarial-reviewer"]
+    end
+
+    subgraph cat["Specialists"]
+        catalog["135+ subagents<br/>auto-select · advisory"]
+    end
+
+    hv --> core
+    hv --> panel
+    core -.->|consult| catalog
+    panel -.->|consult| catalog
+
+    classDef hyper fill:#1f6feb,stroke:#58a6ff,color:#ffffff,stroke-width:2px
+    classDef agent fill:#21262d,stroke:#3fb950,color:#aff5b4,stroke-width:1px
+    classDef panelN fill:#21262d,stroke:#d29922,color:#ffdfb8,stroke-width:1px
+    classDef catalogN fill:#21262d,stroke:#a371f7,color:#dbb7ff,stroke-width:2px
+
+    class pol hyper
+    class d,g,m agent
+    class ar,sr,adv panelN
+    class catalog catalogN
+
+    style hv fill:#0d1117,stroke:#30363d,color:#58a6ff
+    style core fill:#161b22,stroke:#238636,color:#8b949e
+    style panel fill:#161b22,stroke:#d29922,color:#8b949e
+    style cat fill:#161b22,stroke:#a371f7,color:#8b949e
 ```
-Hypervisor (Claude Code + CLAUDE.md policy)
-├── Core Pipeline Agents
-│   ├── developer-agent.md    -- Implementation specialist
-│   ├── git-operations-agent.md -- Branch management, remote sync
-│   ├── pr-manager-agent.md   -- PR creation and management
-│   └── panel/                -- Design review panel (parallel)
-│       ├── architect-reviewer.md
-│       ├── security-reviewer.md
-│       └── adversarial-reviewer.md
-│
-└── Specialized Subagents (135+ agents, 10 categories)
-    ├── core-development/
-    ├── language-specialists/
-    ├── infrastructure/
-    ├── ...
-    └── research-analysis/
-```
 
-## Extending
+---
 
-- **Add a subagent**: Create a `.md` file in `${CLAUDE_PLUGIN_ROOT}/agents/subagents/<category>/` with frontmatter (`name`, `description`, `tools`, `model`)
-- **Add a phase**: Create `.md` in `${CLAUDE_PLUGIN_ROOT}/phases/`, add the state to `CLAUDE.md` (diagram, Required Artifacts, transitions), and update **`${CLAUDE_PLUGIN_ROOT}/state-machine.json`** so it matches the fenced transition block (`npm test` includes `state-machine-json`).
-- **Add a core agent**: Create `.md` in `${CLAUDE_PLUGIN_ROOT}/agents/`, reference in `CLAUDE.md`
-- **Adjust budgets**: Edit `CLAUDE.md` Budgets section and `${CLAUDE_PLUGIN_ROOT}/templates/state.json`
-- **Inspect work folders**: From the pack/repo root, `npm run summarize-work` (or `node scripts/summarize-work.js --json`)
-- **Local dashboard** (filters, export, metrics): `npm run swe-dashboard -- --cwd /path/to/your/repo` or **`/swe-dashboard`** in Claude Code (**`commands/swe-dashboard.md`**). Sample rows: **`npm run seed-dashboard-demo`** (then refresh the dashboard).
-- **Migrate old work state**: `node scripts/migrate-work-state.js` then `node scripts/migrate-work-state.js --apply` after major upgrades (see `CHANGELOG.md`)
+## Extending · CI · License
 
-## Multi-Platform Support
-
-agentic-swe runs the same markdown pipeline — driven by the **Hypervisor** session per `CLAUDE.md` — across multiple AI coding platforms:
-
-| Platform | Install Method | Details |
-|----------|---------------|---------|
-| **Claude Code** | Plugin marketplace + `/plugin install` (or `claude --plugin-dir` for dev) | Primary platform. See [Claude Code plugin](https://agentic-swe.github.io/agentic-swe-site/docs/claude-code-plugin). |
-| **Cursor** | Plugin via `.cursor-plugin/` | `curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh \| bash` then reload; add **`AGENTIC_SWE_TARGET_REPO=/path/to/app`** on the same line to auto-merge **`CLAUDE.md`** (needs **`node`**). [Cursor plugin](https://agentic-swe.github.io/agentic-swe-site/docs/cursor-plugin). |
-| **Codex** | Clone + symlink or copy | See `.codex/INSTALL.md` and the [Codex doc](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.codex.md) in **agentic-swe-site**. |
-| **OpenCode** | Plugin via `.opencode/` | ESM plugin injects orchestration policy. See the [OpenCode doc](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.opencode.md) in **agentic-swe-site**. |
-| **Gemini CLI** | Extension via `gemini-extension.json` | Context loaded from `GEMINI.md`. |
-
-All platforms share the same markdown source at this repo’s **plugin root** (`commands/`, `phases/`, `agents/`, …). Platform-specific tool mappings are in `${CLAUDE_PLUGIN_ROOT}/references/` (`codex-tools.md`, `opencode-tools.md`, `gemini-tools.md`, `copilot-tools.md`).
-
-**Skill-like triggering:** agentic-swe does not use a separate Skill-tool registry. The same habit is implemented with **session hooks** (`hooks/hooks.json` for Claude Code, `hooks/hooks-cursor.json` for Cursor) running `hooks/session-start` (**memory prime** appended by default; opt out **`AGENTIC_SWE_MEMORY_PRIME=0`**), plus `${CLAUDE_PLUGIN_ROOT}/references/implicit-routing.md` for intent → command/phase hints. The pipeline remains authoritative in root `CLAUDE.md`. **Durable memory** (local index, `memory-prime`, import, sliding summary, optional embeddings): [docs site](https://agentic-swe.github.io/agentic-swe-site/docs/durable-memory) · [spec](docs/specs/memory-graph.md).
-
-## CI and pre-push checks
-
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) in **this** repo runs on **push / pull request** to **`main`**, on **merge queue**, and **manually** (`workflow_dispatch`). It uses **Node 20 and 22**, **`npm ci`** for the root pack and **`agents/plugin-runtime/brainstorm-server`**, then **`npm run verify`**, **`npm run version:check`**, optional **`claude plugin validate`**, and **`npm test`** (state machine, references, **multi-platform wiring**, brainstorm-server, etc.). The docs site has its own CI in **[`agentic-swe-site`](https://github.com/agentic-swe/agentic-swe-site)**.
-
-Locally, run **`npm run ci`** at this repo root for the same bar as Actions here (minus the Node matrix and unless **`claude`** is on your **`PATH`**). See the [Release checklist](https://agentic-swe.github.io/agentic-swe-site/docs/release-checklist) for the full maintainer sequence (includes the separate site repo checks).
-
-## Research Basis
-
-Built on research from SWE-agent, Agentless, Ambig-SWE, Reflexion, Self-Refine, AgentCoder, TALE, OpenHands, and more. See the Research Basis section in [CLAUDE.md](CLAUDE.md) for the full citation table.
-
-## License
-
-[MIT](LICENSE). See [licensing](https://agentic-swe.github.io/agentic-swe-site/docs/licensing) for how the license applies to the pack and typical use (not legal advice).
+| Topic | Where |
+|-------|--------|
+| Extend pipeline | **`/author-pipeline`** · [`references/authoring-pipeline-capabilities.md`](references/authoring-pipeline-capabilities.md) |
+| CI | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — **`npm run ci`** locally |
+| Research basis | [`CLAUDE.md` — Research basis](CLAUDE.md#research-basis) |
+| License | [MIT](LICENSE) · [Licensing](https://agentic-swe.github.io/agentic-swe-site/docs/licensing) |
