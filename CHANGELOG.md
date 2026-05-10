@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-05-10
+
+### Added
+
+- **npm distribution:** publishable package **`@agentic-swe/agentic-swe`** (the unscoped name **`agentic-swe`** on the public registry is a different project). Global CLI **`agentic-swe`** prints **`path`** / **`pack-path`** (absolute pack root for **`claude --plugin-dir`**) and **`version`**. **`prepublishOnly`** runs **`version:check`** + **`verify`** before **`npm publish`**.
+- **Maintainer guide:** **`docs/PUBLISHING.md`** — Claude Code Git marketplace refresh, optional git tag, npm **`publish`** under the **`@agentic-swe`** scope, Cursor symlink via **`AGENTIC_SWE_PACK_ROOT="$(agentic-swe path)"`**, Anthropic directory pointer.
+
+### Changed
+
+- **`package.json`:** **`repository`** / **`bugs`** objects, **`publishConfig.access`**: **`public`**, scoped **`name`**, **`bin`**, **`files`** includes **`bin/`**; removed root **`private`** so the tarball can be published.
+
 ## [3.1.1] - 2026-04-20
 
 ### Added

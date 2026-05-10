@@ -266,6 +266,7 @@ describe('multi-platform stubs: npm package files[]', () => {
     'mcp-servers.json',
     'hooks/',
     '.claude-plugin/',
+    'bin',
   ];
 
   it('package.json files includes all host bundle paths', () => {
@@ -278,5 +279,16 @@ describe('multi-platform stubs: npm package files[]', () => {
         `package.json files[] should include "${entry}" (for tarball / consumers)`,
       );
     }
+  });
+});
+
+describe('npm CLI stub (bin/agentic-swe.cjs)', () => {
+  it('path prints absolute pack root matching repoRoot', () => {
+    const bin = path.join(repoRoot, 'bin', 'agentic-swe.cjs');
+    const out = spawnSync(process.execPath, [bin, 'path'], { encoding: 'utf8' });
+    assert.strictEqual(out.status, 0, out.stderr || out.stdout);
+    const printed = out.stdout.trim();
+    assert.ok(fs.existsSync(path.join(printed, 'CLAUDE.md')));
+    assert.strictEqual(path.resolve(printed), repoRoot);
   });
 });
