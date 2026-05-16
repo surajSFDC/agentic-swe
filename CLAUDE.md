@@ -353,6 +353,9 @@ Permission-gated; the user sees each check.
 | `/write-plan` | Refine `implementation.md` to plan bar (no code) | `plan-quality-bar`, `plan-only` |
 | `/execute-plan` | Execute plan via implementation or lean path per `state.json` | `developer-agent` |
 | `/author-pipeline` | Safe extension checklist | `authoring-pipeline-capabilities` |
+| `/doubt <claim>` | Doubt-Driven Verification — bounded 3-cycle adversarial review of a decision or artifact | `design-review`, `code-review`, `validation`, ad-hoc |
+| `/policy show\|explain\|check` | Inspect active Policy-as-Code configuration (merged org > repo > pack) | `lean-track-check`, phase delegation, tool invocations |
+| `/swe-tui` | Terminal cockpit — live state bar, history, gate prompts, budget burn | `ambiguity-wait`, `approval-wait`, headless environments |
 
 ---
 

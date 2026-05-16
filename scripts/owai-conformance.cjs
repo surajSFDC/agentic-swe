@@ -96,8 +96,18 @@ function validateL3(workDir) {
 }
 
 if (require.main === module) {
-  const workDir = process.argv[2];
-  const level = (process.argv[3] || '--level=L1').replace('--level=', '').replace('--level', '').trim() || 'L1';
+  const args = process.argv.slice(2);
+  const workDir = args.find(a => !a.startsWith('--'));
+  const levelArg = args.find(a => a.startsWith('--level'));
+  let level = 'L1';
+  if (levelArg) {
+    if (levelArg.includes('=')) {
+      level = levelArg.split('=')[1];
+    } else {
+      const idx = args.indexOf(levelArg);
+      level = args[idx + 1] || 'L1';
+    }
+  }
 
   if (!workDir) {
     console.error('Usage: node owai-conformance.cjs <work-dir> [--level L1|L2|L3]');
