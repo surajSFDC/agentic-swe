@@ -28,4 +28,13 @@ Launch a terminal-based live cockpit for monitoring pipeline execution.
 
 ## Implementation Notes
 
-Uses Node built-in `readline` for minimal dependency. For richer TUI, `blessed` or `ink` can be added as optional dependencies.
+Uses Node built-in `readline` for minimal dependency. Implementation: `${CLAUDE_PLUGIN_ROOT}/scripts/swe-tui-server.cjs`.
+
+Exported API for tests and programmatic use:
+- `formatBudgetBar(remaining, total, width)` → string
+- `discoverWorkDir(cwd)` → string|null
+- `discoverAllWorkDirs(cwd)` → string[]
+- `renderWorkItem(state, opts)` → string
+- `chooseLayout(itemCount, termWidth)` → 'side-by-side'|'stacked'
+
+ASCII mascot is rendered only when `process.stdout.isTTY === true` and `NO_COLOR` is not set. CI/pipe environments get plain-text output automatically.
