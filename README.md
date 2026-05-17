@@ -1,6 +1,6 @@
 <h1 align="center">Agentic SWE</h1>
 
-<p align="center"><strong>Hypervisor policy · Pure markdown · No cloud runtime</strong></p>
+<p align="center"><strong>Claude codes your PRs. You review the receipt. Then merge.</strong></p>
 
 <p align="center">
   <a href="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml"><img src="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
@@ -11,7 +11,77 @@
   <a href="https://agentic-swe.github.io/agentic-swe-site/"><img src="https://img.shields.io/badge/docs-site-informational.svg" alt="Docs site" /></a>
 </p>
 
-**Policy-driven autonomous engineering:** a **state-machine pipeline** (lean / standard / rigorous), **human gates**, **evidence-backed artifacts** in **`.worklogs/<id>/`**, and **135+ specialists** chosen from repo signals. Everything is **markdown in your repo** — not a hosted runner.
+An open-source autonomous SWE pipeline that runs in your editor or CI, writes every decision into your repo, and gives you a shareable audit trail of what the AI did and why.
+
+**What you get:**
+
+- **Structured PRs** — Claude works through a state machine (lean / standard / rigorous), not one mega-prompt
+- **Cost-attributed decisions** — every phase has a dollar amount and an artifact in `.worklogs/<id>/`
+- **Audit trail** — `/receipt` renders a shareable summary suitable for a PR description, Slack, or a compliance ticket
+
+## Quickstart
+
+```bash
+npm install -g @agentic-swe/agentic-swe
+claude --plugin-dir "$(agentic-swe path)"
+```
+
+Then in Claude Code:
+
+```text
+/work Add retry logic to the API client
+# ...pipeline runs, opens a PR...
+/receipt
+```
+
+→ See [Install & first run](#install--first-run) for Cursor, Codex, OpenCode, Gemini CLI, and Claude Code plugin marketplace alternatives.
+
+## What `/receipt` looks like
+
+`/receipt` reads `.worklogs/<id>/` and renders the work item as markdown. Sample from `test/fixtures/receipt/lean-happy/`:
+
+```markdown
+# /work add-retry-logic — Add retry logic to the API client
+
+| Field | Value |
+|---|---|
+| Work ID | add-retry-logic |
+| Track | lean |
+| Status | completed |
+| Duration | 47 min |
+| Cost | $1.84 |
+| PR | https://github.com/example/repo/pull/142 |
+
+## Decisions made (6)
+
+1. **feasibility → lean-track-check** ($0.08) — lean signal → feasibility.md#L1-L20
+2. **lean-track-check → lean-track-implementation** ($0.04) — verdict: simple
+3. **lean-track-implementation → validation** ($1.33) — implementation complete → implementation.md
+4. **validation → pr-creation** ($0.21) — tests green
+5. **pr-creation → approval-wait** ($0.18) — PR opened
+6. **approval-wait → completed** ($0.00) — approved by suraj
+
+## Human gates respected (1)
+
+- `approval-wait` resolved by user at 2026-05-17T14:47:00Z — approved by suraj
+
+## Loop counters
+
+- `self_review_iter`: 0
+- `doubt_cycles`: 1
+- `code_review_iter`: 0
+
+## Verifiable references
+
+- All artifacts: `test/fixtures/receipt/lean-happy/`
+- Audit log: `test/fixtures/receipt/lean-happy/audit.log` (9 entries)
+```
+
+Every line above is computed from `.worklogs/<id>/` — no LLM summary, no hallucinated PRs. Reproduce locally:
+
+```bash
+node scripts/render-receipt.cjs --work-dir test/fixtures/receipt/lean-happy
+```
 
 **Docs:** [agentic-swe.github.io/agentic-swe-site](https://agentic-swe.github.io/agentic-swe-site/)
 
@@ -61,78 +131,27 @@ Canonical transitions: **`state-machine.json`** and the fenced graph in **`CLAUD
 
 ## Install & first run
 
-<details>
-<summary><strong>Claude Code</strong> (recommended)</summary>
+Beyond the [Quickstart](#quickstart) above, alternate paths:
+
+**Claude Code (plugin marketplace)**
 
 ```text
 /plugin marketplace add agentic-swe/agentic-swe
 /plugin install agentic-swe@agentic-swe-catalog
 ```
 
-Local pack: `claude --plugin-dir /path/to/agentic-swe`
+**Other hosts**
 
-```text
-/work Add retry logic to the API client
-```
-
-Use **`/install`** once to merge **`CLAUDE.md`** and optional **`.gitignore`** for `.worklogs/`.
-
-→ [Installation](https://agentic-swe.github.io/agentic-swe-site/docs/installation) · [Claude Code plugin](https://agentic-swe.github.io/agentic-swe-site/docs/claude-code-plugin)
-
-</details>
-
-<details>
-<summary><strong>npm (pack path for any host)</strong></summary>
-
-Install the published tarball globally (scoped package — the unscoped **`agentic-swe`** name on npm is a different project):
-
-```bash
-npm install -g @agentic-swe/agentic-swe --registry=https://registry.npmjs.org/
-```
-
-Print the pack root, then point Claude Code or scripts at it:
-
-```bash
-agentic-swe path
-# claude --plugin-dir "$(agentic-swe path)"
-```
-
-Maintainers: **`docs/PUBLISHING.md`** — **First time on npm:** create the **`@agentic-swe`** organization on the registry before **`npm publish`** ([details](docs/PUBLISHING.md#first-time-on-npm-create-the-scope)).
-
-</details>
-
-<details>
-<summary><strong>Cursor</strong></summary>
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
-```
-
-From an **npm** global install, symlink the pack into Cursor’s local plugins dir:
-
-```bash
-export AGENTIC_SWE_PACK_ROOT="$(agentic-swe path)"
-curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh | bash
-```
-
-Optional: `AGENTIC_SWE_TARGET_REPO=/path/to/app` on the same line (needs **Node**) to merge **`CLAUDE.md`**.
-
-→ [Cursor plugin](https://agentic-swe.github.io/agentic-swe-site/docs/cursor-plugin)
-
-</details>
-
-<details>
-<summary><strong>Codex · OpenCode · Gemini CLI</strong></summary>
-
-| Host | Pointer |
-|------|---------|
-| **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) · [Codex doc (site repo)](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.codex.md) |
-| **OpenCode** | [`.opencode/`](.opencode/) · [OpenCode doc (site repo)](https://github.com/agentic-swe/agentic-swe-site/blob/main/src/content/docs/README.opencode.md) |
+| Host | How |
+|------|-----|
+| **Cursor** | `curl -fsSL https://raw.githubusercontent.com/agentic-swe/agentic-swe/main/scripts/install-cursor-plugin.sh \| bash` |
+| **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) |
+| **OpenCode** | [`.opencode/`](.opencode/) |
 | **Gemini CLI** | `gemini-extension.json` · **`GEMINI.md`** |
 
-</details>
+After enabling the plugin, run **`/install`** once to merge **`CLAUDE.md`** and an optional **`.gitignore`** entry for **`.worklogs/`**. Maintainers see [`docs/PUBLISHING.md`](docs/PUBLISHING.md).
 
-**~15 minutes:** [Golden path](https://agentic-swe.github.io/agentic-swe-site/docs/golden-path)
+→ [Full installation guide](https://agentic-swe.github.io/agentic-swe-site/docs/installation) · [Golden path (~15 min)](https://agentic-swe.github.io/agentic-swe-site/docs/golden-path)
 
 ---
 
@@ -154,126 +173,27 @@ Optional: `AGENTIC_SWE_TARGET_REPO=/path/to/app` on the same line (needs **Node*
 
 ## Subagents
 
-Under **`agents/subagents/`**. **Auto-selected** from **`feasibility.md`** signals; manual **`/subagent invoke`** anytime.
-
-| Category | Count |
-|----------|------:|
-| Language Specialists | 29 |
-| Infrastructure | 16 |
-| Quality & Security | 14 |
-| Data & AI | 13 |
-| Developer Experience | 13 |
-| Specialized Domains | 12 |
-| Business & Product | 11 |
-| Core Development | 10 |
-| Meta & Orchestration | 10 |
-| Research & Analysis | 7 |
+**135+ specialists** under **`agents/subagents/`**, **auto-selected** from **`feasibility.md`** signals; manual **`/subagent invoke`** anytime. Across 10 categories — Language Specialists (29), Infrastructure (16), Quality & Security (14), Data & AI (13), Developer Experience (13), Specialized Domains (12), Business & Product (11), Core Development (10), Meta & Orchestration (10), Research & Analysis (7).
 
 **Details:** [Subagent catalog](https://agentic-swe.github.io/agentic-swe-site/docs/subagent-catalog) · [Catalog routing](https://agentic-swe.github.io/agentic-swe-site/docs/catalog-routing)
 
 ---
 
-## Work state & principles
+## Work state
 
-**`.worklogs/<id>/`** holds **`state.json`** (source of truth), **`progress.md`**, **`audit.log`**, and phase markdown files.
-
-```mermaid
-%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
-flowchart LR
-    subgraph wl[".worklogs / &lt;id&gt; /"]
-        subgraph core["Core files"]
-            direction TB
-            s["state.json<br/>current_state · track · budgets"]
-            p["progress.md<br/>timeline"]
-            a["audit.log<br/>append-only"]
-        end
-        subgraph art["Examples of phase artifacts"]
-            direction TB
-            f1["feasibility.md"]
-            f2["implementation.md"]
-            f3["validation-results.md"]
-            f4["pr-link.txt"]
-        end
-        core --- art
-    end
-
-    classDef file fill:#21262d,stroke:#58a6ff,color:#e6edf3,stroke-width:1px
-
-    class s,p,a,f1,f2,f3,f4 file
-
-    style wl fill:#0d1117,stroke:#30363d,color:#58a6ff
-    style core fill:#161b22,stroke:#388bfd,color:#8b949e
-    style art fill:#161b22,stroke:#388bfd,color:#8b949e
-```
+**`.worklogs/<id>/`** holds **`state.json`** (source of truth), **`progress.md`** (timeline), **`audit.log`** (append-only), and per-phase markdown (e.g. **`feasibility.md`**, **`implementation.md`**, **`validation-results.md`**, **`pr-link.txt`**).
 
 - **State over chat** — resume from files, not from thread memory alone.
 - **Evidence** — tie claims to commands, paths, or CI (`templates/evidence-standard.md`).
-- **CI parity** — **`scripts/work-engine.cjs`** can enforce **`/check`**-style rules.
-
----
-
-## Repository layout
-
-```
-agentic-swe/
-├── commands/ phases/ agents/ templates/ references/
-├── scripts/          # work-engine, catalog, memory, dashboard, …
-├── hooks/ config/ schemas/
-├── state-machine.json
-├── CLAUDE.md         # Hypervisor policy (canonical with state-machine.json)
-├── AGENTS.md GEMINI.md
-└── test/
-```
+- **CI parity** — **`scripts/work-engine.cjs`** enforces **`/check`**-style rules.
 
 ---
 
 ## Architecture
 
-```mermaid
-%%{init: {'theme': 'dark', 'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'}}%%
-flowchart TB
-    subgraph hv["Hypervisor session"]
-        pol["CLAUDE.md<br/>state machine · gates · delegation"]
-    end
+A single **Hypervisor session** (this one) owns transitions, gates, and synthesis. Three **core agents** — **developer**, **git-operations**, **pr-manager** — carry bounded work. A **design panel** (architect, security, adversarial) reviews in parallel on the rigorous track. All consult the **135+ subagent** catalog, auto-selected from repo signals.
 
-    subgraph core["Core agents"]
-        direction TB
-        d["developer-agent"]
-        g["git-operations-agent"]
-        m["pr-manager-agent"]
-    end
-
-    subgraph panel["Design panel · rigorous track"]
-        direction TB
-        ar["architect-reviewer"]
-        sr["security-reviewer"]
-        adv["adversarial-reviewer"]
-    end
-
-    subgraph cat["Specialists"]
-        catalog["135+ subagents<br/>auto-select · advisory"]
-    end
-
-    hv --> core
-    hv --> panel
-    core -.->|consult| catalog
-    panel -.->|consult| catalog
-
-    classDef hyper fill:#1f6feb,stroke:#58a6ff,color:#ffffff,stroke-width:2px
-    classDef agent fill:#21262d,stroke:#3fb950,color:#aff5b4,stroke-width:1px
-    classDef panelN fill:#21262d,stroke:#d29922,color:#ffdfb8,stroke-width:1px
-    classDef catalogN fill:#21262d,stroke:#a371f7,color:#dbb7ff,stroke-width:2px
-
-    class pol hyper
-    class d,g,m agent
-    class ar,sr,adv panelN
-    class catalog catalogN
-
-    style hv fill:#0d1117,stroke:#30363d,color:#58a6ff
-    style core fill:#161b22,stroke:#238636,color:#8b949e
-    style panel fill:#161b22,stroke:#d29922,color:#8b949e
-    style cat fill:#161b22,stroke:#a371f7,color:#8b949e
-```
+→ [Architecture overview](https://agentic-swe.github.io/agentic-swe-site/docs/architecture) (full diagram)
 
 ---
 
