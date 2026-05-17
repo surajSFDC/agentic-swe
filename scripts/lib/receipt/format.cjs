@@ -1,5 +1,17 @@
+const path = require('node:path');
+
 function formatCost(usd) {
   return `$${Number(usd).toFixed(2)}`;
+}
+
+// Render workDir as a path relative to cwd when it's a subpath, otherwise absolute.
+// Keeps rendered receipts portable (no leaking of local user home dirs into docs / shared output)
+// while preserving a verifiable, copy-pasteable reference for the reader.
+function displayWorkDir(workDir, cwd) {
+  const base = cwd || process.cwd();
+  const rel = path.relative(base, workDir);
+  if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) return workDir;
+  return rel;
 }
 
 function formatDurationHuman(seconds) {
@@ -46,8 +58,9 @@ function formatMarkdown(data) {
     lines.push('');
   }
   lines.push('## Verifiable references', '');
-  lines.push(`- All artifacts: \`${data.workDir}/\``);
-  lines.push(`- Audit log: \`${data.workDir}/audit.log\` (${data.auditEntryCount} entries)`);
+  const wd = displayWorkDir(data.workDir);
+  lines.push(`- All artifacts: \`${wd}/\``);
+  lines.push(`- Audit log: \`${wd}/audit.log\` (${data.auditEntryCount} entries)`);
   lines.push('');
   return lines.join('\n');
 }
@@ -56,4 +69,4 @@ function formatJson(data) {
   return JSON.stringify(data, null, 2);
 }
 
-module.exports = { formatMarkdown, formatJson, formatCost, formatDurationHuman };
+module.exports = { formatMarkdown, formatJson, formatCost, formatDurationHuman, displayWorkDir };
