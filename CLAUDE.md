@@ -220,7 +220,7 @@ You may spawn sub-agents for bounded work via the Agent tool.
 - **Design panel** (**${CLAUDE_PLUGIN_ROOT}/agents/panel/*.md**) — Use when complexity or risk warrants. Spawn **architect**, **security**, and **adversarial** reviewers **in parallel** (background).
 - **Git and PR** — **`${CLAUDE_PLUGIN_ROOT}/agents/git-operations-agent.md`** for branches, sync, conflicts; **`${CLAUDE_PLUGIN_ROOT}/agents/pr-manager-agent.md`** for PR lifecycle.
 - **Implementation** — **`${CLAUDE_PLUGIN_ROOT}/agents/developer-agent.md`** for bounded coding; consider **`isolation: "worktree"`** for risky experiments.
-- **Specialists** — **`${CLAUDE_PLUGIN_ROOT}/agents/subagents/`** (135+); **auto-selected** during phases per **Subagent auto-selection** below. **`/subagent`** for manual discovery and invoke outside the pipeline.
+- **Specialists** — **`${CLAUDE_PLUGIN_ROOT}/agents/subagents/`** (<!-- catalog-counts:start kind=short-total -->138+ subagents<!-- catalog-counts:end -->); **auto-selected** during phases per **Subagent auto-selection** below. **`/subagent`** for manual discovery and invoke outside the pipeline.
 - **Canonical phase text** — Always **`${CLAUDE_PLUGIN_ROOT}/phases/*.md`**.
 
 **Delegation contract:** Scoped prompt, explicit files or areas, **evidence-backed verdict** (not vibes), and **integration into the main artifact** — delegated output is input, not automatic truth.
@@ -301,7 +301,9 @@ Set **`state.json.pipeline.subagent_auto_select`** to **`false`** to disable. Ma
 
 ## Specialized subagents
 
-135+ agents under **`${CLAUDE_PLUGIN_ROOT}/agents/subagents/`** (10 categories):
+<!-- catalog-counts:start kind=short-total -->
+138+ subagents
+<!-- catalog-counts:end --> under **`${CLAUDE_PLUGIN_ROOT}/agents/subagents/`** (10 categories):
 
 | Category | Agents | Use when |
 |----------|--------|----------|

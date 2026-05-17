@@ -50,3 +50,7 @@ Print the **`http://127.0.0.1:<port>/`** URL. The UI loads **`GET /api/meta`** (
 ### Stop
 
 Press **Ctrl+C** in the terminal where the server runs, or close that process.
+
+### Related
+
+For a single-work-item shareable summary (PR description / Slack / compliance attachment), use **`/receipt`** (see [`commands/receipt.md`](receipt.md)). The dashboard is a fleet view; the receipt is a per-item report.

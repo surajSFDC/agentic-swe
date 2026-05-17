@@ -6,8 +6,10 @@
   <a href="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml"><img src="https://github.com/agentic-swe/agentic-swe/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg" alt="Node" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.2.0-orange.svg" alt="Version" /></a>
-  <a href="#subagents"><img src="https://img.shields.io/badge/subagents-135%2B-purple.svg" alt="Agents" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-3.3.0-orange.svg" alt="Version" /></a>
+  <!-- catalog-counts:start kind=badge-line -->
+  <a href="#subagents"><img src="https://img.shields.io/badge/subagents-138%2B-purple.svg" alt="Agents" /></a>
+<!-- catalog-counts:end -->
   <a href="https://agentic-swe.github.io/agentic-swe-site/"><img src="https://img.shields.io/badge/docs-site-informational.svg" alt="Docs site" /></a>
 </p>
 
@@ -173,7 +175,13 @@ After enabling the plugin, run **`/install`** once to merge **`CLAUDE.md`** and 
 
 ## Subagents
 
-**135+ specialists** under **`agents/subagents/`**, **auto-selected** from **`feasibility.md`** signals; manual **`/subagent invoke`** anytime. Across 10 categories — Language Specialists (29), Infrastructure (16), Quality & Security (14), Data & AI (13), Developer Experience (13), Specialized Domains (12), Business & Product (11), Core Development (10), Meta & Orchestration (10), Research & Analysis (7).
+<!-- catalog-counts:start kind=total-line -->
+**138+ specialists** under **`agents/subagents/`**
+<!-- catalog-counts:end -->. **Auto-selected** from **`feasibility.md`** signals; manual **`/subagent invoke`** anytime.
+
+<!-- catalog-counts:start kind=inline -->
+Across 10 categories — Language Specialists (29), Infrastructure (16), Specialized Domains (15), Quality & Security (14), Data & AI (13), Developer Experience (13), Business & Product (11), Core Development (10), Meta & Orchestration (10), Research & Analysis (7).
+<!-- catalog-counts:end -->
 
 **Details:** [Subagent catalog](https://agentic-swe.github.io/agentic-swe-site/docs/subagent-catalog) · [Catalog routing](https://agentic-swe.github.io/agentic-swe-site/docs/catalog-routing)
 

@@ -1,3 +1,8 @@
+---
+name: receipt
+description: "Render a completed work item from .worklogs/ as a shareable markdown / JSON summary — drop into a PR description, Slack message, or compliance ticket."
+---
+
 # /receipt
 
 Render a completed work item as a shareable markdown summary — drop into a PR description, Slack message, or compliance ticket.
