@@ -39,11 +39,11 @@ function checkAlternatives(workDir, groups) {
  * but BEFORE the transition is committed, so `from` is the phase that just ran.
  *
  * @param {string} from  - the state being left
- * @param {string} to    - the destination state (used for conditional checks only)
+ * @param {string} _to   - the destination state (reserved for conditional checks; currently unused)
  * @param {object} state - the current work-item state object
  * @returns {string[][]} OR-groups of filenames that must exist and be non-empty
  */
-function requiredArtifactGroups(from, to, state) {
+function requiredArtifactGroups(from, _to, state) {
   // Bootstrap: initialized has no artifacts — the very first transition is free.
   if (from === 'initialized') {
     return [];
@@ -66,25 +66,11 @@ function requiredArtifactGroups(from, to, state) {
       // Phase produces an implementation plan and a review verdict.
       return [['implementation.md'], ['review-pass.md', 'review-feedback.md']];
 
-    case 'design': {
-      // Must have design.md.  When this is a re-entry from design-review (rejection
-      // loop), a reflection-log.md entry is also required.
-      const groups = [['design.md']];
-      if (to === 'design-review') {
-        // Only require reflection-log.md on the second (and later) pass, i.e. when
-        // we are about to re-enter design-review after having already been there.
-        // We detect this by checking whether a design-review artifact already exists.
-        // (The very first design → design-review trip has nothing to reflect on yet.)
-        // Simpler reliable signal: reflection-log.md itself already exists from the
-        // previous rejection — if not, we are on the first pass.
-        // We intentionally do NOT add reflection-log.md here for the first trip;
-        // it is added by design-review when it rejects and writes the log.
-      }
-      if (from === 'design' && to !== 'design-review') {
-        // design → verification (standard/rigorous first-pass) — no reflection needed.
-      }
-      return groups;
-    }
+    case 'design':
+      // Must have design.md before leaving design. Reflection-log.md is NOT enforced
+      // here on re-entry from design-review — it is written by design-review when it
+      // rejects, and verified by the receiving phase that reads it.
+      return [['design.md']];
 
     case 'design-review':
       // Must have produced a review outcome before transitioning.
@@ -100,25 +86,12 @@ function requiredArtifactGroups(from, to, state) {
       // test-stubs.md is enforced here.
       return [['test-stubs.md']];
 
-    case 'implementation': {
-      // Must have implementation.md.  When returning from a rejection (self-review,
-      // code-review, or validation sent us back), reflection-log.md is required.
-      const groups = [['implementation.md']];
-      if (to === 'self-review' || to === 'code-review' || to === 'validation') {
-        // First-pass (self-review) or re-entry after rejection — reflection-log.md
-        // is required only on the re-entry passes.  We use the same "already exists"
-        // heuristic: if the state machine is sending us back from self-review/code-
-        // review/validation, the reflection-log should have been written by the
-        // rejecting phase.  We require it only when `to` is self-review AND this is
-        // a return trip (i.e., we came from self-review/code-review/validation),
-        // but we don't have the prior `from` here.
-        // Per CLAUDE.md: "when returning from rejection" — lean on the state counter
-        // if available, otherwise skip the conditional to avoid false-blocking.
-        // Safest: do NOT require reflection-log.md here; it is checked implicitly
-        // by the rejecting phase that wrote it and the review that reads it.
-      }
-      return groups;
-    }
+    case 'implementation':
+      // Must have implementation.md. Reflection-log.md is NOT enforced here on
+      // re-entry from self-review/code-review/validation — the rejecting phase writes
+      // it and the next reviewer reads it. Enforcing here would false-block first
+      // entry from test-strategy when no rejection has occurred yet.
+      return [['implementation.md']];
 
     case 'self-review':
       return [['self-review.md']];

@@ -7,24 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-05-18
+
 ### Added
 
-- **`/receipt` command** — render a completed work item as shareable markdown / JSON (`commands/receipt.md`, `scripts/render-receipt.cjs`, `scripts/lib/receipt/extract.cjs`, `scripts/lib/receipt/format.cjs`). Bin entry exposes it as `agentic-swe receipt` for npm-installed users.
+- **`/receipt` command** (PR [#62](https://github.com/agentic-swe/agentic-swe/pull/62)) — render a completed work item as shareable markdown / JSON (`commands/receipt.md`, `scripts/render-receipt.cjs`, `scripts/lib/receipt/extract.cjs`, `scripts/lib/receipt/format.cjs`). Bin entry exposes it as `agentic-swe receipt` for npm-installed users.
+- **`/swe-tui` server** (PR [#61](https://github.com/agentic-swe/agentic-swe/pull/61)) — terminal cockpit (`scripts/swe-tui-server.cjs`) with ASCII mascot, color-coded state bar, budget burn bar, recent-transitions panel. Multi-item mode (`--all`). Real-time updates via `fs.watch` + 2 s poll. Zero new dependencies; 5 new unit tests.
+- **Salesforce platform subagents** (PR #61) — `salesforce-developer` (Apex / LWC / SOQL / DevOps, model: opus), `salesforce-headless` (B2C Commerce SCAPI / PWA Kit / Composable Storefront, model: sonnet), `salesforce-agentforce` (Agent Builder / Agent Script / Einstein Trust Layer, model: opus). Catalog grows from 135 → 138 agents.
 - **`docs/specs/positioning-and-receipt.md`** — strategic positioning spec (The Receipt + Magic-PR demo sequencing, ICP tiers, 90-day metrics).
 - **`docs/plans/2026-05-17-positioning-and-receipt.md`** — full implementation plan for the spec.
 - **`docs/compliance-mapping.md`** — NIST AI RMF + OWASP Agentic Top 10 (Dec 2025) + EU AI Act Art. 12/14/15 mapping to `.worklogs/` artifacts.
 - **`docs/assets/sample-receipt.md`** — static rendered example used by the README embed.
 - **`docs/launch-week-1.md`** — internal launch checklist with draft LinkedIn / Twitter / dev.to / Show HN posts.
+- **`docs/testing-guide-2026-05-17.md`** (PR [#63](https://github.com/agentic-swe/agentic-swe/pull/63)) — verification recipes for everything shipped in #60, #61, #62.
 - **`bench/tasks/`** — starter tasks (`01-off-by-one`, `02-add-retry`, `03-rate-limiter`) so `scripts/bench/run.cjs` is no longer vaporware.
+- **`config/default-policy.json`** (PR [#60](https://github.com/agentic-swe/agentic-swe/pull/60)) — pack default Policy-as-Code file that `scripts/lib/policy/merge.cjs` referenced but didn't ship.
+- **Catalog-counts SoT** — `scripts/lib/catalog/counts.cjs` + `scripts/render-catalog-counts.cjs` rewrite `<!-- catalog-counts:start kind=… -->` blocks in `README.md`, `CLAUDE.md`, `AGENTS.md`, and `commands/subagent.md` from the live `agents/subagents/` directory. New `npm run catalog:counts` (write) and `--check` mode (wired into `npm run verify`) catch drift after agent additions. Mirror script ships on the docs site so marketing copy stays in sync.
+- **README version-badge regression test** (`test/readme-version-badge.test.js`) — asserts the README shield URL matches `package.json.version`. Catches the drift that bit this release (badge stayed at 3.2.0 after `bump-version.sh` ran, because it only handles JSON manifests).
 
 ### Changed
 
-- **README first viewport** — new headline ("Claude codes your PRs. You review the receipt. Then merge."), inline `/receipt` sample, single-command quickstart. Drops `Hypervisor policy` jargon and the heavier mermaid diagrams (preserved in `CLAUDE.md` and the docs site). 288 → 207 lines.
+- **README first viewport** (PR #62) — new headline ("Claude codes your PRs. You review the receipt. Then merge."), inline `/receipt` sample, single-command quickstart. Drops `Hypervisor policy` jargon and the heavier mermaid diagrams (preserved in `CLAUDE.md` and the docs site). 288 → 207 lines.
 
 ### Fixed
 
-- **`hooks/hooks.json`** — `SessionStart` matcher now includes `resume` (was `startup|clear|compact`, now `startup|resume|clear|compact`). Previously, Hypervisor policy injection was skipped on every resumed Claude Code session (`--resume`, `--continue`, `/resume`), so the most common entry-point silently dropped the entire pipeline contract.
-- **`scripts/lib/work-engine/artifacts.cjs`** — `requiredArtifactGroups` is now keyed on the **source** state, matching CLAUDE.md's "Required Artifacts by State" semantics. The destination-state lookup previously blocked every legitimate transition (e.g. `validation → pr-creation` required `pr-link.txt` to pre-exist before `pr-creation` had run).
+- **`hooks/hooks.json`** (PR #62) — `SessionStart` matcher now includes `resume` (was `startup|clear|compact`, now `startup|resume|clear|compact`). Previously, Hypervisor policy injection was skipped on every resumed Claude Code session (`--resume`, `--continue`, `/resume`), so the most common entry-point silently dropped the entire pipeline contract.
+- **`scripts/lib/work-engine/artifacts.cjs`** (PR #62) — `requiredArtifactGroups` is now keyed on the **source** state, matching CLAUDE.md's "Required Artifacts by State" semantics. The destination-state lookup previously blocked every legitimate transition (e.g. `validation → pr-creation` required `pr-link.txt` to pre-exist before `pr-creation` had run). This release also removes the empty conditional branches left over from the rewrite (`design`, `implementation`) and renames the unused `to` parameter to `_to`.
+- **`commands/receipt.md`** — adds YAML frontmatter (`name`, `description`) so `/receipt` surfaces correctly in Claude Code slash menus. `commands/swe-dashboard.md` cross-links to it under a new "Related" section.
+- **`schemas/owai/state.schema.json`** (PR #60) — accepts both `at` and `timestamp` in history entries (same `oneOf` pattern as `work-item.schema.json`). Previously every real worklog failed L1 conformance with 11 errors because the work engine writes `at`.
+- **`scripts/owai-conformance.cjs`** (PR #60) — `--level L3` (space-separated form) is parsed correctly. Previously silently fell back to L1.
+- **`CLAUDE.md`** (PR #60) — `/doubt`, `/policy`, `/swe-tui` registered in the Utility skills table. They were added in #57 but never documented.
 
 ### Documentation
 

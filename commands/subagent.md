@@ -5,7 +5,9 @@ description: "Browse, search, and invoke specialized subagents for specific deve
 
 # /subagent — Discover and Invoke Specialized Subagents
 
-Browse, search, and invoke from 135+ specialized subagents covering 10 categories of development expertise.
+Browse, search, and invoke from <!-- catalog-counts:start kind=short-total -->
+138+ subagents
+<!-- catalog-counts:end --> covering 10 categories of development expertise.
 
 ## Input: $ARGUMENTS
 
@@ -17,18 +19,22 @@ Usage:
 
 ## Categories
 
-| # | Category | Count | Examples |
-|---|----------|-------|----------|
-| 01 | Core Development | 10 | api-designer, backend-developer, frontend-developer, fullstack-developer |
-| 02 | Language Specialists | 29 | python-pro, typescript-pro, rust-engineer, golang-pro, react-developer |
-| 03 | Infrastructure | 16 | cloud-architect, devops-engineer, kubernetes-specialist, terraform-engineer |
-| 04 | Quality & Security | 14 | code-reviewer, security-auditor, debugger, performance-engineer |
-| 05 | Data & AI | 13 | data-engineer, ml-engineer, llm-architect, prompt-engineer |
-| 06 | Developer Experience | 13 | documentation-engineer, cli-developer, refactoring-specialist, mcp-developer |
-| 07 | Specialized Domains | 12 | blockchain-developer, fintech-developer, gaming-developer, iot-engineer |
-| 08 | Business & Product | 11 | product-manager, project-manager, technical-writer, ux-researcher |
-| 09 | Meta & Orchestration | 10 | multi-agent-coordinator, workflow-orchestrator, context-manager |
-| 10 | Research & Analysis | 7 | research-analyst, competitive-analyst, trend-analyst |
+<!-- catalog-counts:start kind=table -->
+| Category | Count |
+|----------|------:|
+| Language Specialists | 29 |
+| Infrastructure | 16 |
+| Specialized Domains | 15 |
+| Quality & Security | 14 |
+| Data & AI | 13 |
+| Developer Experience | 13 |
+| Business & Product | 11 |
+| Core Development | 10 |
+| Meta & Orchestration | 10 |
+| Research & Analysis | 7 |
+<!-- catalog-counts:end -->
+
+See [`CLAUDE.md` — Specialized subagents](../CLAUDE.md#specialized-subagents) for example agents per category and when to invoke each.
 
 ## Instructions
 
