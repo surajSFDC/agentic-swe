@@ -1,0 +1,10 @@
+{
+  "id": "01-off-by-one",
+  "title": "Fix off-by-one in countItems",
+  "description": "The function countItems in src/counter.js returns arr.length - 1 instead of arr.length. Fix it so all acceptance tests pass.",
+  "expected_track": "lean",
+  "acceptance_tests": "npm test",
+  "expected_duration_minutes": 5,
+  "complexity": "simple",
+  "scoring_notes": "No design artifact required. Gate-respect score checks initialized -> feasibility -> lean-track-check -> lean-track-implementation -> validation -> completed transitions."
+}

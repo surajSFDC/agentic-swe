@@ -1,0 +1,8 @@
+{
+  "name": "bench-03-rate-limiter",
+  "private": true,
+  "description": "Bench task 03: token-bucket rate limiter (rigorous track).",
+  "scripts": {
+    "test": "node test/rate-limiter.test.js"
+  }
+}

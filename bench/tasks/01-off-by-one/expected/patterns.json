@@ -1,0 +1,12 @@
+{
+  "required_patterns": [
+    {
+      "file": "implementation.md",
+      "pattern": "arr\\.length",
+      "description": "implementation.md must reference the corrected return value"
+    }
+  ],
+  "forbidden_patterns": [],
+  "required_states": ["lean-track-implementation", "validation"],
+  "track_must_be": "lean"
+}

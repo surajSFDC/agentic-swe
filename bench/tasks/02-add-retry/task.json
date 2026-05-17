@@ -1,0 +1,10 @@
+{
+  "id": "02-add-retry",
+  "title": "Add bounded retry with exponential backoff to HTTP client",
+  "description": "The function fetchWithRetry in src/http-client.js is a stub that calls fetch once and returns the response. Add bounded retry logic with exponential backoff: retry on 5xx responses (up to maxAttempts), do not retry on 4xx, honor the maxAttempts cap. The retry delay should double each attempt starting at baseDelayMs.",
+  "expected_track": "standard",
+  "acceptance_tests": "npm test",
+  "expected_duration_minutes": 20,
+  "complexity": "standard",
+  "scoring_notes": "design.md should mention the retry policy (5xx vs 4xx, cap, backoff). Cross-model review not required on standard track."
+}

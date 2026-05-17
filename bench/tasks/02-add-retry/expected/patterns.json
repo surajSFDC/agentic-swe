@@ -1,0 +1,22 @@
+{
+  "required_patterns": [
+    {
+      "file": "design.md",
+      "pattern": "retry",
+      "description": "design.md must mention retry strategy"
+    },
+    {
+      "file": "design.md",
+      "pattern": "5[xX][xX]|5\\d\\d",
+      "description": "design.md must distinguish 5xx from other status codes"
+    },
+    {
+      "file": "design.md",
+      "pattern": "backoff|exponential",
+      "description": "design.md must mention backoff policy"
+    }
+  ],
+  "forbidden_patterns": [],
+  "required_states": ["design", "implementation", "validation"],
+  "track_must_be": "standard"
+}
