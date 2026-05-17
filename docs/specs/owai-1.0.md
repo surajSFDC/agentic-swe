@@ -58,7 +58,7 @@ See `schemas/owai/state.schema.json` for the full JSON Schema.
 
 ### History Entry
 
-Each entry in `history[]`:
+Each entry in `history[]` requires exactly one of `timestamp` or `at` as the transition timestamp (both are accepted; `at` is the field used by the reference implementation):
 
 ```json
 {

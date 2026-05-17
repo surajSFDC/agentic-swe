@@ -33,9 +33,18 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["timestamp", "from", "to"],
+        "required": ["from", "to"],
+        "allOf": [
+          {
+            "oneOf": [
+              { "required": ["timestamp"], "properties": { "timestamp": { "type": "string", "minLength": 1 } } },
+              { "required": ["at"], "properties": { "at": { "type": "string", "minLength": 1 } } }
+            ]
+          }
+        ],
         "properties": {
           "timestamp": { "type": "string" },
+          "at": { "type": "string" },
           "actor": { "type": "string" },
           "from": { "type": "string" },
           "to": { "type": "string" },

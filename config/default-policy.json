@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "track_rules": [],
+  "mandatory_subagents": [],
+  "banned_tools": [],
+  "required_artifacts": {},
+  "budget_overrides": {}
+}
