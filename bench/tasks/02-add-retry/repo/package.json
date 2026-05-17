@@ -1,0 +1,8 @@
+{
+  "name": "bench-02-add-retry",
+  "private": true,
+  "description": "Bench task 02: add bounded retry with exponential backoff (standard track).",
+  "scripts": {
+    "test": "node test/http-client.test.js"
+  }
+}

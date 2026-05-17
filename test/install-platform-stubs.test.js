@@ -94,6 +94,30 @@ describe('multi-platform stubs: Claude Code', () => {
     assert.ok(sawSessionStart, 'no SessionStart command hook found');
   });
 
+  it('hooks/hooks.json SessionStart matcher covers all four valid source types including resume', () => {
+    // SessionStart matcher is filtered against the event source field (startup|resume|clear|compact),
+    // NOT user prompt content. All four sources must be present so policy injection fires on resume.
+    const j = readJson(path.join(repoRoot, 'hooks', 'hooks.json'));
+    const blocks = j.hooks?.SessionStart;
+    assert.ok(Array.isArray(blocks) && blocks.length > 0, 'SessionStart block must exist');
+    // Find the block that references session-start (the policy-injection hook).
+    const policyBlock = blocks.find(b =>
+      (b.hooks || []).some(h => typeof h.command === 'string' && h.command.includes('session-start')),
+    );
+    assert.ok(policyBlock, 'no SessionStart block containing session-start hook found');
+    const matcher = policyBlock.matcher;
+    // matcher may be absent (fires on all) or must include all four source types.
+    if (matcher !== undefined) {
+      const required = ['startup', 'resume', 'clear', 'compact'];
+      for (const src of required) {
+        assert.ok(
+          matcher.includes(src),
+          `SessionStart matcher must include '${src}' (got: '${matcher}') — policy is not injected on '${src}' sessions`,
+        );
+      }
+    }
+  });
+
   it('hooks/hooks.json UserPromptSubmit starts brainstorm helper when /brainstorm is used', () => {
     const j = readJson(path.join(repoRoot, 'hooks', 'hooks.json'));
     const hookScript = path.join(repoRoot, 'hooks', 'brainstorm-on-prompt.sh');

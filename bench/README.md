@@ -29,21 +29,43 @@ tasks/<task-id>/
   scoring.json       # Scoring rubric specific to this task
 ```
 
+## Tasks
+
+Three starter tasks ship with the benchmark, one per pipeline track:
+
+| ID | Track | What it tests |
+|----|-------|---------------|
+| **`01-off-by-one`** | lean | Fix `countItems` to return `arr.length` instead of `arr.length - 1`. Acceptance: `node test/counter.test.js` passes. No design artifact required. |
+| **`02-add-retry`** | standard | Implement bounded retry with exponential backoff in `fetchWithRetry`. Retries on 5xx, not 4xx; honours `maxAttempts`. Acceptance: 5 test cases covering success, retry-then-succeed, no-retry-on-4xx, exhaustion, and `maxAttempts=1`. Scoring bonus: `design.md` mentions retry strategy. |
+| **`03-rate-limiter`** | rigorous | Implement `TokenBucket` with `tryConsume`/`getTokens`, `RangeError` on invalid config, and time-based refill. Security panel must flag negative `capacity`/`refillRate` as a DoS vector. Acceptance: 9 deterministic test cases. |
+
+Each task directory follows the layout in **Task Format** below.
+
 ## Running
 
 ```bash
-node scripts/bench/run.cjs [--task <id>] [--all] [--output <path>]
+# Validate all tasks (no LLM key required)
+node scripts/bench/run.cjs validate --all
+
+# Validate a single task
+node scripts/bench/run.cjs validate --task 01-off-by-one
+
+# Score a completed worklog (requires a finished .worklogs/<id>/ directory)
+node scripts/bench/run.cjs score <work-dir> [task-dir]
 ```
 
-The runner:
+Full pipeline execution (requires an LLM API key):
 
-1. Copies the task's repo to a temp directory
-2. Initializes a work item via the pipeline
-3. Executes the pipeline (requires an LLM API key)
-4. Validates the resulting worklog against OWAI expectations (see **`schemas/owai/`**)
-5. Runs acceptance tests
-6. Scores across all dimensions
-7. Outputs a scorecard JSON
+```bash
+# (planned — not yet implemented)
+node scripts/bench/run.cjs run --task 01-off-by-one
+```
+
+The scorer:
+
+1. Reads `state.json` from the completed worklog
+2. Scores task pass rate (pipeline state reached `completed`), cost efficiency, cross-model review presence, and gate-respect (transition chain validity)
+3. Outputs a scorecard JSON; exits 0 if total >= 0.6
 
 ## Contributing Tasks
 

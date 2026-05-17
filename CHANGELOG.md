@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`/receipt` command** — render a completed work item as shareable markdown / JSON (`commands/receipt.md`, `scripts/render-receipt.cjs`, `scripts/lib/receipt/extract.cjs`, `scripts/lib/receipt/format.cjs`). Bin entry exposes it as `agentic-swe receipt` for npm-installed users.
+- **`docs/specs/positioning-and-receipt.md`** — strategic positioning spec (The Receipt + Magic-PR demo sequencing, ICP tiers, 90-day metrics).
+- **`docs/plans/2026-05-17-positioning-and-receipt.md`** — full implementation plan for the spec.
+- **`docs/compliance-mapping.md`** — NIST AI RMF + OWASP Agentic Top 10 (Dec 2025) + EU AI Act Art. 12/14/15 mapping to `.worklogs/` artifacts.
+- **`docs/assets/sample-receipt.md`** — static rendered example used by the README embed.
+- **`docs/launch-week-1.md`** — internal launch checklist with draft LinkedIn / Twitter / dev.to / Show HN posts.
+- **`bench/tasks/`** — starter tasks (`01-off-by-one`, `02-add-retry`, `03-rate-limiter`) so `scripts/bench/run.cjs` is no longer vaporware.
+
+### Changed
+
+- **README first viewport** — new headline ("Claude codes your PRs. You review the receipt. Then merge."), inline `/receipt` sample, single-command quickstart. Drops `Hypervisor policy` jargon and the heavier mermaid diagrams (preserved in `CLAUDE.md` and the docs site). 288 → 207 lines.
+
+### Fixed
+
+- **`hooks/hooks.json`** — `SessionStart` matcher now includes `resume` (was `startup|clear|compact`, now `startup|resume|clear|compact`). Previously, Hypervisor policy injection was skipped on every resumed Claude Code session (`--resume`, `--continue`, `/resume`), so the most common entry-point silently dropped the entire pipeline contract.
+- **`scripts/lib/work-engine/artifacts.cjs`** — `requiredArtifactGroups` is now keyed on the **source** state, matching CLAUDE.md's "Required Artifacts by State" semantics. The destination-state lookup previously blocked every legitimate transition (e.g. `validation → pr-creation` required `pr-link.txt` to pre-exist before `pr-creation` had run).
+
 ### Documentation
 
 - **`docs/PUBLISHING.md`:** prominent callout for **First time on npm: create the scope** (create **`@agentic-swe`** org on npm before first **`npm publish`**; explains **`404 Scope not found`**). **`README`** links to that section.

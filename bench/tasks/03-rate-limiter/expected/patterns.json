@@ -1,0 +1,22 @@
+{
+  "required_patterns": [
+    {
+      "file": "design.md",
+      "pattern": "token.?bucket|rate.?limit",
+      "description": "design.md must describe the token-bucket pattern"
+    },
+    {
+      "file": "design.md",
+      "pattern": "concurren|async|single.?thread",
+      "description": "design.md must acknowledge JS concurrency model"
+    },
+    {
+      "file": "design-panel-review.md",
+      "pattern": "DoS|denial.of.service|negative|invalid.*cap|invalid.*refill",
+      "description": "security panel must flag negative config as DoS vector"
+    }
+  ],
+  "forbidden_patterns": [],
+  "required_states": ["design", "design-review", "implementation", "self-review", "code-review", "validation"],
+  "track_must_be": "rigorous"
+}

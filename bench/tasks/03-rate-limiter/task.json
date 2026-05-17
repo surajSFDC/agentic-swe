@@ -1,0 +1,10 @@
+{
+  "id": "03-rate-limiter",
+  "title": "Implement a token-bucket rate limiter",
+  "description": "Implement a TokenBucket class in src/rate-limiter.js. It must: (1) allow up to 'capacity' tokens, (2) refill at 'refillRate' tokens per second, (3) expose a tryConsume(n) method that returns true if n tokens are available (consuming them) and false otherwise, (4) expose a getTokens() method returning current token count. Security concern: callers must not be able to set refillRate or capacity to negative values — the constructor must throw on invalid config. NOTE: JavaScript is single-threaded so true thread-safety is moot, but the design review must acknowledge concurrent async call patterns.",
+  "expected_track": "rigorous",
+  "acceptance_tests": "npm test",
+  "expected_duration_minutes": 40,
+  "complexity": "complex",
+  "scoring_notes": "Security panel should flag negative refillRate/capacity as a DoS vector. design-panel-review.md is expected. Design must acknowledge async concurrency pattern."
+}

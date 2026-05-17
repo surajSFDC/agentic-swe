@@ -1,0 +1,33 @@
+{
+  "task_pass": {
+    "weight": 0.4,
+    "method": "run_acceptance_tests",
+    "command": "node test/http-client.test.js",
+    "cwd": "repo",
+    "full_credit_exit_code": 0
+  },
+  "cost_efficiency": {
+    "weight": 0.2,
+    "method": "cost_vs_budget",
+    "cost_budget_usd": 2.0,
+    "comment": "Standard tasks should cost under $2"
+  },
+  "cross_model": {
+    "weight": 0.2,
+    "method": "artifact_presence",
+    "artifact": "design-panel-review.md",
+    "partial_credit": 0.5,
+    "comment": "Standard track does not require cross-model panel; partial credit always awarded"
+  },
+  "gate_respect": {
+    "weight": 0.2,
+    "method": "transition_chain",
+    "expected_track": "standard",
+    "penalize_skip": 0.2,
+    "penalize_budget_overrun": 0.3,
+    "bonus": {
+      "design_md_mentions_retry": 0.1,
+      "comment": "Bonus if design.md mentions retry strategy"
+    }
+  }
+}

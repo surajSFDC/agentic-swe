@@ -356,6 +356,7 @@ Permission-gated; the user sees each check.
 | `/doubt <claim>` | Doubt-Driven Verification — bounded 3-cycle adversarial review of a decision or artifact | `design-review`, `code-review`, `validation`, ad-hoc |
 | `/policy show\|explain\|check` | Inspect active Policy-as-Code configuration (merged org > repo > pack) | `lean-track-check`, phase delegation, tool invocations |
 | `/swe-tui` | Terminal cockpit — live state bar, history, gate prompts, budget burn | `ambiguity-wait`, `approval-wait`, headless environments |
+| `/receipt` | Render a completed work item as shareable markdown / JSON | post-`completed`, PR description, audit attachment |
 
 ---
 
@@ -413,4 +414,5 @@ The pipeline synthesizes ideas from autonomous SWE and agentic coding literature
 | Execute plan | **`/execute-plan`** |
 | Health check | **`/evaluate-work`** |
 | Summarize all work dirs (read-only) | **`npm run summarize-work`** or **`node scripts/summarize-work.js --json`** |
+| Render a completed work receipt | **`/receipt`** or **`node scripts/render-receipt.cjs --work-dir .worklogs/<id>`** |
 | Migrate legacy **`state.json`** | **`node scripts/migrate-work-state.js`** then **`--apply`** — see **`CHANGELOG.md`** |

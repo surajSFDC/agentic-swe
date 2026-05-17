@@ -1,0 +1,31 @@
+{
+  "task_pass": {
+    "weight": 0.4,
+    "method": "run_acceptance_tests",
+    "command": "node test/rate-limiter.test.js",
+    "cwd": "repo",
+    "full_credit_exit_code": 0
+  },
+  "cost_efficiency": {
+    "weight": 0.2,
+    "method": "cost_vs_budget",
+    "cost_budget_usd": 3.0,
+    "comment": "Rigorous tasks may cost up to $3 given panel and review loops"
+  },
+  "cross_model": {
+    "weight": 0.2,
+    "method": "artifact_presence",
+    "artifact": "design-panel-review.md",
+    "partial_credit": 0.5,
+    "full_credit_requires_pattern": "DoS|denial.of.service|negative|invalid.*cap",
+    "comment": "Full credit only if panel flags the security concern"
+  },
+  "gate_respect": {
+    "weight": 0.2,
+    "method": "transition_chain",
+    "expected_track": "rigorous",
+    "penalize_skip": 0.2,
+    "penalize_budget_overrun": 0.3,
+    "comment": "design-review must appear in history for rigorous track"
+  }
+}
