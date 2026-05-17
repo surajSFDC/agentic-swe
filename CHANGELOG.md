@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`docs/testing-guide-2026-05-17.md`** (PR [#63](https://github.com/agentic-swe/agentic-swe/pull/63)) — verification recipes for everything shipped in #60, #61, #62.
 - **`bench/tasks/`** — starter tasks (`01-off-by-one`, `02-add-retry`, `03-rate-limiter`) so `scripts/bench/run.cjs` is no longer vaporware.
 - **`config/default-policy.json`** (PR [#60](https://github.com/agentic-swe/agentic-swe/pull/60)) — pack default Policy-as-Code file that `scripts/lib/policy/merge.cjs` referenced but didn't ship.
+- **Catalog-counts SoT** — `scripts/lib/catalog/counts.cjs` + `scripts/render-catalog-counts.cjs` rewrite `<!-- catalog-counts:start kind=… -->` blocks in `README.md`, `CLAUDE.md`, `AGENTS.md`, and `commands/subagent.md` from the live `agents/subagents/` directory. New `npm run catalog:counts` (write) and `--check` mode (wired into `npm run verify`) catch drift after agent additions. Mirror script ships on the docs site so marketing copy stays in sync.
+- **README version-badge regression test** (`test/readme-version-badge.test.js`) — asserts the README shield URL matches `package.json.version`. Catches the drift that bit this release (badge stayed at 3.2.0 after `bump-version.sh` ran, because it only handles JSON manifests).
 
 ### Changed
 
@@ -30,7 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **`hooks/hooks.json`** (PR #62) — `SessionStart` matcher now includes `resume` (was `startup|clear|compact`, now `startup|resume|clear|compact`). Previously, Hypervisor policy injection was skipped on every resumed Claude Code session (`--resume`, `--continue`, `/resume`), so the most common entry-point silently dropped the entire pipeline contract.
-- **`scripts/lib/work-engine/artifacts.cjs`** (PR #62) — `requiredArtifactGroups` is now keyed on the **source** state, matching CLAUDE.md's "Required Artifacts by State" semantics. The destination-state lookup previously blocked every legitimate transition (e.g. `validation → pr-creation` required `pr-link.txt` to pre-exist before `pr-creation` had run).
+- **`scripts/lib/work-engine/artifacts.cjs`** (PR #62) — `requiredArtifactGroups` is now keyed on the **source** state, matching CLAUDE.md's "Required Artifacts by State" semantics. The destination-state lookup previously blocked every legitimate transition (e.g. `validation → pr-creation` required `pr-link.txt` to pre-exist before `pr-creation` had run). This release also removes the empty conditional branches left over from the rewrite (`design`, `implementation`) and renames the unused `to` parameter to `_to`.
+- **`commands/receipt.md`** — adds YAML frontmatter (`name`, `description`) so `/receipt` surfaces correctly in Claude Code slash menus. `commands/swe-dashboard.md` cross-links to it under a new "Related" section.
 - **`schemas/owai/state.schema.json`** (PR #60) — accepts both `at` and `timestamp` in history entries (same `oneOf` pattern as `work-item.schema.json`). Previously every real worklog failed L1 conformance with 11 errors because the work engine writes `at`.
 - **`scripts/owai-conformance.cjs`** (PR #60) — `--level L3` (space-separated form) is parsed correctly. Previously silently fell back to L1.
 - **`CLAUDE.md`** (PR #60) — `/doubt`, `/policy`, `/swe-tui` registered in the Utility skills table. They were added in #57 but never documented.
